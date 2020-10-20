@@ -1,0 +1,16 @@
+/user
+/user/new
+/user/login
+
+/menu/new
+/menu/today
+/menu/{menu name}
+/menu/shopping-list/{menu name}/
+
+/meal/new
+/meal/{id}
+
+/course/new
+/course/{course name}
+
+## all names needs to have the creator name prefixed

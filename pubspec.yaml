@@ -83,7 +83,9 @@ flutter:
   fonts:
     - family: Playfair_Display
       fonts:
-          - asset: ./assets/fonts/PlayfairDisplay-Regular.ttf
+          - asset: ./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf
+          - asset: ./assets/fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf
+            style: italic
     - family: Roboto
       fonts:
           - asset: ./assets/fonts/Roboto-Regular.ttf

@@ -1,16 +1,16 @@
-/user
-/user/new
-/user/login
+/user           - mangler
+/user/new       - har design
+/user/login     - har design
 
-/menu/new
-/menu/today
-/menu/{menu name}
-/menu/shopping-list/{menu name}/
+/menu/new                           - mangler
+/menu/today                         - design halveis
+/menu/{menu name}                   - mangler
+/menu/shopping-list/{menu name}/    - mangler
 
-/meal/new
-/meal/{id}
+/meal/new       - har design
+/meal/{id}      - ferdig
 
-/course/new
-/course/{course name}
+/course/new             - har design
+/course/{course name}   - usikker på om vi skal ha kansje bare ta blocken fra /meal/id
 
 ## all names needs to have the creator name prefixed

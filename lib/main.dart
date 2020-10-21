@@ -2,6 +2,7 @@ import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/user.dart';
 import 'package:App/pages/course_pages.dart';
+import 'package:App/pages/meal_pages.dart';
 import 'package:App/pages/user_pages.dart';
 import 'package:flutter/material.dart';
 import 'designstuff/themes.dart' as app_themes;
@@ -162,53 +163,53 @@ class MyApp extends StatelessWidget {
       BottomNavigationBarItem(
           icon: Icon(
             Icons.adb,
-            color: Colors.white,
+            //color: Colors.white,
           ),
-          activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
+          //activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
           label: "alal"),
       BottomNavigationBarItem(
           icon: Icon(
             Icons.baby_changing_station,
-            color: Colors.white,
+            //color: Colors.white,
           ),
-          activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
+          //activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
           label: "glg"),
       BottomNavigationBarItem(
           icon: Icon(
             Icons.bathtub_sharp,
-            color: Colors.white,
+            //color: Colors.white,
           ),
-          activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
+          //activeIcon: Icon(Icons.accessible_forward_sharp, color: Colors.red),
           label: "ieius")
     ],
-    backgroundColor: Colors.yellow,
+    //backgroundColor: Colors.yellow,
   );
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: app_themes.mainTheme,
+      theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
+      initialRoute: "/meal/new",
       onGenerateRoute: (settings) {
         // go home //
         if (settings.name == '/') {
-          return MaterialPageRoute(builder: (context) => LoginPage()
-              //CourseMealPage(meal: m, bottomNavigationBar: _bottomNavigationBar)
-              );
+          return MaterialPageRoute(
+              builder: (context) => CourseMealPage(
+                  meal: m, bottomNavigationBar: _bottomNavigationBar));
         }
-
-        print('THIS IS BAD');
 
         // Handle '/details/:id'
         var uri = Uri.parse(settings.name);
+        print(uri);
         if (uri.pathSegments.length >= 2) {
           // ---------- user ---------- //
           if (uri.pathSegments.first == "user") {
             if (uri.pathSegments[1] == "new") {
               // @ /user/new
-              return null;
+              return MaterialPageRoute(builder: (context) => NewUserPage());
             } else if (uri.pathSegments[1] == "login") {
               // @ /user/login
-              return null;
+              return MaterialPageRoute(builder: (context) => LoginPage());
             }
           }
           // ---------- menu ---------- //
@@ -233,6 +234,9 @@ class MyApp extends StatelessWidget {
           else if (uri.pathSegments.first == "meal") {
             if (uri.pathSegments[1] == "new") {
               // @ /meals/new
+              return MaterialPageRoute(
+                  builder: (context) =>
+                      NewCoursePage(bottomNavigationBar: _bottomNavigationBar));
               return null;
             } else {
               // @ /meals/:id

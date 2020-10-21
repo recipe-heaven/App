@@ -16,7 +16,7 @@ class CourseMealPage extends StatefulWidget {
 
 class CourseMealState extends State<CourseMealPage> {
   int _currentCourse = 0;
-  PageController _pageController = PageController();
+  PageController _pageController = PageController(keepPage: true);
 
   void _backPage() {
     setState(() {
@@ -113,11 +113,13 @@ class CourseMealState extends State<CourseMealPage> {
             ShaderMask(
                 shaderCallback: (rect) {
                   return LinearGradient(
-                          begin: Alignment(0.0, 0.0),
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.black, Colors.transparent])
-                      .createShader(
-                          Rect.fromLTRB(0, 0, rect.width, rect.height));
+                      begin: Alignment(0.0, 0.0),
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context).scaffoldBackgroundColor,
+                        Colors.transparent
+                      ]).createShader(
+                      Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 blendMode: BlendMode.dstIn,
                 child: Image.asset("assets/images/abc.gif")),
@@ -125,32 +127,45 @@ class CourseMealState extends State<CourseMealPage> {
               children: [
                 Text(
                   c.course.name,
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).accentTextTheme.headline2,
                 ),
                 IconButton(
-                    icon: Icon(Icons.admin_panel_settings_sharp),
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     onPressed: null)
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
             Row(
               children: [
-                Icon(Icons.time_to_leave),
-                Text(c.course.cookTime.toString())
+                Icon(Icons.access_time,
+                    color: Theme.of(context).iconTheme.color),
+                Text(
+                  c.course.cookTime.toString(),
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .headline3
+                      .copyWith(fontSize: 15),
+                )
               ],
             ),
-            Row(
-              children: [
-                for (var tag in c.course.tags) ...[
-                  Text(
-                    tag.tagName,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  )
-                ]
-              ],
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  for (var tag in c.course.tags) ...[
+                    Text(
+                      tag.tagName,
+                      style: Theme.of(context).primaryTextTheme.headline4,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    )
+                  ]
+                ],
+              ),
             ),
             Text(
               c.course.description,
@@ -252,6 +267,7 @@ class CourseMealState extends State<CourseMealPage> {
             });
           },
         ),
+        //backgroundColor: Theme.of(context).backgroundColor,
         bottomNavigationBar: _makePsudoNavBar(),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,

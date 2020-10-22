@@ -1,4 +1,5 @@
 import 'package:App/main.dart';
+import 'package:App/pages/register/register.dart';
 import 'package:App/pages/user_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       return null;
   }
 
-  return MaterialPageRoute(builder: (cotext) => page);
+  return MaterialPageRoute(builder: (context) => page);
 }
 
 /// Generatesa route ling with query parameters ?key=value

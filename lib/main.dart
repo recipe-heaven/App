@@ -3,7 +3,7 @@ import 'package:App/pages/home/home.dart';
 import 'package:App/routes/router.dart';
 import 'package:flutter/material.dart';
 
-import 'designstuff/themes.dart' as app_themes;
+import 'package:App/theme/themes.dart' as app_themes;
 
 void main() {
   runApp(MyApp());

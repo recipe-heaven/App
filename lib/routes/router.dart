@@ -1,6 +1,9 @@
-import 'package:App/main.dart';
+import 'package:App/pages/create_recipe/create_recipe.dart';
+import 'package:App/pages/home/home.dart';
+import 'package:App/pages/login/login.dart';
 import 'package:App/pages/register/register.dart';
-import 'package:App/pages/user_pages.dart';
+import 'package:App/pages/view_meal/view_meal.dart';
+
 import 'package:flutter/material.dart';
 
 import "routes.dart";
@@ -14,7 +17,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
   Widget page;
   switch (path) {
     case RouteHome:
-      page = MyHomePage();
+      page = Home();
       break;
     case RouteUserNew:
       page = NewUserPage();
@@ -25,11 +28,15 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
     case RouteUserProfile:
     case RouteUserEditProfile:
     case RouteRecipeNew:
+      page = NewCoursePage();
+      break;
     case RouteRecipeEdit:
     case RouteRecipeView:
     case RouteMealNew:
     case RouteMealEdit:
     case RouteMealView:
+      page = CourseMealPage();
+      break;
     case RouteMenuNew:
     case RouteMenuEdit:
     case RouteMenuView:

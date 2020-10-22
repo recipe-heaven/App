@@ -1,13 +1,10 @@
 import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/user.dart';
-import 'package:App/pages/course_pages.dart';
-import 'package:App/pages/meal_pages.dart';
-import 'package:App/pages/user_pages.dart';
+import 'package:App/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'designstuff/themes.dart' as app_themes;
-
-import 'examples/nested_path_ex.dart';
+import "routes/routes.dart";
 
 void main() {
   runApp(MyApp());
@@ -187,80 +184,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
-      initialRoute: "/meal/new",
-      onGenerateRoute: (settings) {
-        // go home //
-        if (settings.name == '/') {
-          return MaterialPageRoute(
-              builder: (context) => CourseMealPage(
-                  meal: m, bottomNavigationBar: _bottomNavigationBar));
-        }
-
-        // Handle '/details/:id'
-        var uri = Uri.parse(settings.name);
-        print(uri);
-        if (uri.pathSegments.length >= 2) {
-          // ---------- user ---------- //
-          if (uri.pathSegments.first == "user") {
-            if (uri.pathSegments[1] == "new") {
-              // @ /user/new
-              return MaterialPageRoute(builder: (context) => NewUserPage());
-            } else if (uri.pathSegments[1] == "login") {
-              // @ /user/login
-              return MaterialPageRoute(builder: (context) => LoginPage());
-            }
-          }
-          // ---------- menu ---------- //
-          else if (uri.pathSegments.first == "menu") {
-            if (uri.pathSegments[1] == "new") {
-              // @ /menu/new
-              return null;
-            } else if (uri.pathSegments[1] == "today") {
-              // @ /menu/today
-              return null;
-            } else if (uri.pathSegments[1] == "shopping_list" &&
-                uri.pathSegments.length == 3) {
-              // @ /menu/shopping_list/:id
-              return null;
-            } else {
-              // @ /menu/:id
-              return null;
-            }
-          }
-
-          // ---------- meal ---------- //
-          else if (uri.pathSegments.first == "meal") {
-            if (uri.pathSegments[1] == "new") {
-              // @ /meals/new
-              return MaterialPageRoute(
-                  builder: (context) =>
-                      NewCoursePage(bottomNavigationBar: _bottomNavigationBar));
-              return null;
-            } else {
-              // @ /meals/:id
-              var id = uri.pathSegments[1];
-              // TODO: get the correct meal from db here
-              return null;
-            }
-          }
-
-          // ---------- course ---------- //
-          else if (uri.pathSegments.first == "user") {
-            if (uri.pathSegments[1] == "new") {
-              // @ /courses/new
-              return null;
-            } else {
-              // @ /courses/:id
-              return null;
-            }
-          }
-        }
-
-        return MaterialPageRoute(builder: (context) => Path404Page());
-      },
-    );
+        title: 'Flutter Demo',
+        theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
+        initialRoute: RouteHome,
+        onGenerateRoute: (settings) => router(context, settings));
   }
 }
 

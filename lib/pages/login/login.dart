@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:App/pages/cards/input_feald.dart';
+import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -59,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
                 child: Text(
                   "Recipes Heaven",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: logoTextStyle,
                 ),
               ),
               Container(
@@ -83,8 +84,7 @@ class LoginPageState extends State<LoginPage> {
                             onPressed: _handleLogin,
                             child: Text(
                               "Login",
-                              style:
-                                  Theme.of(context).accentTextTheme.headline3,
+                              style: Theme.of(context).textTheme.headline2,
                             ))
                       ])),
                   padding: const EdgeInsets.symmetric(
@@ -103,15 +103,15 @@ class LoginPageState extends State<LoginPage> {
                     },
                     child: Text(
                       "Create New user",
-                      style: Theme.of(context).accentTextTheme.headline3,
+                      style: Theme.of(context).textTheme.headline2,
                     )),
                 padding: const EdgeInsets.only(bottom: 60),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Copyright 1337 - floofservice",
-                  style: Theme.of(context).accentTextTheme.caption,
+                  "Copyright ${DateTime.now().year} - foodservice",
+                  style: Theme.of(context).textTheme.caption,
                 ),
               )
             ],

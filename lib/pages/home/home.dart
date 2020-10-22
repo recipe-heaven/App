@@ -1,5 +1,6 @@
 import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/components/navigation/drawer_navigation.dart';
+import 'package:App/pages/home/labeled_card.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -18,15 +19,39 @@ class _HomeState extends State<Home> {
         builder: (context) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {},
-                  )
+            body: Container(
+              child: ListView(
+                children: [
+                  ...[
+                    generateLabeledCard(
+                        accent: "monday",
+                        subtitle: "kake",
+                        title: "Bergensk fiskesuppe",
+                        background: "assets/images/y_6cfb1008.jpg"),
+                    generateLabeledCard(
+                        accent: "monday",
+                        subtitle: "kake",
+                        title: "Bergensk fiskesuppe",
+                        background: "assets/images/y_6cfb1008.jpg"),
+                    generateLabeledCard(
+                        accent: "monday",
+                        subtitle: "kake",
+                        title: "Bergensk fiskesuppe",
+                        background: "assets/images/y_6cfb1008.jpg"),
+                    generateLabeledCard(
+                        accent: "monday",
+                        subtitle: "kake",
+                        title: "Bergensk fiskesuppe",
+                        background: "assets/images/y_6cfb1008.jpg"),
+                    generateLabeledCard(
+                        accent: "monday",
+                        subtitle: "kake",
+                        title: "Bergensk fiskesuppe",
+                        background: "assets/images/y_6cfb1008.jpg"),
+                  ]
                 ],
               ),
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
             ),
           );
         },
@@ -47,3 +72,12 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+// Container(
+//                   decoration: BoxDecoration(
+//                       image: DecorationImage(
+//                           image:
+//                               ExactAssetImage("assets/images/y_6cfb1008.jpg"),
+//                           fit: BoxFit.cover))
+
+// var card =

@@ -1,3 +1,4 @@
+import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
 Container userScreenInpBox(BuildContext context,
@@ -12,7 +13,7 @@ Container userScreenInpBox(BuildContext context,
         Padding(
           child: Text(
             hedValue,
-            style: Theme.of(context).accentTextTheme.headline4,
+            style: Theme.of(context).textTheme.headline2,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
@@ -54,7 +55,7 @@ Container newMealInputBox(BuildContext context,
         Padding(
           child: Text(
             hedValue,
-            style: Theme.of(context).accentTextTheme.headline4,
+            style: Theme.of(context).textTheme.headline2,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),

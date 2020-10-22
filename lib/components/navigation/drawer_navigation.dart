@@ -43,7 +43,7 @@ Drawer getDrawer(BuildContext context) {
         leading: Icon(Icons.settings),
         title: Text('Settings'),
         onTap: () {
-          _onDrawerItemTap(context, RouteUserNew);
+          _onDrawerItemTap(context, RouteUserLogin);
         },
       ),
     ],

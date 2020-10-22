@@ -63,12 +63,9 @@ class NewUserPageState extends State<NewUserPage> {
                 child: Column(
                   children: [
                     Text(
-                      "Join the recipe",
-                      style: Theme.of(context).accentTextTheme.headline2,
-                    ),
-                    Text(
-                      "community",
-                      style: Theme.of(context).accentTextTheme.headline2,
+                      "Join the recipe\ncommunity",
+                      style: Theme.of(context).textTheme.headline1,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -107,8 +104,7 @@ class NewUserPageState extends State<NewUserPage> {
                             onPressed: _handleRegister,
                             child: Text(
                               "Join",
-                              style:
-                                  Theme.of(context).accentTextTheme.headline3,
+                              style: Theme.of(context).textTheme.headline2,
                             ))
                       ])),
                   padding: const EdgeInsets.symmetric(

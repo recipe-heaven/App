@@ -1,14 +1,11 @@
 import 'package:App/data_classes/course.dart';
 
 class Meal {
-  List<MealCourse> courses;
+  String name;
+  String owner;
+  String public;
 
-  Meal({this.courses});
-}
+  List<Recipe> recipe;
 
-class MealCourse {
-  Course course;
-  List<String> drinks;
-
-  MealCourse({this.course, this.drinks});
+  Meal({this.recipe});
 }

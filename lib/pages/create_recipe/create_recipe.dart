@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/pages/cards/input_feald.dart';
@@ -7,15 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class NewCoursePage extends StatelessWidget {
-  Course _course = Course();
-  BottomNavigationBar bottomNavigationBar;
+  final Recipe _course = Recipe();
+
   final _formKey = GlobalKey<FormState>();
 
-  NewCoursePage({Key key, this.bottomNavigationBar}) : super(key: key);
+  NewCoursePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: navigationBar(context, (isNavigating) {}),
       body: Column(
         children: [
           FlatButton(
@@ -86,7 +88,6 @@ class NewCoursePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
-      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

@@ -1,10 +1,14 @@
 import 'package:App/data_classes/course.dart';
 
 class Menu {
-  List<MenuCourse> courses;
+  String name;
+  String owner;
+  String public;
+
+  List<MenuCourse> recipes;
 }
 
 class MenuCourse {
-  Course course;
-  var day;
+  Recipe recipe;
+  String day;
 }

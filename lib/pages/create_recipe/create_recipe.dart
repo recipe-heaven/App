@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class NewCoursePage extends StatelessWidget {
-  final Course _course = Course();
+  final Recipe _course = Recipe();
 
   final _formKey = GlobalKey<FormState>();
 

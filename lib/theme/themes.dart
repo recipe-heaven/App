@@ -11,6 +11,7 @@ final mainBackgroundColor = Color(0xFF161D21);
 final elementBackgroundColor = Color(0xFF222D33);
 final linkActiveColor = Color(0xFFFFC891);
 final splitLineColor = Color(0xFF304048);
+final recipeStepDescriptionBackground = Color(0xFF1D262B);
 
 final navBarBackgroundColor = Color(0xFF222D33);
 final shadowColor = Color(0xCC111D22);

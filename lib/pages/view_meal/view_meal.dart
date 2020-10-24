@@ -8,145 +8,91 @@ import 'package:App/data_classes/user.dart';
 
 class CourseMealPage extends StatefulWidget {
   Meal meal = Meal(
-    courses: [
-      MealCourse(
-          course: Course(
-              cookingSteps: [
-                "steg 1 jør noe",
-                "bipetibo",
-                "lang neste",
-                "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-              ],
-              cookTime: 1999999,
-              creator: User(),
-              description:
-                  "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… ",
-              name: "nvajnekj-dsfj-sdsadns",
-              tags: [
-                Tag("#canibalism"),
-                Tag("#edgy"),
-                Tag("#javasucks"),
-                Tag("#tagName")
-              ],
-              ingredients: [
-                Ingredient(
-                    amount: 1000,
-                    unitType: "tonnes",
-                    name: "gravel",
-                    comentidk: "finely ground"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "units",
-                    name: "penguin",
-                    comentidk: "nawww"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "cars",
-                    name: "planks",
-                    comentidk: "without nails"),
-                Ingredient(
-                    amount: 20,
-                    unitType: "ml",
-                    name: "screens",
-                    comentidk: "waaaaa"),
-                Ingredient(
-                    amount: 88,
-                    unitType: "rockets",
-                    name: "keys",
-                    comentidk: "waaaa"),
-              ])),
-      MealCourse(
-          course: Course(
-              cookingSteps: [
-                "steg 1 jør noe",
-                "bipetibo",
-                "lang neste",
-                "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-              ],
-              cookTime: 1999999,
-              creator: User(),
-              description:
-                  "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… ",
-              name: "nvajnens",
-              tags: [
-                Tag("#canibalism"),
-                Tag("#edgy"),
-                Tag("#javasucks"),
-                Tag("#tagName")
-              ],
-              ingredients: [
-                Ingredient(
-                    amount: 1000,
-                    unitType: "tonnes",
-                    name: "gravel",
-                    comentidk: "finely ground"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "units",
-                    name: "penguin",
-                    comentidk: "nawww"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "cars",
-                    name: "planks",
-                    comentidk: "without nails"),
-                Ingredient(
-                    amount: 20,
-                    unitType: "ml",
-                    name: "screens",
-                    comentidk: "waaaaa"),
-                Ingredient(
-                    amount: 88,
-                    unitType: "rockets",
-                    name: "keys",
-                    comentidk: "waaaa"),
-              ])),
-      MealCourse(
-          course: Course(
-              cookingSteps: [
-                "steg 1 jør noe",
-                "bipetibo",
-                "lang neste",
-                "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-              ],
-              cookTime: 1999999,
-              creator: User(),
-              description:
-                  "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… ",
-              name: "nvajnens",
-              tags: [
-                Tag("#canibalism"),
-                Tag("#edgy"),
-                Tag("#javasucks"),
-                Tag("#tagName")
-              ],
-              ingredients: [
-                Ingredient(
-                    amount: 1000,
-                    unitType: "tonnes",
-                    name: "gravel",
-                    comentidk: "finely ground"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "units",
-                    name: "penguin",
-                    comentidk: "nawww"),
-                Ingredient(
-                    amount: 2,
-                    unitType: "cars",
-                    name: "planks",
-                    comentidk: "without nails"),
-                Ingredient(
-                    amount: 20,
-                    unitType: "ml",
-                    name: "screens",
-                    comentidk: "waaaaa"),
-                Ingredient(
-                    amount: 88,
-                    unitType: "rockets",
-                    name: "keys",
-                    comentidk: "waaaa"),
-              ]))
+    recipe: [
+      Recipe(
+          cookingSteps: [
+            "steg 1 jør noe",
+            "bipetibo",
+            "lang neste",
+            "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+          ],
+          cookTime: 1999999,
+          creator: User(),
+          description:
+              "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… ",
+          name: "nvajnens",
+          tags: [
+            Tag("#canibalism"),
+            Tag("#edgy"),
+            Tag("#javasucks"),
+            Tag("#tagName")
+          ],
+          ingredients: [
+            Ingredient(
+                amount: 1000,
+                unitType: "tonnes",
+                name: "gravel",
+                comment: "finely ground"),
+            Ingredient(
+                amount: 2,
+                unitType: "units",
+                name: "penguin",
+                comment: "nawww"),
+            Ingredient(
+                amount: 2,
+                unitType: "cars",
+                name: "planks",
+                comment: "without nails"),
+            Ingredient(
+                amount: 20, unitType: "ml", name: "screens", comment: "waaaaa"),
+            Ingredient(
+                amount: 88,
+                unitType: "rockets",
+                name: "keys",
+                comment: "waaaa"),
+          ]),
+      Recipe(
+          cookingSteps: [
+            "steg 1 jør noe",
+            "bipetibo",
+            "lang neste",
+            "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+          ],
+          cookTime: 1999999,
+          creator: User(),
+          description:
+              "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… ",
+          name: "nvajnens",
+          tags: [
+            Tag("#canibalism"),
+            Tag("#edgy"),
+            Tag("#javasucks"),
+            Tag("#tagName")
+          ],
+          ingredients: [
+            Ingredient(
+                amount: 1000,
+                unitType: "tonnes",
+                name: "gravel",
+                comment: "finely ground"),
+            Ingredient(
+                amount: 2,
+                unitType: "units",
+                name: "penguin",
+                comment: "nawww"),
+            Ingredient(
+                amount: 2,
+                unitType: "cars",
+                name: "planks",
+                comment: "without nails"),
+            Ingredient(
+                amount: 20, unitType: "ml", name: "screens", comment: "waaaaa"),
+            Ingredient(
+                amount: 88,
+                unitType: "rockets",
+                name: "keys",
+                comment: "waaaa"),
+          ]),
     ],
   );
   BottomNavigationBar bottomNavigationBar;
@@ -193,10 +139,10 @@ class CourseMealState extends State<CourseMealPage> {
               child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              for (MapEntry<int, MealCourse> entry
-                  in widget.meal.courses.asMap().entries) ...[
+              for (MapEntry<int, Recipe> entry
+                  in widget.meal.recipe.asMap().entries) ...[
                 TextButton(
-                  child: Text(entry.value.course.name,
+                  child: Text(entry.value.name,
                       style: (_currentCourse == entry.key)
                           ? courseNavbarTextStyleActive
                           : courseNavbarTextStyle),
@@ -228,8 +174,8 @@ class CourseMealState extends State<CourseMealPage> {
 
                   _currentCourse++;
 
-                  if (_currentCourse >= widget.meal.courses.length) {
-                    _currentCourse = widget.meal.courses.length - 1;
+                  if (_currentCourse >= widget.meal.recipe.length) {
+                    _currentCourse = widget.meal.recipe.length - 1;
                   }
 
                   _pageController.animateToPage(
@@ -246,7 +192,7 @@ class CourseMealState extends State<CourseMealPage> {
 
   List<Widget> _makeCourseWiget() {
     var a = [
-      for (MealCourse c in widget.meal.courses)
+      for (Recipe c in widget.meal.recipe)
         ListView(
           children: [
             ShaderMask(
@@ -271,7 +217,7 @@ class CourseMealState extends State<CourseMealPage> {
                     Row(
                       children: [
                         Text(
-                          c.course.name,
+                          c.name,
                           style: Theme.of(context).primaryTextTheme.headline1,
                         ),
                         IconButton(
@@ -288,7 +234,7 @@ class CourseMealState extends State<CourseMealPage> {
                         Icon(Icons.access_time,
                             color: Theme.of(context).iconTheme.color),
                         Text(
-                          c.course.cookTime.toString(),
+                          c.cookTime.toString(),
                           style: Theme.of(context)
                               .primaryTextTheme
                               .headline3
@@ -298,7 +244,7 @@ class CourseMealState extends State<CourseMealPage> {
                     ),
                     Row(
                       children: [
-                        for (var tag in c.course.tags) ...[
+                        for (var tag in c.tags) ...[
                           Text(
                             tag.tagName,
                             style: Theme.of(context).primaryTextTheme.headline4,
@@ -310,7 +256,7 @@ class CourseMealState extends State<CourseMealPage> {
                       ],
                     ),
                     Text(
-                      c.course.description,
+                      c.description,
                       style: Theme.of(context).accentTextTheme.bodyText2,
                     ),
                     Divider(
@@ -321,9 +267,9 @@ class CourseMealState extends State<CourseMealPage> {
                         style: Theme.of(context).textTheme.headline2),
                     Column(
                       children: [
-                        for (Ingredient ing in c.course.ingredients) ...[
+                        for (Ingredient ing in c.ingredients) ...[
                           Text(
-                            "${ing.amount} ${ing.unitType} ${ing.name} ${ing.comentidk}",
+                            "${ing.amount} ${ing.unitType} ${ing.name} ${ing.comment}",
                             style: Theme.of(context).accentTextTheme.headline3,
                           )
                         ]
@@ -335,23 +281,24 @@ class CourseMealState extends State<CourseMealPage> {
             Column(
               children: [
                 for (MapEntry<int, String> entry
-                    in c.course.cookingSteps.asMap().entries) ...[
+                    in c.cookingSteps.asMap().entries) ...[
                   Container(
                     child: Stack(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 0),
+                              vertical: 15, horizontal: 0),
                           child: Container(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 15),
+                                  vertical: 15, horizontal: 10),
                               child: Text(
                                 entry.value,
-                                style: Theme.of(context).textTheme.bodyText2,
+                                style:
+                                    Theme.of(context).accentTextTheme.bodyText2,
                               ),
                             ),
-                            color: Theme.of(context).primaryColor,
+                            color: recipeStepDescriptionBackground,
                             width: double.infinity,
                           ),
                         ),
@@ -359,20 +306,22 @@ class CourseMealState extends State<CourseMealPage> {
                           child: Stack(
                             children: [
                               Image.asset(
-                                "assets/images/G7iK20dtZZ4.jpg",
-                                height: 20,
-                                alignment: Alignment(-1, -1.5),
+                                "assets/images/step-flag.png",
+                                width: 56,
+                                height: 36,
                               ),
                               Text(
-                                entry.key.toString(),
+                                (entry.key + 1).toString(),
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
                               ),
                             ],
-                            alignment: Alignment.center,
+                            alignment: Alignment(-0.6, -.4),
                           ),
-                          alignment: Alignment(-1, -2),
+                          alignment: Alignment(-1, 0),
                         ),
                       ],
                     ),

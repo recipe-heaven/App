@@ -1,15 +1,19 @@
 import 'package:App/data_classes/user.dart';
 
-class Course {
+// Måltid
+class Recipe {
   User creator;
-  var name;
+  String name;
   List<Tag> tags;
-  var description;
-  var cookTime;
+  String description;
+  int cookTime;
+  String type; // starter/main/dessert
+  bool public;
   List<Ingredient> ingredients;
   List<String> cookingSteps;
+  List<String> recommendedDrinks;
 
-  Course(
+  Recipe(
       {this.creator,
       this.name,
       this.tags,
@@ -19,11 +23,14 @@ class Course {
       this.cookingSteps});
 }
 
+// tar ikke med hashtag til server
 class Tag {
-  var tagName;
+  String tagName;
 
   Tag(this.tagName);
 }
+
+// us
 
 ///
 /// 3 different classes
@@ -40,10 +47,9 @@ List<String> unitUnits;
 // this comes from the db
 class Ingredient {
   String name;
-  num amount;
-  String unitType;
-  String
-      comentidk; // if we are going to have the whole finely chopped, cut into cunks osv...
+  num amount; // metric
+  String unitType; // g ml cup
+  String comment; // if we are going to have the whole finely chopped
 
   num getAmount() {
     return amount;
@@ -53,5 +59,5 @@ class Ingredient {
     return unitType;
   }
 
-  Ingredient({this.name, this.amount, this.unitType, this.comentidk});
+  Ingredient({this.name, this.amount, this.unitType, this.comment});
 }

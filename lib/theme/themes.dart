@@ -35,7 +35,17 @@ final courseNavbarTextStyleActive = TextStyle(
     color: linkActiveColor,
     fontSize: 10);
 
+final shadowBoxDecoration = BoxDecoration(boxShadow: [
+  BoxShadow(
+      color: shadowColor, //Colors.yellow,
+      blurRadius: 4,
+      offset: const Offset(0.5, 2),
+      spreadRadius: 2)
+]);
+
 final mainTheme = ThemeData(
+    buttonColor: acceptColor,
+    errorColor: errorColor,
     // The background color for major parts of the app (toolbars, tab bars, etc) [...]
     primaryColor: elementBackgroundColor,
     //

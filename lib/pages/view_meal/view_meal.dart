@@ -11,10 +11,12 @@ class CourseMealPage extends StatefulWidget {
     recipe: [
       Recipe(
           cookingSteps: [
-            "steg 1 jør noe",
-            "bipetibo",
-            "lang neste",
-            "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+            RecipeStep(step: "steg 1 jør noe"),
+            RecipeStep(step: "bipetibo"),
+            RecipeStep(step: "lang neste"),
+            RecipeStep(
+                step:
+                    "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.")
           ],
           cookTime: 1999999,
           creator: User(),
@@ -30,33 +32,38 @@ class CourseMealPage extends StatefulWidget {
           ingredients: [
             Ingredient(
                 amount: 1000,
-                unitType: "tonnes",
+                unitType: IngredientUnit.a,
                 name: "gravel",
                 comment: "finely ground"),
             Ingredient(
                 amount: 2,
-                unitType: "units",
+                unitType: IngredientUnit.b,
                 name: "penguin",
                 comment: "nawww"),
             Ingredient(
                 amount: 2,
-                unitType: "cars",
+                unitType: IngredientUnit.b,
                 name: "planks",
                 comment: "without nails"),
             Ingredient(
-                amount: 20, unitType: "ml", name: "screens", comment: "waaaaa"),
+                amount: 20,
+                unitType: IngredientUnit.b,
+                name: "screens",
+                comment: "waaaaa"),
             Ingredient(
                 amount: 88,
-                unitType: "rockets",
+                unitType: IngredientUnit.b,
                 name: "keys",
                 comment: "waaaa"),
           ]),
       Recipe(
           cookingSteps: [
-            "steg 1 jør noe",
-            "bipetibo",
-            "lang neste",
-            "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+            RecipeStep(step: "steg 1 jør noe"),
+            RecipeStep(step: "bipetibo"),
+            RecipeStep(step: "lang neste"),
+            RecipeStep(
+                step:
+                    "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.")
           ],
           cookTime: 1999999,
           creator: User(),
@@ -72,24 +79,27 @@ class CourseMealPage extends StatefulWidget {
           ingredients: [
             Ingredient(
                 amount: 1000,
-                unitType: "tonnes",
+                unitType: IngredientUnit.a,
                 name: "gravel",
                 comment: "finely ground"),
             Ingredient(
                 amount: 2,
-                unitType: "units",
+                unitType: IngredientUnit.b,
                 name: "penguin",
                 comment: "nawww"),
             Ingredient(
                 amount: 2,
-                unitType: "cars",
+                unitType: IngredientUnit.b,
                 name: "planks",
                 comment: "without nails"),
             Ingredient(
-                amount: 20, unitType: "ml", name: "screens", comment: "waaaaa"),
+                amount: 20,
+                unitType: IngredientUnit.b,
+                name: "screens",
+                comment: "waaaaa"),
             Ingredient(
                 amount: 88,
-                unitType: "rockets",
+                unitType: IngredientUnit.b,
                 name: "keys",
                 comment: "waaaa"),
           ]),
@@ -280,7 +290,7 @@ class CourseMealState extends State<CourseMealPage> {
             ),
             Column(
               children: [
-                for (MapEntry<int, String> entry
+                for (MapEntry<int, RecipeStep> entry
                     in c.cookingSteps.asMap().entries) ...[
                   Container(
                     child: Stack(
@@ -293,7 +303,7 @@ class CourseMealState extends State<CourseMealPage> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 10),
                               child: Text(
-                                entry.value,
+                                entry.value.step,
                                 style:
                                     Theme.of(context).accentTextTheme.bodyText2,
                               ),

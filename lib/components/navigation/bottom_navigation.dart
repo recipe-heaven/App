@@ -19,7 +19,6 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteMealView);
       }
       if (i == 3) {
-        Scaffold.of(context).openEndDrawer();
         navigateCallback(false);
       }
       if (i != 3) {

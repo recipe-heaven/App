@@ -18,7 +18,7 @@ class Recipe {
 
   Recipe(
       {this.creator,
-      this.name = "aa",
+      this.name = "",
       tags,
       this.description,
       this.cookTime,

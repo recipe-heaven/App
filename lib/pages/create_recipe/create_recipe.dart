@@ -95,7 +95,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                     newMealInputBox(context,
                         hedValue: "Meal Name",
                         onSave: (newValue) => {widget._course.name = newValue},
-                        validator: validateAnyInputt,
+                        validator: validateNotEmptyInput,
                         initVal: widget._course.name,
                         hint: "name"),
                     newMealInputBox(context,
@@ -115,7 +115,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                         hedValue: "Description",
                         onSave: (newValue) =>
                             {widget._course.description = newValue},
-                        validator: validateAnyInputt,
+                        validator: validateNotEmptyInput,
                         initVal: widget._course.name,
                         hint: "desc"),
                     newTimeInputBox(context,
@@ -280,10 +280,26 @@ class NewCoursePageState extends State<NewCoursePage> {
     if (widget._course.tags.length == 0) {
       return "";
     } else {
-      return "";
-      // return widget._course.tags
-      //     .map((e) => e.tagName)
-      //     .reduce((value, element) => value + " " + element);
+      return widget._course.tags
+          .map((e) => e.tagName)
+          .reduce((value, element) => value + " " + element);
     }
   }
 }
+
+/*
+
+Validering pa estimated time viser bare e... < tror vi bare fjerner feedback melding og bare har rod border pa den
+
+Dropdown for ingredients er større en andre felt
+
+Hint fargen er off
+- eneste rødfargen i palleten
+
+Hint text mangler eller er ikke hints> tags.. -> #dessert #lowfat eks
+
+
+input_feald filen har mye duplication
+
+
+ */

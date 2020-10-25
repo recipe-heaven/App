@@ -5,6 +5,15 @@ import 'package:App/data_classes/course.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
+Widget _inputFealdShadowWrapper({Widget child}) {
+  return Material(
+    color: Colors.transparent,
+    child: child,
+    elevation: 5,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+}
+
 Container userScreenInpBox(BuildContext context,
     {String hedValue,
     FormFieldSetter<String> onSave,
@@ -21,7 +30,7 @@ Container userScreenInpBox(BuildContext context,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
-        Container(
+        _inputFealdShadowWrapper(
           child: TextFormField(
             validator: validator,
             onSaved: onSave,
@@ -32,7 +41,6 @@ Container userScreenInpBox(BuildContext context,
                   hintText: hint,
                 ),
           ),
-          decoration: shadowBoxDecoration,
         )
       ],
       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +67,7 @@ Container newMealInputBox(BuildContext context,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
-        Container(
+        _inputFealdShadowWrapper(
           child: TextFormField(
             validator: validator,
             initialValue: initVal,
@@ -72,7 +80,6 @@ Container newMealInputBox(BuildContext context,
                   hintText: hint,
                 ),
           ),
-          decoration: shadowBoxDecoration,
         )
       ],
       mainAxisAlignment: MainAxisAlignment.start,
@@ -102,17 +109,18 @@ Container newTimeInputBox(BuildContext context,
         Row(
           children: [
             Container(
-                child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    validator: validator,
-                    onSaved: onSaveHour,
-                    obscureText: obscureInput,
-                    decoration: const InputDecoration().applyDefaults(
-                        Theme.of(context).inputDecorationTheme.copyWith(
-                            fillColor:
-                                Theme.of(context).dialogBackgroundColor))),
-                width: MediaQuery.of(context).size.width * 0.1,
-                decoration: shadowBoxDecoration),
+              child: _inputFealdShadowWrapper(
+                  child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      validator: validator,
+                      onSaved: onSaveHour,
+                      obscureText: obscureInput,
+                      decoration: const InputDecoration().applyDefaults(
+                          Theme.of(context).inputDecorationTheme.copyWith(
+                              fillColor:
+                                  Theme.of(context).dialogBackgroundColor)))),
+              width: MediaQuery.of(context).size.width * 0.1,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -121,16 +129,18 @@ Container newTimeInputBox(BuildContext context,
               ),
             ),
             Container(
-              child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  validator: validator,
-                  onSaved: onSaveMin,
-                  obscureText: obscureInput,
-                  decoration: const InputDecoration().applyDefaults(
-                      Theme.of(context).inputDecorationTheme.copyWith(
-                          fillColor: Theme.of(context).dialogBackgroundColor))),
+              child: _inputFealdShadowWrapper(
+                child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: validator,
+                    onSaved: onSaveMin,
+                    obscureText: obscureInput,
+                    decoration: const InputDecoration().applyDefaults(
+                        Theme.of(context).inputDecorationTheme.copyWith(
+                            fillColor:
+                                Theme.of(context).dialogBackgroundColor))),
+              ),
               width: MediaQuery.of(context).size.width * 0.1,
-              decoration: shadowBoxDecoration,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -161,51 +171,56 @@ Container newMealIngredientInputBlock(
     bool obscureInput = false,
     String hint = ""}) {
   return Container(
-    //key: ingredient.key, //Key("ingredient-" + ingredient.name),
     child: Column(
       children: [
         Row(
           children: [
             Container(
-              child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  validator: validateFloatInput,
-                  onSaved: onSavedAmmount,
-                  obscureText: obscureInput,
-                  decoration: const InputDecoration().applyDefaults(
-                      Theme.of(context).inputDecorationTheme.copyWith(
-                          fillColor: Theme.of(context).dialogBackgroundColor))),
+              child: _inputFealdShadowWrapper(
+                child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: validateFloatInput,
+                    onSaved: onSavedAmmount,
+                    obscureText: obscureInput,
+                    decoration: const InputDecoration().applyDefaults(
+                        Theme.of(context).inputDecorationTheme.copyWith(
+                            fillColor:
+                                Theme.of(context).dialogBackgroundColor))),
+              ),
               width: MediaQuery.of(context).size.width * 0.2,
-              decoration: shadowBoxDecoration,
+              //decoration: shadowBoxDecoration,
               padding: const EdgeInsets.only(right: 10),
             ),
             SizedBox(
               width: 5,
             ),
             Container(
-              child: DropdownButtonFormField<IngredientUnit>(
-                  value: ingredient.unitType,
-                  onSaved: onSavedType,
-                  onChanged: onDropdownChanged,
-                  items: [
-                    DropdownMenuItem(
-                      value: IngredientUnit.a,
-                      child: Text("aa"),
-                    ),
-                    DropdownMenuItem(
-                      value: IngredientUnit.b,
-                      child: Text("bb"),
-                    ),
-                    DropdownMenuItem(
-                      value: IngredientUnit.c,
-                      child: Text("cc"),
-                    ),
-                  ],
-                  decoration: const InputDecoration().applyDefaults(
-                      Theme.of(context).inputDecorationTheme.copyWith(
-                          fillColor: Theme.of(context).dialogBackgroundColor))),
+              child: _inputFealdShadowWrapper(
+                child: DropdownButtonFormField<IngredientUnit>(
+                    value: ingredient.unitType,
+                    onSaved: onSavedType,
+                    onChanged: onDropdownChanged,
+                    isDense: true,
+                    items: [
+                      DropdownMenuItem(
+                        value: IngredientUnit.a,
+                        child: Text("aa"),
+                      ),
+                      DropdownMenuItem(
+                        value: IngredientUnit.b,
+                        child: Text("bb"),
+                      ),
+                      DropdownMenuItem(
+                        value: IngredientUnit.c,
+                        child: Text("cc"),
+                      ),
+                    ],
+                    decoration: const InputDecoration().applyDefaults(
+                        Theme.of(context).inputDecorationTheme.copyWith(
+                            fillColor:
+                                Theme.of(context).dialogBackgroundColor))),
+              ),
               width: MediaQuery.of(context).size.width * 0.3,
-              decoration: shadowBoxDecoration,
             ),
             Spacer(),
             IconButton(
@@ -216,15 +231,16 @@ Container newMealIngredientInputBlock(
           ],
         ),
         Container(
-          child: TextFormField(
-              validator: validateAnyInputt,
-              onSaved: onSavedComment,
-              obscureText: false,
-              decoration: const InputDecoration().applyDefaults(
-                  Theme.of(context).inputDecorationTheme.copyWith(
-                      fillColor: Theme.of(context).dialogBackgroundColor))),
+          child: _inputFealdShadowWrapper(
+            child: TextFormField(
+                validator: validateNotEmptyInput,
+                onSaved: onSavedComment,
+                obscureText: false,
+                decoration: const InputDecoration().applyDefaults(
+                    Theme.of(context).inputDecorationTheme.copyWith(
+                        fillColor: Theme.of(context).dialogBackgroundColor))),
+          ),
           width: MediaQuery.of(context).size.width,
-          decoration: shadowBoxDecoration,
           padding: const EdgeInsets.only(right: 10),
         ),
       ],
@@ -271,16 +287,17 @@ Container newMealStepInputBlock(BuildContext context, //int ingredient_idx,
           ],
         ),
         Container(
-          child: TextFormField(
-              initialValue: step.step,
-              validator: validateAnyInputt,
-              maxLines: null,
-              onSaved: onSavedStepp,
-              decoration: const InputDecoration().applyDefaults(
-                  Theme.of(context).inputDecorationTheme.copyWith(
-                      fillColor: Theme.of(context).dialogBackgroundColor))),
+          child: _inputFealdShadowWrapper(
+            child: TextFormField(
+                initialValue: step.step,
+                validator: validateNotEmptyInput,
+                maxLines: null,
+                onSaved: onSavedStepp,
+                decoration: const InputDecoration().applyDefaults(
+                    Theme.of(context).inputDecorationTheme.copyWith(
+                        fillColor: Theme.of(context).dialogBackgroundColor))),
+          ),
           width: MediaQuery.of(context).size.width,
-          decoration: shadowBoxDecoration,
           padding: const EdgeInsets.only(right: 10),
         ),
         if (!last)

@@ -20,6 +20,21 @@ final playfairFont = "Playfair_Display";
 final robotoFont = "Roboto";
 final lobsterFont = "Lobster";
 
+/*
+intil vidre ligger den her her, hvis vi går over til og få inputt feald skygge via material ternger vi den er litt usikker på hva som er best atm
+
+
+ shadowColor: Theme.of(context).shadowColor,
+          elevation: 10,
+          color: Colors.transparent,
+          borderRadius: const BorderRadius.all(
+            const Radius.circular(10.0),
+          ),
+        )
+
+
+ */
+
 final logoTextStyle =
     TextStyle(fontFamily: "Lobster", color: primaryTextColor, fontSize: 50);
 
@@ -38,9 +53,9 @@ final courseNavbarTextStyleActive = TextStyle(
 final shadowBoxDecoration = BoxDecoration(boxShadow: [
   BoxShadow(
       color: shadowColor, //Colors.yellow,
-      blurRadius: 4,
+      blurRadius: 2,
       offset: const Offset(0.5, 2),
-      spreadRadius: 2)
+      spreadRadius: 4)
 ]);
 
 final mainTheme = ThemeData(
@@ -74,8 +89,10 @@ final mainTheme = ThemeData(
           ),
         ),
         hintStyle: TextStyle(
-          color: formHintColor,
-        )),
+            fontFamily: robotoFont,
+            color: formHintColor,
+            fontStyle: FontStyle.italic,
+            fontSize: 12)),
     backgroundColor: mainBackgroundColor,
     scaffoldBackgroundColor: mainBackgroundColor,
     iconTheme: IconThemeData(color: fadeTextColor),
@@ -98,6 +115,7 @@ final mainTheme = ThemeData(
             fontWeight: FontWeight.w500,
             fontSize: 16,
             color: primaryTextColor),
+
         // Used for text on ElevatedButton, TextButton and OutlinedButton.
         //button: null,
         // Used for auxiliary text associated with images.
@@ -105,7 +123,7 @@ final mainTheme = ThemeData(
         // The smallest style. [...]
         //overline: null,
         // Used for the primary text in lists (e.g., ListTile.title).
-        //subtitle1: null,
+        // subtitle1: ,
         // For medium emphasis text that's a little smaller than subtitle1.
         //subtitle2: null,
         // Extremely large text.

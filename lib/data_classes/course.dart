@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 // Måltid
 class Recipe {
   User creator;
-  String name = "aaaaa";
+  String name = "";
   List<Tag> tags = [];
   String description = "";
   int cookTime = 0;

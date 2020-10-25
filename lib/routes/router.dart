@@ -30,7 +30,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
     case RouteRecipeNew:
       page = NewCoursePage();
       break;
-    case RouteRecipeEdit:
+    //case RouteRecipeEdit:
     case RouteRecipeView:
     case RouteMealNew:
     case RouteMealEdit:

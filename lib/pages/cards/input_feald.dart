@@ -14,8 +14,9 @@ Widget _inputFealdShadowWrapper({Widget child}) {
   );
 }
 
-Container userScreenInpBox(BuildContext context,
-    {String hedValue,
+/// Secondary input field has a different color scheme then the primary.
+Container secondaryInputField(BuildContext context,
+    {String label,
     FormFieldSetter<String> onSave,
     FormFieldValidator<String> validator,
     bool obscureInput = false,
@@ -25,7 +26,7 @@ Container userScreenInpBox(BuildContext context,
       children: [
         Padding(
           child: Text(
-            hedValue,
+            label,
             style: Theme.of(context).textTheme.headline2,
           ),
           padding: const EdgeInsets.only(bottom: 4),

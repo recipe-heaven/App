@@ -1,7 +1,19 @@
 class NewUserFormData {
-  String username;
   String name;
+
   String password;
 
-  NewUserFormData();
+  String email;
+
+  String username;
+
+  /// Returns a map of all the fields with their values
+  toMap() {
+    return {
+      "name": this.name,
+      "email": this.email,
+      "username": this.username,
+      "password": this.password
+    };
+  }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 final alpha = new RegExp(r'[A-Z]');
 final hashtag = new RegExp(r'^(((^| )#([a-zA-Z0-9]+))+ *)*$');
 final floatRegex = new RegExp(r'^(\d*(.|,)\d*)$');
+final emailRegex =
+    new RegExp(r'^[a-zA-Z0-9.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]{2,64})+$');
 
 String validateTagFeald(String value) {
   // if valid tag or empty return valid
@@ -24,6 +26,14 @@ String validateNotEmptyInput(String value) {
   if (value.trim().length > 1) {
     return null;
   } else {
-    return "provide some input";
+    return "Can not be empty";
+  }
+}
+
+String validateEmail(String value) {
+  if (value.trim().contains(emailRegex)) {
+    return null;
+  } else {
+    return "Please enter a valid email address";
   }
 }

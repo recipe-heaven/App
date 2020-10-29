@@ -4,6 +4,7 @@ const RouteUserNew = "/user/create";
 const RouteUserLogin = "/user/login";
 const RouteUserProfile = "/user/profile"; // ID
 const RouteUserEditProfile = "/user/editprofile";
+const RouteUserChangePass = "/user/changepass";
 
 const RouteRecipeNew = "/recipe/new";
 const RouteRecipeEdit = "/recipe/edit"; // ID

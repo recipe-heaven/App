@@ -4,7 +4,7 @@ import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
-import 'package:App/pages/cards/input_feald.dart';
+import 'package:App/pages/common_widgets/input_feald.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,13 +93,13 @@ class NewCoursePageState extends State<NewCoursePage> {
                 child: Column(
                   children: [
                     newMealInputBox(context,
-                        hedValue: "Meal Name",
+                        label: "Meal Name",
                         onSave: (newValue) => {widget._course.name = newValue},
                         validator: validateNotEmptyInput,
                         initVal: widget._course.name,
                         hint: "name"),
                     newMealInputBox(context,
-                        hedValue: "Tags",
+                        label: "Tags",
                         onSave: (newValue) => {
                               if (newValue.length > 2)
                                 {
@@ -112,7 +112,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                         initVal: _getTagString(),
                         hint: "tags"),
                     newMealInputBox(context,
-                        hedValue: "Description",
+                        label: "Description",
                         onSave: (newValue) =>
                             {widget._course.description = newValue},
                         validator: validateNotEmptyInput,

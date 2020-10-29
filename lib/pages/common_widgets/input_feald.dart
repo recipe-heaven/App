@@ -52,7 +52,7 @@ Container secondaryInputField(BuildContext context,
 }
 
 Container newMealInputBox(BuildContext context,
-    {String hedValue,
+    {String label,
     String initVal,
     FormFieldSetter<String> onSave,
     FormFieldValidator<String> validator,
@@ -63,13 +63,14 @@ Container newMealInputBox(BuildContext context,
       children: [
         Padding(
           child: Text(
-            hedValue,
+            label,
             style: Theme.of(context).textTheme.headline2,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
         _inputFealdShadowWrapper(
           child: TextFormField(
+            style: Theme.of(context).textTheme.bodyText1,
             validator: validator,
             initialValue: initVal,
             onSaved: onSave,

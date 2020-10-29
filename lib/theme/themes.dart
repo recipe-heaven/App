@@ -20,20 +20,6 @@ final playfairFont = "Playfair_Display";
 final robotoFont = "Roboto";
 final lobsterFont = "Lobster";
 
-/*
-intil vidre ligger den her her, hvis vi går over til og få inputt feald skygge via material ternger vi den er litt usikker på hva som er best atm
-
-
- shadowColor: Theme.of(context).shadowColor,
-          elevation: 10,
-          color: Colors.transparent,
-          borderRadius: const BorderRadius.all(
-            const Radius.circular(10.0),
-          ),
-        )
-
-
- */
 
 final logoTextStyle =
     TextStyle(fontFamily: "Lobster", color: primaryTextColor, fontSize: 50);
@@ -77,6 +63,7 @@ final mainTheme = ThemeData(
         unselectedLabelStyle: TextStyle(color: softTextColor, fontSize: 10)),
     shadowColor: shadowColor,
     dialogBackgroundColor: elementBackgroundColor,
+
     inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,

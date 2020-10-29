@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
-        initialRoute: route_names.RouteHome,
+        // for easy testing of pr
+        initialRoute: route_names.RouteUserChangePass, //route_names.RouteHome,
         onGenerateRoute: (settings) => router(context, settings));
   }
 }

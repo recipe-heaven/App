@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation/bottom_navigation.dart';
-import 'package:App/data_classes/course.dart';
-import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/cupertino.dart';
@@ -87,7 +86,7 @@ class NewCoursePageState extends State<NewCoursePage> {
             height: 2,
             width: double.maxFinite,
             color: Theme.of(context).backgroundColor,
-          ) ,
+          ),
           Text(
             "NEW RECIPE",
             style: Theme.of(context).accentTextTheme.headline1,

@@ -16,13 +16,12 @@ class UserService {
   ///
   Future<bool> changePass(
       {@required String oldPass, @required String newPass}) async {
-    var response = await httpClient
-        .post(changePassEndpoint, headers: {"old-pass": oldPass, "new-pass": newPass});
+    var response = await httpClient.post(changePassEndpoint,
+        headers: {"old-pass": oldPass, "new-pass": newPass});
     if (response.statusCode == 200) {
-return true;
+      return true;
     } else {
-return false;
+      return false;
     }
   }
-
 }

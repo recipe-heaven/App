@@ -1,10 +1,10 @@
 import 'package:App/components/navigation/bottom_navigation.dart';
-import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:App/data_classes/user.dart';
 
 class CourseMealPage extends StatefulWidget {
   Meal meal = Meal(

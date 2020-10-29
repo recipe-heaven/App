@@ -13,13 +13,14 @@ final linkActiveColor = Color(0xFFFFC891);
 final splitLineColor = Color(0xFF304048);
 final recipeStepDescriptionBackground = Color(0xFF1D262B);
 
+final YeahhhhhColor = Color(0xFF00bb00);
+
 final navBarBackgroundColor = Color(0xFF222D33);
 final shadowColor = Color(0xCC111D22);
 
 final playfairFont = "Playfair_Display";
 final robotoFont = "Roboto";
 final lobsterFont = "Lobster";
-
 
 final logoTextStyle =
     TextStyle(fontFamily: "Lobster", color: primaryTextColor, fontSize: 50);
@@ -63,7 +64,6 @@ final mainTheme = ThemeData(
         unselectedLabelStyle: TextStyle(color: softTextColor, fontSize: 10)),
     shadowColor: shadowColor,
     dialogBackgroundColor: elementBackgroundColor,
-
     inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,

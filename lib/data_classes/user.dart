@@ -1,10 +1,29 @@
 import 'package:App/data_classes/course.dart';
+import 'package:flutter/foundation.dart';
 
 class User {
   num id;
   String email;
   String name;
+  String username;
   UserSettings settings;
+
+  User(
+      {@required this.id,
+      @required this.email,
+      @required this.name,
+      @required this.username,
+      @required this.settings});
+
+  // Creates a new user object from JSON
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        id: json["id"],
+        email: json["email"],
+        name: json["name"],
+        username: json["username"],
+        settings: json["settings"]);
+  }
 }
 
 class UserSettings {

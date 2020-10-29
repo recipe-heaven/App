@@ -1,6 +1,7 @@
 import 'package:App/pages/create_recipe/create_recipe.dart';
 import 'package:App/pages/home/home.dart';
 import 'package:App/pages/login/login.dart';
+import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
 
@@ -27,6 +28,9 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     case RouteUserProfile:
     case RouteUserEditProfile:
+    case RouteUserChangePass:
+      page = ChangePassPage();
+      break;
     case RouteRecipeNew:
       page = NewCoursePage();
       break;

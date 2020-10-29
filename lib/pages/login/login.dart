@@ -1,13 +1,16 @@
 import 'dart:ui';
 
-import 'package:App/pages/cards/input_feald.dart';
+import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/routes/routes.dart';
+import 'package:App/service/auth_service.dart';
+import 'package:App/service/http_client.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'login_form_data.dart';
-
 class LoginPage extends StatefulWidget {
+  final authService = AuthService(HttpClient());
+
   LoginPage({Key key}) : super(key: key);
 
   @override
@@ -16,22 +19,26 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  var _loginFormData;
 
-  @override
-  void initState() {
-    super.initState();
-    _loginFormData = LoginFormData();
-  }
+  String _email = "";
+  String _password = "";
+  String _errorMessage = "";
 
-  void _handleLogin() {
-    // todo
-    if (_formKey.currentState.validate()) {
-      final FormState formS = _formKey.currentState;
-      formS.save();
+  void _handleLogin() async {
+    _errorMessage = "";
+    final FormState formState = _formKey.currentState;
+    if (formState.validate()) {
+      formState.save();
 
-      print("Username: " + _loginFormData.username);
-      print("Password: " + _loginFormData.password);
+      var res = await widget.authService
+          .loginEmailPassword(email: _email, password: _password);
+      if (res == null) {
+        setState(() {
+          _errorMessage = "Wrong email and/or password";
+        });
+      } else {
+        // Do routing, set state
+      }
     }
   }
 
@@ -63,21 +70,24 @@ class LoginPageState extends State<LoginPage> {
                   style: logoTextStyle,
                 ),
               ),
+              Text(
+                _errorMessage,
+                style: TextStyle(color: Theme.of(context).errorColor),
+              ),
               Container(
                   child: Form(
                       key: _formKey,
                       child: Column(children: [
-                        userScreenInpBox(context,
-                            hedValue: "Email",
-                            onSave: (newValue) =>
-                                {_loginFormData.username = newValue},
+                        secondaryInputField(context,
+                            label: "Email",
+                            onSave: (email) => {_email = email},
                             validator: null,
-                            hint: "mail"),
-                        userScreenInpBox(context,
-                            hedValue: "Password",
-                            onSave: (newValue) =>
-                                {_loginFormData.password = newValue},
-                            validator: null,
+                            hint: "recipe@mail.com"),
+                        secondaryInputField(context,
+                            label: "Password",
+                            onSave: (password) => {_password = password},
+                            validator: (value) =>
+                                value.isEmpty ? "Please enter password" : null,
                             obscureInput: true,
                             hint: "••••••••"),
                         TextButton(
@@ -99,7 +109,7 @@ class LoginPageState extends State<LoginPage> {
               Container(
                 child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/user/register");
+                      Navigator.pushNamed(context, RouteUserNew);
                     },
                     child: Text(
                       "Create New user",

@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:App/data_classes/course.dart';
 import 'package:App/data_classes/meal.dart';
-import 'package:App/pages/cards/input_feald.dart';
+import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/service/auth_service.dart';
+import 'package:App/service/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,7 @@ import 'new_user_form_data.dart';
 
 class NewUserPage extends StatefulWidget {
   NewUserPage({Key key}) : super(key: key);
+  final authService = AuthService(HttpClient());
 
   @override
   NewUserPageState createState() => NewUserPageState();
@@ -34,6 +37,7 @@ class NewUserPageState extends State<NewUserPage> {
       print("Username: " + _newUserFormData.username);
       print("Username: " + _newUserFormData.name);
       print("Password: " + _newUserFormData.password);
+      widget.authService.createUser(_newUserFormData);
     }
   }
 
@@ -74,27 +78,27 @@ class NewUserPageState extends State<NewUserPage> {
                   child: Form(
                       key: _formKey,
                       child: Column(children: [
-                        userScreenInpBox(context,
-                            hedValue: "Email",
+                        secondaryInputField(context,
+                            label: "Email",
                             onSave: (newValue) =>
                                 {_newUserFormData.username = newValue},
                             validator: null,
                             hint: "mail"),
-                        userScreenInpBox(context,
-                            hedValue: "Full name",
+                        secondaryInputField(context,
+                            label: "Full name",
                             onSave: (newValue) =>
                                 {_newUserFormData.name = newValue},
                             validator: null,
                             hint: "Name"),
-                        userScreenInpBox(context,
-                            hedValue: "Password",
+                        secondaryInputField(context,
+                            label: "Password",
                             onSave: (newValue) =>
                                 {_newUserFormData.password = newValue},
                             validator: null,
                             obscureInput: true,
                             hint: "••••••••"),
-                        userScreenInpBox(context,
-                            hedValue: "Repeat Password",
+                        secondaryInputField(context,
+                            label: "Repeat Password",
                             onSave: (newValue) =>
                                 {_newUserFormData.password = newValue},
                             validator: null,

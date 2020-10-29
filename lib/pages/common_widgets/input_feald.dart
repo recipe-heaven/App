@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:App/components/form/form_validators.dart';
-import 'package:App/data_classes/course.dart';
-import 'package:App/theme/themes.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:flutter/material.dart';
 
 Widget _inputFealdShadowWrapper({Widget child}) {

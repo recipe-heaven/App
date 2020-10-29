@@ -1,3 +1,4 @@
+import 'package:App/pages/create_meal/create_meal.dart';
 import 'package:App/pages/create_recipe/create_recipe.dart';
 import 'package:App/pages/home/home.dart';
 import 'package:App/pages/login/login.dart';
@@ -37,6 +38,8 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
     //case RouteRecipeEdit:
     case RouteRecipeView:
     case RouteMealNew:
+      page = CreateMealPage();
+      break;
     case RouteMealEdit:
     case RouteMealView:
       page = CourseMealPage();

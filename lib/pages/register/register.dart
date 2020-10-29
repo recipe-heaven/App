@@ -1,13 +1,10 @@
 import 'dart:ui';
 
-import 'package:App/data_classes/course.dart';
-import 'package:App/data_classes/meal.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
 import 'package:App/service/auth_service.dart';
 import 'package:App/service/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 
 import 'new_user_form_data.dart';
 

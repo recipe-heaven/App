@@ -83,6 +83,11 @@ class NewCoursePageState extends State<NewCoursePage> {
                 )),
             padding: const EdgeInsets.all(0),
           ),
+          Container(
+            height: 2,
+            width: double.maxFinite,
+            color: Theme.of(context).backgroundColor,
+          ) ,
           Text(
             "NEW RECIPE",
             style: Theme.of(context).accentTextTheme.headline1,

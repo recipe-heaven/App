@@ -1,6 +1,10 @@
-import 'package:App/data_classes/course.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable()
 class User {
   num id;
   String email;
@@ -16,18 +20,26 @@ class User {
       @required this.settings});
 
   // Creates a new user object from JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        id: json["id"],
-        email: json["email"],
-        name: json["name"],
-        username: json["username"],
-        settings: json["settings"]);
-  }
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //       id: json["id"],
+  //       email: json["email"],
+  //       name: json["name"],
+  //       username: json["username"],
+  //       settings: json["settings"]);
+  // }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
+@JsonSerializable()
 class UserSettings {
   String unit; // metric / imperial
+
+  UserSettings();
+  factory UserSettings.fromJson(Map<String, dynamic> json) =>
+      _$UserSettingsFromJson(json);
+  Map<String, dynamic> toJson() => _$UserSettingsToJson(this);
 }
 
 class ActiveMenu {

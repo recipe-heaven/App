@@ -37,3 +37,31 @@ String validateEmail(String value) {
     return "Please enter a valid email address";
   }
 }
+
+String validateLength(String value, {int min = -1, int max = -1}) {
+  var invalid = false;
+  if (min >= 0) {
+    invalid = value.length < min;
+  }
+  if (max >= 0 && max >= min && !invalid) {
+    invalid = value.length > max;
+  }
+  var errorMessage = "";
+  if (min >= 0 && max >= 0 && max >= min) {
+    errorMessage = "Must be between $min and $max characters";
+  } else if (min >= 0) {
+    errorMessage = "Must be minimum $min characters";
+  } else if (max >= 0) {
+    errorMessage = "Must be maximum $max characters";
+  }
+
+  return invalid ? errorMessage : null;
+}
+
+String validateEquality(String a, String b, String targetEquality) {
+  print(a == b);
+  if (a != b) {
+    return "Is not equal to $targetEquality";
+  }
+  return null;
+}

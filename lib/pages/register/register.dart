@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:App/components/form/form_validators.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/routes/routes.dart';
 import 'package:App/service/auth_service.dart';
 import 'package:App/service/http_client.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,7 @@ class NewUserPage extends StatefulWidget {
 class NewUserPageState extends State<NewUserPage> {
   final _formKey = GlobalKey<FormState>();
   NewUserFormData _newUserFormData;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -26,15 +30,25 @@ class NewUserPageState extends State<NewUserPage> {
     _newUserFormData = NewUserFormData();
   }
 
-  void _handleRegister() {
-    // todo
-    if (_formKey.currentState.validate()) {
-      final FormState formS = _formKey.currentState;
-      formS.save();
-      print("Username: " + _newUserFormData.username);
-      print("Username: " + _newUserFormData.name);
-      print("Password: " + _newUserFormData.password);
-      widget.authService.createUser(_newUserFormData);
+  void _handleRegister() async {
+    final FormState formState = _formKey.currentState;
+    setState(() {
+      _errorMessage = "";
+    });
+    formState.save();
+    if (formState.validate()) {
+      try {
+        await widget.authService.createUser(_newUserFormData);
+        Navigator.pushReplacementNamed(context, RouteUserLogin);
+      } on HttpException catch (e) {
+        setState(() {
+          _errorMessage = e.message;
+        });
+      } on CreateUserException catch (e) {
+        setState(() {
+          _errorMessage = e.message;
+        });
+      }
     }
   }
 
@@ -56,7 +70,8 @@ class NewUserPageState extends State<NewUserPage> {
               ),
             ),
           ),
-          Column(
+          SingleChildScrollView(
+              child: Column(
             children: [
               Padding(
                 padding:
@@ -71,6 +86,10 @@ class NewUserPageState extends State<NewUserPage> {
                   ],
                 ),
               ),
+              Text(
+                _errorMessage,
+                style: TextStyle(color: Theme.of(context).errorColor),
+              ),
               Container(
                   child: Form(
                       key: _formKey,
@@ -78,29 +97,41 @@ class NewUserPageState extends State<NewUserPage> {
                         secondaryInputField(context,
                             label: "Email",
                             onSave: (newValue) =>
-                                {_newUserFormData.username = newValue},
-                            validator: null,
+                                {_newUserFormData.email = newValue},
+                            validator: (value) {
+                              return validateEmail(value);
+                            },
                             hint: "mail"),
+                        secondaryInputField(context,
+                            label: "Username",
+                            onSave: (newValue) =>
+                                {_newUserFormData.username = newValue},
+                            validator: (value) {
+                              return validateNotEmptyInput(value);
+                            },
+                            hint: "username"),
                         secondaryInputField(context,
                             label: "Full name",
                             onSave: (newValue) =>
                                 {_newUserFormData.name = newValue},
-                            validator: null,
+                            validator: (value) {
+                              return validateNotEmptyInput(value);
+                            },
                             hint: "Name"),
                         secondaryInputField(context,
                             label: "Password",
                             onSave: (newValue) =>
                                 {_newUserFormData.password = newValue},
-                            validator: null,
+                            validator: (value) {
+                              return validateLength(value, min: 6);
+                            },
                             obscureInput: true,
                             hint: "••••••••"),
-                        secondaryInputField(context,
-                            label: "Repeat Password",
-                            onSave: (newValue) =>
-                                {_newUserFormData.password = newValue},
-                            validator: null,
-                            obscureInput: true,
-                            hint: "••••••••"),
+                        secondaryInputField(context, label: "Repeat Password",
+                            validator: (value) {
+                          return validateEquality(
+                              value, _newUserFormData.password, "password");
+                        }, obscureInput: true, hint: "••••••••"),
                         TextButton(
                             onPressed: _handleRegister,
                             child: Text(
@@ -114,7 +145,7 @@ class NewUserPageState extends State<NewUserPage> {
             ],
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-          ),
+          )),
         ],
         alignment: Alignment.center,
         fit: StackFit.expand,

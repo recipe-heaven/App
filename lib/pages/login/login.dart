@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:App/app_state.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/service/auth_service.dart';
@@ -7,6 +9,7 @@ import 'package:App/service/http_client.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final authService = AuthService(HttpClient());
@@ -25,19 +28,25 @@ class LoginPageState extends State<LoginPage> {
   String _errorMessage = "";
 
   void _handleLogin() async {
-    _errorMessage = "";
     final FormState formState = _formKey.currentState;
+    setState(() {
+      _errorMessage = "";
+    });
+    formState.save();
     if (formState.validate()) {
-      formState.save();
-
-      var res = await widget.authService
-          .loginEmailPassword(email: _email, password: _password);
-      if (res == null) {
+      try {
+        var user = await widget.authService
+            .loginEmailPassword(email: _email, password: _password);
+        Provider.of<AppState>(context).user = user;
+        Navigator.pushReplacementNamed(context, RouteHome);
+      } on HttpException catch (e) {
         setState(() {
-          _errorMessage = "Wrong email and/or password";
+          _errorMessage = e.message;
         });
-      } else {
-        // Do routing, set state
+      } on LoginException catch (e) {
+        setState(() {
+          _errorMessage = e.message;
+        });
       }
     }
   }

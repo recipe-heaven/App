@@ -1,24 +1,54 @@
-import 'package:App/pages/home/home.dart';
-
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart' as route_names;
+import 'package:App/app_state.dart';
+import 'package:App/service/http_client.dart';
+import 'package:App/service/user_service.dart';
+import 'package:App/store/store.dart';
 import 'package:flutter/material.dart';
 
 import 'package:App/theme/themes.dart' as app_themes;
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => AppState(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _StateSetup(context);
     return MaterialApp(
         title: 'Flutter Demo',
         theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
         // for easy testing of pr
-        initialRoute: route_names.RouteMealNew, //route_names.RouteHome,
+        initialRoute: route_names.RouteHome, //route_names.RouteHome,
         onGenerateRoute: (settings) => router(context, settings));
+  }
+}
+
+/// Provides facilities for setting application state and setup required when
+/// the application starts.
+class _StateSetup {
+  BuildContext _context;
+
+  AppState _appState;
+  _StateSetup(this._context) {
+    _appState = Provider.of<AppState>(_context);
+    _initState();
+  }
+
+  void _initState() {
+    _setInitialUserState();
+  }
+
+  /// Will try to get user from stored token, and set the user state, by fetching
+  /// the user from the server.
+  void _setInitialUserState() async {
+    var userService = UserService(HttpClient());
+    _appState.user = await userService.getCurrentUser();
   }
 }
 

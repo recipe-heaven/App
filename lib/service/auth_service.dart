@@ -1,10 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:App/data_classes/user.dart';
 import 'package:App/pages/register/new_user_form_data.dart';
 import 'package:App/service/endpoints.dart';
 import 'package:App/service/http_client.dart';
+import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
+
+class LoginException implements Exception {
+  String message;
+  LoginException(this.message);
+}
+
+class CreateUserException implements Exception {
+  String message;
+  CreateUserException(this.message);
+}
 
 class AuthService {
   final Http httpClient;
@@ -13,37 +25,49 @@ class AuthService {
 
   /// Tries to authenticate a user with the server.
   ///
-  /// If authentication succeed the user is returned, else null.
+  /// Throws HttpException if service or HTTP fails (network error)
+  /// Throws LoginException when failing to login
   Future<User> loginEmailPassword(
       {@required String email, @required String password}) async {
-    var response = await httpClient
-        .post(loginEndpoint, headers: {"email": email, "password": password});
-    if (response.statusCode == 200) {
-      var decodedJson = jsonDecode(response.body);
-      if (decodedJson["data"] != null) {
-        var user = User.fromJson(decodedJson["data"]);
-        return user;
+    try {
+      var response = await httpClient
+          .post(loginEndpoint, headers: {"email": email, "password": password});
+      if (response.statusCode == 200) {
+        var decodedJson = jsonDecode(response.body);
+        if (decodedJson["data"] != null) {
+          var token = response.headers['authorization'];
+          var user = User.fromJson(decodedJson["data"]);
+          Storage().saveToken(token);
+          return user;
+        } else {
+          throw LoginException("Wrong email/password");
+        }
       } else {
-        return null;
+        throw HttpException("Error logging in");
       }
-    } else {
-      // ERROR
-      return null;
+    } on IOException {
+      throw HttpException("Service unavailable");
     }
   }
 
   /// Tries to create a new user on the server.
   ///
-  /// Returns true if creation was successfull, else false
-  Future<bool> createUser(NewUserFormData userDetails) async {
-    var response =
-        await httpClient.post(createUserEndpoint, headers: userDetails.toMap());
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      // ERROR
-      return false;
+  /// Throws HttpException if service or HTTP fails (network error)
+  /// Throws CreateUserException when failing to create the user
+  Future<void> createUser(NewUserFormData userDetails) async {
+    try {
+      var response = await httpClient.post(createUserEndpoint,
+          headers: userDetails.toMap());
+      if (response.statusCode == 200) {
+        var decodedJson = jsonDecode(response.body);
+        if (decodedJson["data"] == null) {
+          throw CreateUserException("Email aldready exists");
+        }
+      } else {
+        throw HttpException("Error creating user");
+      }
+    } on IOException {
+      throw HttpException("Service unavailable");
     }
   }
 }

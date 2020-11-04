@@ -121,7 +121,7 @@ class CourseMealState extends State<CourseMealPage> {
                       Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 blendMode: BlendMode.dstIn,
-                child: Image.asset("assets/images/abc.gif")),
+                child: Image.network(c.imageUrl)),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(

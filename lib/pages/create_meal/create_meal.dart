@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
-import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';

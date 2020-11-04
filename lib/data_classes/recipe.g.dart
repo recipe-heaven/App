@@ -18,6 +18,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
     cookTime: json['cookTime'] as int,
     ingredients: json['ingredients'],
     cookingSteps: json['cookingSteps'],
+    imageUrl: json['imageUrl'] as String,
   )
     ..public = json['public'] as bool
     ..recommendedDrinks =
@@ -35,6 +36,7 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'ingredients': instance.ingredients,
       'cookingSteps': instance.cookingSteps,
       'recommendedDrinks': instance.recommendedDrinks,
+      'imageUrl': instance.imageUrl,
     };
 
 Tag _$TagFromJson(Map<String, dynamic> json) {

@@ -20,6 +20,8 @@ class Recipe {
   List<RecipeStep> cookingSteps = [];
   List<String> recommendedDrinks = [];
 
+  String imageUrl = "";
+
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
@@ -32,7 +34,9 @@ class Recipe {
       this.description,
       this.cookTime,
       ingredients,
-      cookingSteps})
+      cookingSteps,
+      this.imageUrl =
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1599px-RedDot_Burger.jpg"})
       : this.ingredients = ingredients ?? [],
         this.cookingSteps = cookingSteps ?? [],
         this.tags = tags ?? [],

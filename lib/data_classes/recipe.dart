@@ -65,8 +65,7 @@ List<String> volumeUnits;
 List<String> massUnits;
 List<String> unitUnits;
 
-//shitty language shitty solutions
-enum IngredientUnit { a, b, c, d }
+enum IngredientUnit { kg, cm, lumen, liter }
 var _random = Random(928130938120983);
 
 @JsonSerializable()
@@ -106,7 +105,7 @@ class Ingredient {
       this.amount = 0,
       unitType = IngredientUnit,
       this.comment = ""})
-      : this.unitType = IngredientUnit.a,
+      : this.unitType = IngredientUnit.kg,
         this.key = Key(_random.nextDouble().toString());
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>

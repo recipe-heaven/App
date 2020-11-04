@@ -87,27 +87,27 @@ final TEST_DATA = Meal(recipe: [
       ingredients: [
         Ingredient(
             amount: 1000,
-            unitType: IngredientUnit.a,
+            unitType: IngredientUnit.kg,
             name: "gravel",
             comment: "finely ground"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "penguin",
             comment: "nawww"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "planks",
             comment: "without nails"),
         Ingredient(
             amount: 20,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "screens",
             comment: "waaaaa"),
         Ingredient(
             amount: 88,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "keys",
             comment: "waaaa"),
       ]),
@@ -134,27 +134,27 @@ final TEST_DATA = Meal(recipe: [
       ingredients: [
         Ingredient(
             amount: 1000,
-            unitType: IngredientUnit.a,
+            unitType: IngredientUnit.kg,
             name: "gravel",
             comment: "finely ground"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "penguin",
             comment: "nawww"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "planks",
             comment: "without nails"),
         Ingredient(
             amount: 20,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "screens",
             comment: "waaaaa"),
         Ingredient(
             amount: 88,
-            unitType: IngredientUnit.b,
+            unitType: IngredientUnit.cm,
             name: "keys",
             comment: "waaaa"),
       ]),

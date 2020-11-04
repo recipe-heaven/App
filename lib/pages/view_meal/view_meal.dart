@@ -3,6 +3,7 @@ import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/theme/themes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -183,7 +184,7 @@ class CourseMealState extends State<CourseMealPage> {
                       children: [
                         for (Ingredient ing in c.ingredients) ...[
                           Text(
-                            "${ing.amount} ${ing.unitType} ${ing.name} ${ing.comment}",
+                            "${ing.amount} ${describeEnum(ing.unitType)} ${ing.name} ${ing.comment}",
                             style: Theme.of(context).accentTextTheme.headline3,
                           )
                         ]

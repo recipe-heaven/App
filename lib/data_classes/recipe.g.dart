@@ -78,8 +78,8 @@ Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
     };
 
 const _$IngredientUnitEnumMap = {
-  IngredientUnit.a: 'a',
-  IngredientUnit.b: 'b',
-  IngredientUnit.c: 'c',
-  IngredientUnit.d: 'd',
+  IngredientUnit.kg: 'a',
+  IngredientUnit.cm: 'b',
+  IngredientUnit.lumen: 'c',
+  IngredientUnit.liter: 'd',
 };

@@ -150,8 +150,8 @@ class NewCoursePageState extends State<NewCoursePage> {
                                     ._course
                                     .ingredients[(widget._course.ingredients
                                         .indexOf(ing))]
-                                    .amount = 1
-                              }, // TODO: actually save ammount
+                                    .amount = num.parse(newValue.trim())
+                              },
                               onSavedType: (newValue) =>
                                   {ing.unitType = newValue},
                               onSavedComment: (newValue) {

@@ -1,5 +1,6 @@
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 Widget _inputFealdShadowWrapper({Widget child}) {
@@ -201,18 +202,11 @@ Container newMealIngredientInputBlock(
                     onChanged: onDropdownChanged,
                     isDense: true,
                     items: [
-                      DropdownMenuItem(
-                        value: IngredientUnit.a,
-                        child: Text("aa"),
-                      ),
-                      DropdownMenuItem(
-                        value: IngredientUnit.b,
-                        child: Text("bb"),
-                      ),
-                      DropdownMenuItem(
-                        value: IngredientUnit.c,
-                        child: Text("cc"),
-                      ),
+                      for (IngredientUnit unit in IngredientUnit.values)
+                        DropdownMenuItem(
+                          value: unit,
+                          child: Text(describeEnum(unit)),
+                        ),
                     ],
                     decoration: const InputDecoration().applyDefaults(
                         Theme.of(context).inputDecorationTheme.copyWith(

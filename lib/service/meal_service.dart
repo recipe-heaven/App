@@ -8,9 +8,6 @@ class MealService {
 
   MealService(this.httpClient);
 
-  /// Tries to change the users password
-  ///
-  ///
   Future<bool> addNewMeal({@required Meal meal}) async {
     var response = await httpClient.post(newMealEndpoint, body: meal.toJson());
     if (response.statusCode == 200) {

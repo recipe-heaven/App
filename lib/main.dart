@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'data_classes/meal.dart';
+import 'data_classes/menu.dart';
 import 'data_classes/recipe.dart';
 
 void main() {
@@ -159,3 +160,4 @@ final TEST_DATA = Meal(recipe: [
             comment: "waaaa"),
       ]),
 ]);
+final TEST_MENU = Menu(meals: [TEST_DATA, TEST_DATA, null, null, TEST_DATA]);

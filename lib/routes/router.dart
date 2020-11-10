@@ -1,11 +1,15 @@
 import 'package:App/pages/create_meal/create_meal.dart';
 import 'package:App/pages/create_menu/create_menu.dart';
 import 'package:App/pages/create_recipe/create_recipe.dart';
+import 'package:App/pages/explore/search.dart';
 import 'package:App/pages/home/home.dart';
 import 'package:App/pages/login/login.dart';
 import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
+
+import 'package:App/routes/routes_options.dart';
+
 import 'package:flutter/material.dart';
 
 import "routes.dart";
@@ -48,8 +52,17 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       page = CreateMenuPage();
       break;
     case RouteMenuEdit:
+      page = CreateMealPage();
+      break;
     case RouteMenuView:
     case RouteMenuShoppingList:
+      break;
+    case RouteSearch:
+      SearchRouteOptions options = SearchRouteOptions();
+      if (settings.arguments.runtimeType == SearchRouteOptions) {
+        options = settings.arguments;
+      }
+      page = Search(options);
       break;
     default:
       return null;

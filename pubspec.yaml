@@ -97,6 +97,8 @@ flutter:
     - family: Roboto
       fonts:
         - asset: ./assets/fonts/Roboto-Regular.ttf
+        - asset: ./assets/fonts/Roboto-Thin.ttf
+          weight: 300
     - family: Lobster
       fonts:
         - asset: ./assets/fonts/Lobster-Regular.ttf

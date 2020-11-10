@@ -1,0 +1,20 @@
+[{
+		"type": "recipe",
+		"data": {
+			"cooktipe": 100
+		}
+	}, {
+		"type": "meal",
+		"data": {
+			"starters": 2,
+			"courses": 2,
+			"desserts": 2
+		}
+	},
+	{
+		"type": "menu",
+		"data": {
+			"days": ["monday", "tuesday"]
+		}
+	}
+]

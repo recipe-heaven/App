@@ -7,9 +7,7 @@ abstract class Http {
   Future<http.Response> get(dynamic url, {Map<String, String> headers});
 
   Future<http.Response> post(dynamic url,
-      {Map<String, String> headers,
-      Map<String, String> body,
-      Encoding encoding});
+      {Map<String, String> headers, dynamic body, Encoding encoding});
 
   Future<http.Response> put(dynamic url,
       {Map<String, String> headers,
@@ -32,9 +30,7 @@ class HttpClient implements Http {
   }
 
   Future<http.Response> post(dynamic url,
-      {Map<String, String> headers,
-      Map<String, String> body,
-      Encoding encoding}) {
+      {Map<String, String> headers, dynamic body, Encoding encoding}) {
     return _client.post(url, headers: headers, body: body, encoding: encoding);
   }
 

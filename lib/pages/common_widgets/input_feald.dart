@@ -1,5 +1,6 @@
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,11 +32,12 @@ Container secondaryInputField(BuildContext context,
         ),
         _inputFealdShadowWrapper(
           child: TextFormField(
+            cursorColor: Colors.white,
             validator: validator,
             onSaved: onSave,
             obscureText: obscureInput,
             decoration: const InputDecoration()
-                .applyDefaults(Theme.of(context).inputDecorationTheme)
+                .applyDefaults(secondaryInputDecorationTheme)
                 .copyWith(
                   hintText: hint,
                 ),
@@ -47,6 +49,29 @@ Container secondaryInputField(BuildContext context,
     ),
     padding: const EdgeInsets.symmetric(vertical: 10),
   );
+}
+
+inputField(BuildContext context,
+    {String label,
+    FormFieldSetter<String> onSave,
+    FormFieldValidator<String> validator,
+    bool obscureInput = false,
+    TextInputAction inputAction = TextInputAction.none,
+    Function(String) onFieldSubmitted,
+    String hint = ""}) {
+  return _inputFealdShadowWrapper(
+      child: TextFormField(
+          style: TextStyle(color: primaryTextColor),
+          validator: validator,
+          onSaved: onSave,
+          obscureText: obscureInput,
+          textInputAction: inputAction,
+          onFieldSubmitted: onFieldSubmitted,
+          decoration: const InputDecoration()
+              .applyDefaults(primaryInputDecorationTheme)
+              .copyWith(
+                hintText: hint,
+              )));
 }
 
 Container newMealInputBox(BuildContext context,

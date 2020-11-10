@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 
 final primaryTextColor = Color(0xFFFFFFFF);
 final formTextColor = Color(0xFF555555);
-final formHintColor = Color(0xFFCCCCCC);
+final formSecondaryHintColor = Color(0xFFCCCCCC);
+final formPrimaryHintColor = Color(0xFF2B3B40);
 final errorColor = Color(0xFFD96060);
 final acceptColor = Color(0xFF4F6E81);
 final softTextColor = Color(0xFFD5E2E6);
 final fadeTextColor = Color(0xFF687A89);
 final mainBackgroundColor = Color(0xFF161D21);
 final elementBackgroundColor = Color(0xFF222D33);
+final elementSecondaryBackgroundColor = Color(0xFFFFFFFF);
 final linkActiveColor = Color(0xFFFFC891);
 final splitLineColor = Color(0xFF304048);
 final recipeStepDescriptionBackground = Color(0xFF1D262B);
+
+final buttonEnabledColor = Color(0xFF4F6E81);
+final buttonDisabledColor = Color(0xFF222D33);
 
 final YeahhhhhColor = Color(0xFF00bb00);
 
@@ -45,9 +50,42 @@ final shadowBoxDecoration = BoxDecoration(boxShadow: [
       spreadRadius: 4)
 ]);
 
+final _sharedInputFeatures = InputDecorationTheme(
+  filled: true,
+  isDense: true,
+  contentPadding: const EdgeInsets.all(10),
+);
+
+final secondaryInputDecorationTheme = _sharedInputFeatures.copyWith(
+    fillColor: elementSecondaryBackgroundColor,
+    border: new OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        const Radius.circular(10.0), // dobbel defined also in input_fealds
+      ),
+    ),
+    hintStyle: TextStyle(
+        fontFamily: robotoFont,
+        color: formSecondaryHintColor,
+        fontStyle: FontStyle.italic,
+        fontSize: 12));
+
+final primaryInputDecorationTheme = _sharedInputFeatures.copyWith(
+    fillColor: elementBackgroundColor,
+    border: new OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        const Radius.circular(10.0), // dobbel defined also in input_fealds
+      ),
+    ),
+    hintStyle: TextStyle(
+        fontFamily: robotoFont,
+        color: formPrimaryHintColor,
+        fontStyle: FontStyle.italic,
+        fontSize: 12));
+
 final mainTheme = ThemeData(
     buttonColor: acceptColor,
     errorColor: errorColor,
+
     // The background color for major parts of the app (toolbars, tab bars, etc) [...]
     primaryColor: elementBackgroundColor,
     //
@@ -64,26 +102,13 @@ final mainTheme = ThemeData(
         unselectedLabelStyle: TextStyle(color: softTextColor, fontSize: 10)),
     shadowColor: shadowColor,
     dialogBackgroundColor: elementBackgroundColor,
-    inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        isDense: true,
-        // labelStyle: ,
-        contentPadding: const EdgeInsets.all(10),
-        border: new OutlineInputBorder(
-          borderRadius: const BorderRadius.all(
-            const Radius.circular(10.0), // dobbel defined also in input_fealds
-          ),
-        ),
-        hintStyle: TextStyle(
-            fontFamily: robotoFont,
-            color: formHintColor,
-            fontStyle: FontStyle.italic,
-            fontSize: 12)),
+    inputDecorationTheme: primaryInputDecorationTheme,
     backgroundColor: mainBackgroundColor,
     scaffoldBackgroundColor: mainBackgroundColor,
     iconTheme: IconThemeData(color: fadeTextColor),
     dividerColor: splitLineColor,
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(backgroundColor: acceptColor),
 
     //bottomAppBarColor: Colors.deepOrange,
     accentColor: Colors.red,
@@ -181,8 +206,9 @@ final mainTheme = ThemeData(
         // Large text.
         headline4: TextStyle(
             fontFamily: robotoFont,
-            color: splitLineColor,
-            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w200,
+            color: primaryTextColor,
+            fontStyle: FontStyle.normal,
             fontSize: 12),
         // Used for large text in dialogs (e.g., the month and year in the dialog shown by showDatePicker).
         headline5: null,

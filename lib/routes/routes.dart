@@ -18,3 +18,5 @@ const RouteMenuNew = "/menu/new";
 const RouteMenuEdit = "/menu/edit"; // ID
 const RouteMenuView = "/menu/"; // ID
 const RouteMenuShoppingList = "/menu/shopping_list"; // ID
+
+const RouteSearch = "/search";

@@ -4,6 +4,8 @@ import 'package:App/components/form/form_validators.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/routes/routes.dart';
+import 'package:App/routes/routes_options.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/meal_service.dart';
 import 'package:App/theme/themes.dart';
@@ -127,8 +129,14 @@ class CreateMealPageState extends State<CreateMealPage> {
     );
   }
 
-  Recipe _ChristoffersMagicSearchAlgorithm() {
-    return null;
+  Future<Recipe> _ChristoffersMagicSearchAlgorithm() async {
+    final recipeObject = await Navigator.pushNamed(context, RouteSearch,
+        arguments: SearchRouteOptions(
+            returnSelcted: true,
+            searchOwnedOnly: true,
+            searchMenus: false,
+            searchMeals: false));
+    print(recipeObject);
   }
 
   Widget _category_selector(
@@ -285,10 +293,10 @@ class CreateMealPageState extends State<CreateMealPage> {
                 _category_selector(
                   buttonText: "ADD STARTERS",
                   category: "starters",
-                  onClick: () {
+                  onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(newRecipe);
+                      widget._meal.recipe.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }
@@ -297,10 +305,10 @@ class CreateMealPageState extends State<CreateMealPage> {
                 _category_selector(
                   buttonText: "ADD COURSE",
                   category: "course",
-                  onClick: () {
+                  onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(newRecipe);
+                      widget._meal.recipe.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }
@@ -309,10 +317,10 @@ class CreateMealPageState extends State<CreateMealPage> {
                 _category_selector(
                   buttonText: "ADD DESSERT",
                   category: "dessert",
-                  onClick: () {
+                  onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(newRecipe);
+                      widget._meal.recipe.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }

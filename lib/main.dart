@@ -1,3 +1,10 @@
+
+import 'package:App/routes/router.dart';
+import 'package:App/routes/routes.dart' as route_names;
+import 'package:App/app_state.dart';
+import 'package:App/service/http_client.dart';
+import 'package:App/service/user_service.dart';
+
 import 'package:App/app_state.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart' as route_names;
@@ -7,6 +14,8 @@ import 'package:App/theme/themes.dart' as app_themes;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:App/theme/themes.dart' as app_themes;
+import 'package:provider/provider.dart';
 import 'data_classes/meal.dart';
 import 'data_classes/menu.dart';
 import 'data_classes/recipe.dart';
@@ -38,7 +47,7 @@ class _StateSetup {
 
   AppState _appState;
   _StateSetup(this._context) {
-    _appState = Provider.of<AppState>(_context);
+    _appState = Provider.of<AppState>(_context, listen: false);
     _initState();
   }
 

@@ -8,4 +8,5 @@ const createUserEndpoint = "${apiUrl}authentication/create";
 const changePassEndpoint = "${apiUrl}authentication/changepassword";
 const currentUserEndpoint = "${apiUrl}authentication/currentuser";
 const newMealEndpoint = "${apiUrl}meal/new";
+const searchEndpoint = "${apiUrl}search";
 const newMenuEndpoint =  "${apiUrl}menu/new";

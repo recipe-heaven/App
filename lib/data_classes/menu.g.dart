@@ -7,14 +7,12 @@ part of 'menu.dart';
 // **************************************************************************
 
 Menu _$MenuFromJson(Map<String, dynamic> json) {
-  return Menu()
-    ..name = json['name'] as String
-    ..owner = json['owner'] as String
-    ..public = json['public'] as String
-    ..meals = (json['meals'] as List)
-        ?.map(
-            (e) => e == null ? null : Meal.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+  return Menu(
+    name: json['name'],
+    owner: json['owner'],
+    public: json['public'],
+    meals: json['meals'],
+  );
 }
 
 Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{

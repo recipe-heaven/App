@@ -9,11 +9,16 @@ part 'menu.g.dart';
 class Menu {
   String name;
   String owner;
-  String public;
+  bool public;
 
   List<Meal> meals;
 
-  Menu();
+  Menu({name, owner, public, meals})
+      : this.name = name ?? "",
+        this.owner = owner,
+        this.public = public ?? false,
+        this.meals = meals ?? new List<Meal>();
+
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);
   Map<String, dynamic> toJson() => _$MenuToJson(this);
 }

@@ -7,11 +7,8 @@ import 'package:App/pages/login/login.dart';
 import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
-
 import 'package:App/routes/routes_options.dart';
-
 import 'package:flutter/material.dart';
-
 import "routes.dart";
 
 /// Performs routing logic and returns route pages for given path

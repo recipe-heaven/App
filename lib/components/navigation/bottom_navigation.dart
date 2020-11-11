@@ -13,7 +13,7 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteHome);
       }
       if (i == 1) {
-        Navigator.pushNamed(context, RouteRecipeNew);
+        Navigator.pushNamed(context, RouteMenuNew);
       }
       if (i == 2) {
         Navigator.pushNamed(context, RouteMealView);
@@ -28,25 +28,23 @@ _bottomNavigationBar(
     },
     items: [
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.house,
-          ),
-          label: "Home"),
+          icon: Padding(
+              padding: EdgeInsets.only(top: 10), child: Icon(Icons.home)),
+          label: ""),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.local_dining,
-          ),
-          label: "Menu"),
+          icon: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Icon(Icons.local_dining)),
+          label: ""),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.shopping_bag,
-          ),
-          label: "Shopping"),
+          icon: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Icon(Icons.shopping_bag)),
+          label: ""),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.menu,
-          ),
-          label: "hamburger")
+          icon: Padding(
+              padding: EdgeInsets.only(top: 10), child: Icon(Icons.menu)),
+          label: "")
     ],
     //backgroundColor: Colors.yellow,
   );

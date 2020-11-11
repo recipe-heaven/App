@@ -1,4 +1,5 @@
 import 'package:App/components/navigation/bottom_navigation.dart';
+import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
@@ -255,7 +256,7 @@ class CourseMealState extends State<CourseMealPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWithNavigation(
       body: Scaffold(
         body: Container(
             child: PageView(
@@ -270,7 +271,6 @@ class CourseMealState extends State<CourseMealPage> {
         //backgroundColor: Theme.of(context).backgroundColor,
         bottomNavigationBar: _makePsudoNavBar(),
       ),
-      bottomNavigationBar: navigationBar(context, (isNavigating) {}),
     );
   }
 }

@@ -50,6 +50,8 @@ class _FilterButtonState extends State<FilterButtons> {
     return FlatButton(
       onPressed: onPressed,
       textColor: softTextColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       padding: const EdgeInsets.all(0.0),
       child: Container(
         width: MediaQuery.of(context).size.width * .28,

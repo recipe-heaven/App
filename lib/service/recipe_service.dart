@@ -54,23 +54,3 @@ class RecipeService {
     return false;
   }
 }
-
-/*
-try {
-      var response = await httpClient.post(searchEndpoint,
-          headers: {'Content-type': "application/json"},
-          body: options.toJsonString());
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        if (body["data"] != null) {
-          return Result.fromJson(body["data"]);
-        }
-      } else {
-        return null;
-      }
-    } on IOException catch (e) {
-      print(e);
-    }
-
-
- */

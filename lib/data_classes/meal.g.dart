@@ -15,9 +15,18 @@ Meal _$MealFromJson(Map<String, dynamic> json) {
     ..public = json['public'] as bool;
 }
 
-Map<String, dynamic> _$MealToJson(Meal instance) => <String, dynamic>{
-      'name': instance.name,
-      'owner': instance.owner,
-      'public': instance.public,
-      'recipe': instance.recipe,
-    };
+Map<String, dynamic> _$MealToJson(Meal instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  writeNotNull('owner', instance.owner);
+  writeNotNull('public', instance.public);
+  writeNotNull('recipe', instance.recipe?.map((e) => e?.toJson())?.toList());
+  return val;
+}

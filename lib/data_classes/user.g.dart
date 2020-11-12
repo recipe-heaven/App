@@ -18,19 +18,36 @@ User _$UserFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'id': instance.id,
-      'email': instance.email,
-      'name': instance.name,
-      'username': instance.username,
-      'settings': instance.settings,
-    };
+Map<String, dynamic> _$UserToJson(User instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('email', instance.email);
+  writeNotNull('name', instance.name);
+  writeNotNull('username', instance.username);
+  writeNotNull('settings', instance.settings?.toJson());
+  return val;
+}
 
 UserSettings _$UserSettingsFromJson(Map<String, dynamic> json) {
   return UserSettings()..unit = json['unit'] as String;
 }
 
-Map<String, dynamic> _$UserSettingsToJson(UserSettings instance) =>
-    <String, dynamic>{
-      'unit': instance.unit,
-    };
+Map<String, dynamic> _$UserSettingsToJson(UserSettings instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('unit', instance.unit);
+  return val;
+}

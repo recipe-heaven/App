@@ -1,47 +1,114 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation/bottom_navigation.dart';
+import 'package:App/components/navigation_scaffold.dart';
+import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/service/http_client.dart';
+import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 
-class NewCoursePage extends StatefulWidget {
+class NewRecipePage extends StatefulWidget {
+  final RecipeService _service = RecipeService(HttpClient());
+
   @override
-  NewCoursePageState createState() => NewCoursePageState();
-  final Recipe _course = Recipe();
+  NewRecipePageState createState() => NewRecipePageState();
+  final Recipe _recipe = Recipe();
 }
 
-class NewCoursePageState extends State<NewCoursePage> {
+class NewRecipePageState extends State<NewRecipePage> {
   final _formKey = GlobalKey<FormState>();
-  void _handleSaveMeal() {
+  void _handleSaveMeal() async {
     if (_formKey.currentState.validate()) {
       final FormState formS = _formKey.currentState;
       formS.save();
-
-      print("name: " + widget._course.name);
-      print("des: " + widget._course.description);
-      print("type: " + widget._course.type);
-      print("steps: " + widget._course.cookingSteps.toString());
-      print("ingr: " + widget._course.ingredients.toString());
-      print("tags: " + widget._course.tags.toString());
-      print("time: " + widget._course.cookTime.toString());
-      print("name: " + widget._course.name);
+      bool suc = await widget._service.newRecipe(widget._recipe, _image);
+      print(suc);
     }
+  }
+
+  File _image;
+  final picker = ImagePicker();
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _getGalleryImage();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _takeImage();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future _takeImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future _getGalleryImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  ImageProvider _getDisplayImage() {
+    if (_image != null) {
+      return Image.file(_image).image;
+    }
+    if (widget._recipe.recipeImage != null) {
+      return Image.network(widget._recipe.recipeImage.getImageUrl()).image;
+    }
+    return FoodImage().default_image.image;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: navigationBar(context, (isNavigating) {}),
+    return ScaffoldWithNavigation(
+      //bottomNavigationBar: navigationBar(context, (isNavigating) {}),
       body: ListView(
         children: [
           FlatButton(
             minWidth: double.infinity,
-            onPressed: null,
+            onPressed: () => _showPicker(context),
             child: ShaderMask(
                 shaderCallback: (rect) {
                   return LinearGradient(
@@ -57,9 +124,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image:
-                              ExactAssetImage("assets/images/y_6cfb1008.jpg"),
-                          fit: BoxFit.cover)),
+                          image: _getDisplayImage(), fit: BoxFit.cover)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                     child: new Container(
@@ -98,36 +163,34 @@ class NewCoursePageState extends State<NewCoursePage> {
                   children: [
                     newMealInputBox(context,
                         label: "Meal Name",
-                        onSave: (newValue) => {widget._course.name = newValue},
+                        onSave: (newValue) => {widget._recipe.name = newValue},
                         validator: validateNotEmptyInput,
-                        initVal: widget._course.name,
+                        initVal: widget._recipe.name,
                         hint: "name"),
-                    newMealInputBox(context,
-                        label: "Tags",
-                        onSave: (newValue) => {
-                              if (newValue.length > 2)
-                                {
-                                  widget._course.tags = newValue
-                                      .split(" ")
-                                      .map((e) => Tag(e.replaceFirst("#", "")))
-                                }
-                            },
+                    newMealInputBox(context, label: "Tags", onSave: (tags) {
+                      if (tags.length >= 2) {
+                        widget._recipe.tags = tags
+                            .split(" ")
+                            .map((e) => Tag(e.replaceFirst("#", "")))
+                            .toList();
+                      }
+                    },
                         validator: validateTagFeald,
                         initVal: _getTagString(),
                         hint: "tags"),
                     newMealInputBox(context,
                         label: "Description",
                         onSave: (newValue) =>
-                            {widget._course.description = newValue},
+                            {widget._recipe.description = newValue},
                         validator: validateNotEmptyInput,
-                        initVal: widget._course.name,
+                        initVal: widget._recipe.name,
                         hint: "desc"),
                     newTimeInputBox(context,
                         hedValue: "Estimated time",
                         onSaveHour: (newValue) =>
-                            {widget._course.cookTime = num.parse(newValue)},
+                            {widget._recipe.cookTime = num.parse(newValue)},
                         onSaveMin: (newValue) =>
-                            {widget._course.cookTime = num.parse(newValue)},
+                            {widget._recipe.cookTime = num.parse(newValue)},
                         validator: validateFloatInput),
                     Row(
                       children: [
@@ -140,15 +203,16 @@ class NewCoursePageState extends State<NewCoursePage> {
                     ),
                     Column(
                       children: [
-                        for (Ingredient ing in widget._course.ingredients)
+                        for (Ingredient ing in widget._recipe.recipeIngredients)
                           Container(
                             child: newMealIngredientInputBlock(
                               context,
                               ingredient: ing,
                               onSavedAmmount: (newValue) => {
                                 widget
-                                    ._course
-                                    .ingredients[(widget._course.ingredients
+                                    ._recipe
+                                    .recipeIngredients[(widget
+                                        ._recipe.recipeIngredients
                                         .indexOf(ing))]
                                     .amount = num.parse(newValue.trim())
                               },
@@ -159,7 +223,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                               },
                               onPressdBack: () {
                                 setState(() {
-                                  widget._course.ingredients.remove(ing);
+                                  widget._recipe.recipeIngredients.remove(ing);
                                 });
                               },
                               validator: null,
@@ -175,7 +239,8 @@ class NewCoursePageState extends State<NewCoursePage> {
                         RawMaterialButton(
                           onPressed: () {
                             setState(() {
-                              widget._course.ingredients.add(Ingredient());
+                              widget._recipe.recipeIngredients
+                                  .add(Ingredient());
                             });
                           },
                           elevation: 2.0,
@@ -200,13 +265,13 @@ class NewCoursePageState extends State<NewCoursePage> {
                     Column(
                       children: [
                         for (MapEntry<int, RecipeStep> entry
-                            in widget._course.cookingSteps.asMap().entries)
+                            in widget._recipe.cookingSteps.asMap().entries)
                           Container(
                             child: newMealStepInputBlock(
                               context,
                               first: entry.key == 0,
                               last: entry.key ==
-                                  widget._course.cookingSteps.length - 1,
+                                  widget._recipe.cookingSteps.length - 1,
                               hint: "step",
                               step: entry.value,
                               onSavedStepp: (newValue) {
@@ -215,23 +280,23 @@ class NewCoursePageState extends State<NewCoursePage> {
                               hedValue: "Estimated time",
                               onPressdDown: () {
                                 setState(() {
-                                  widget._course.cookingSteps
+                                  widget._recipe.cookingSteps
                                       .removeAt(entry.key);
-                                  widget._course.cookingSteps
+                                  widget._recipe.cookingSteps
                                       .insert(entry.key + 1, entry.value);
                                 });
                               },
                               onPressdUp: () {
                                 setState(() {
-                                  widget._course.cookingSteps
+                                  widget._recipe.cookingSteps
                                       .removeAt(entry.key);
-                                  widget._course.cookingSteps
+                                  widget._recipe.cookingSteps
                                       .insert(entry.key - 1, entry.value);
                                 });
                               },
                               onPressdBack: () {
                                 setState(() {
-                                  widget._course.cookingSteps
+                                  widget._recipe.cookingSteps
                                       .remove(entry.value);
 
                                   //widget._course.cookingSteps.removeAt(widget._course.cookingSteps.indexOf(step));
@@ -244,7 +309,7 @@ class NewCoursePageState extends State<NewCoursePage> {
                         RawMaterialButton(
                           onPressed: () {
                             setState(() {
-                              widget._course.cookingSteps.add(RecipeStep());
+                              widget._recipe.cookingSteps.add(RecipeStep());
                             });
                           },
                           elevation: 2.0,
@@ -281,10 +346,10 @@ class NewCoursePageState extends State<NewCoursePage> {
   }
 
   String _getTagString() {
-    if (widget._course.tags.length == 0) {
+    if (widget._recipe.tags.length == 0) {
       return "";
     } else {
-      return widget._course.tags
+      return widget._recipe.tags
           .map((e) => e.tagName)
           .reduce((value, element) => value + " " + element);
     }

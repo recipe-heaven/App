@@ -1,21 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'meal.dart';
+part of 'food_image.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Meal _$MealFromJson(Map<String, dynamic> json) {
-  return Meal(
-    recipe: json['recipe'],
-  )
+FoodImage _$FoodImageFromJson(Map<String, dynamic> json) {
+  return FoodImage()
+    ..id = json['id'] as int
     ..name = json['name'] as String
-    ..owner = json['owner'] as String
-    ..public = json['public'] as bool;
+    ..mimeType = json['mimeType'] as String
+    ..size = json['size'] as int;
 }
 
-Map<String, dynamic> _$MealToJson(Meal instance) {
+Map<String, dynamic> _$FoodImageToJson(FoodImage instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -24,9 +23,9 @@ Map<String, dynamic> _$MealToJson(Meal instance) {
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('name', instance.name);
-  writeNotNull('owner', instance.owner);
-  writeNotNull('public', instance.public);
-  writeNotNull('recipe', instance.recipe?.map((e) => e?.toJson())?.toList());
+  writeNotNull('mimeType', instance.mimeType);
+  writeNotNull('size', instance.size);
   return val;
 }

@@ -16,11 +16,19 @@ SearchOptions _$SearchOptionsFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$SearchOptionsToJson(SearchOptions instance) =>
-    <String, dynamic>{
-      'searchString': instance.searchString,
-      'ownedOnly': instance.ownedOnly,
-      'includeMeals': instance.includeMeals,
-      'includeMenus': instance.includeMenus,
-      'includeRecipes': instance.includeRecipes,
-    };
+Map<String, dynamic> _$SearchOptionsToJson(SearchOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('searchString', instance.searchString);
+  writeNotNull('ownedOnly', instance.ownedOnly);
+  writeNotNull('includeMeals', instance.includeMeals);
+  writeNotNull('includeMenus', instance.includeMenus);
+  writeNotNull('includeRecipes', instance.includeRecipes);
+  return val;
+}

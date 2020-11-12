@@ -15,6 +15,15 @@ Result _$ResultFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ResultToJson(Result instance) => <String, dynamic>{
-      'result': instance.result,
-    };
+Map<String, dynamic> _$ResultToJson(Result instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('result', instance.result?.map((e) => e?.toJson())?.toList());
+  return val;
+}

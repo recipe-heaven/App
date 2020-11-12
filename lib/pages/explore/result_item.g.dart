@@ -13,8 +13,16 @@ ResultItem _$ResultItemFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ResultItemToJson(ResultItem instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'data': instance.data,
-    };
+Map<String, dynamic> _$ResultItemToJson(ResultItem instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('type', instance.type);
+  writeNotNull('data', instance.data);
+  return val;
+}

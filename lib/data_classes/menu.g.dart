@@ -15,9 +15,18 @@ Menu _$MenuFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
-      'name': instance.name,
-      'owner': instance.owner,
-      'public': instance.public,
-      'meals': instance.meals,
-    };
+Map<String, dynamic> _$MenuToJson(Menu instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  writeNotNull('owner', instance.owner);
+  writeNotNull('public', instance.public);
+  writeNotNull('meals', instance.meals?.map((e) => e?.toJson())?.toList());
+  return val;
+}

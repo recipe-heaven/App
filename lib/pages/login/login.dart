@@ -89,7 +89,7 @@ class LoginPageState extends State<LoginPage> {
                       child: Column(children: [
                         secondaryInputField(context,
                             label: "Email",
-                            onSave: (email) => {_email = email},
+                            onSave: (email) => {_email = email.trim()},
                             validator: null,
                             hint: "recipe@mail.com"),
                         secondaryInputField(context,

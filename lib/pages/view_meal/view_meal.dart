@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/components/navigation_scaffold.dart';
+import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
@@ -123,7 +126,7 @@ class CourseMealState extends State<CourseMealPage> {
                       Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 blendMode: BlendMode.dstIn,
-                child: Image.network(c.imageUrl)),
+                child: c.getDisplayImage()),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
@@ -183,7 +186,7 @@ class CourseMealState extends State<CourseMealPage> {
                         style: Theme.of(context).textTheme.headline2),
                     Column(
                       children: [
-                        for (Ingredient ing in c.ingredients) ...[
+                        for (Ingredient ing in c.recipeIngredients) ...[
                           Text(
                             "${ing.amount} ${describeEnum(ing.unitType)} ${ing.name} ${ing.comment}",
                             style: Theme.of(context).accentTextTheme.headline3,

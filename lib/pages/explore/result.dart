@@ -10,4 +10,5 @@ class Result {
   Result(this.result);
 
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
+  Map<String, dynamic> toJson() => _$ResultToJson(this);
 }

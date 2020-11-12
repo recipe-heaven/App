@@ -17,6 +17,7 @@ class ResultItem {
 
   factory ResultItem.fromJson(Map<String, dynamic> json) =>
       _$ResultItemFromJson(json);
+  Map<String, dynamic> toJson() => _$ResultItemToJson(this);
 }
 
 abstract class TypeSearchResult {

@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/pages/common_widgets/input_feald.dart';
 import 'package:App/service/http_client.dart';
@@ -109,10 +111,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                           Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 blendMode: BlendMode.dstIn,
-                child: Image.network(
-                  meal.recipe?.first.imageUrl,
-                  fit: BoxFit.fitWidth,
-                )),
+                child: meal.getDisplayImage()),
             Column(
               children: [
                 Row(

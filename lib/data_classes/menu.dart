@@ -5,7 +5,7 @@ import 'meal.dart';
 
 part 'menu.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Menu {
   String name;
   String owner;

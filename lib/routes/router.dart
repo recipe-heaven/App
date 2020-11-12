@@ -34,7 +34,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       page = ChangePassPage();
       break;
     case RouteRecipeNew:
-      page = NewCoursePage();
+      page = NewRecipePage();
       break;
     //case RouteRecipeEdit:
     case RouteRecipeView:

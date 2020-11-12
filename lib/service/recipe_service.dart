@@ -44,7 +44,6 @@ class RecipeService {
       ..fields["recipe"] = json.encode(recipe.toJson())
       ..files.add(await http.MultipartFile.fromPath("image", imageFile.path,
           contentType: MediaType.parse(lookupMimeType(imageFile.path))));
-    print(lookupMimeType(imageFile.path));
     var response = await request.send();
     print(await response.stream.bytesToString());
     print(response.reasonPhrase);

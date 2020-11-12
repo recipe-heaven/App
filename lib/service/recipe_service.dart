@@ -45,8 +45,6 @@ class RecipeService {
       ..files.add(await http.MultipartFile.fromPath("image", imageFile.path,
           contentType: MediaType.parse(lookupMimeType(imageFile.path))));
     var response = await request.send();
-    print(await response.stream.bytesToString());
-    print(response.reasonPhrase);
     if (response.statusCode == 200) {
       return true;
     }

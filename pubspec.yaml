@@ -25,6 +25,8 @@ dependencies:
   shared_preferences: ^0.5.12+2
   json_annotation: ^3.0.0
   provider: ^3.0.0
+  image_picker: ^0.6.7+14
+  mime: 0.9.7
   flutter:
     sdk: flutter
 

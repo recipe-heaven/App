@@ -1,4 +1,6 @@
 import 'package:App/routes/routes.dart';
+import 'package:App/service/auth_service.dart';
+import 'package:App/service/http_client.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,7 @@ void _onDrawerItemTap(BuildContext context, String route) {
 }
 
 Drawer getDrawer(BuildContext context) {
+  final _authServ = AuthService(HttpClient());
   return Drawer(
       child: Container(
     decoration: BoxDecoration(color: elementBackgroundColor),
@@ -38,8 +41,17 @@ Drawer getDrawer(BuildContext context) {
         createDrawerItem("New meal", RouteMealNew, Icons.adb, context),
         createDrawerItem("New recipe", RouteRecipeNew, Icons.adb, context),
         createDrawerItem("New menu", RouteMenuNew, Icons.adb, context),
-        createDrawerItem("Login", RouteMealNew, Icons.adb, context),
-        createDrawerItem("Create user", RouteRecipeNew, Icons.adb, context),
+        createDrawerItem("Login", RouteUserLogin, Icons.adb, context),
+        createDrawerItem("Create user", RouteUserNew, Icons.adb, context),
+        ListTile(
+            leading: Icon(
+              Icons.send,
+              color: primaryTextColor,
+            ),
+            title: Text("DEBUG LOGIN"),
+            onTap: () {
+              _authServ.loginEmailPassword(email: 'a@a', password: 'a');
+            })
       ],
     ),
   ));

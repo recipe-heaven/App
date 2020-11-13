@@ -1,4 +1,3 @@
-
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart' as route_names;
 import 'package:App/app_state.dart';
@@ -73,9 +72,9 @@ class Path404Page extends StatelessWidget {
   }
 }
 
-final TEST_DATA = Meal(recipe: [
+final TEST_DATA = Meal(name: "aslkdjal", recipe: [
   Recipe(
-      type: "course",
+      type: MealType.main,
       cookingSteps: [
         RecipeStep(step: "steg 1 jør noe"),
         RecipeStep(step: "bipetibo"),
@@ -94,7 +93,7 @@ final TEST_DATA = Meal(recipe: [
         Tag("#javasucks"),
         Tag("#tagName")
       ],
-      ingredients: [
+      recipeIngredients: [
         Ingredient(
             amount: 1000,
             unitType: IngredientUnit.kg,
@@ -122,7 +121,7 @@ final TEST_DATA = Meal(recipe: [
             comment: "waaaa"),
       ]),
   Recipe(
-      type: "dessert",
+      type: MealType.dessert,
       cookingSteps: [
         RecipeStep(step: "steg 1 jør noe"),
         RecipeStep(step: "bipetibo"),
@@ -141,7 +140,7 @@ final TEST_DATA = Meal(recipe: [
         Tag("#javasucks"),
         Tag("#tagName")
       ],
-      ingredients: [
+      recipeIngredients: [
         Ingredient(
             amount: 1000,
             unitType: IngredientUnit.kg,

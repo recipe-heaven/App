@@ -6,18 +6,19 @@ import 'meal.dart';
 part 'menu.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Menu {
+class Menu with UserOwned {
   String name;
-  String owner;
-  bool public;
 
   List<Meal> meals;
 
-  Menu({name, owner, public, meals})
-      : this.name = name ?? "",
-        this.owner = owner,
-        this.public = public ?? false,
-        this.meals = meals ?? new List<Meal>();
+  Menu({this.name, this.meals, public, owner, id}) {
+    this.owner = owner;
+    this.public = public ?? false;
+    this.id = id;
+
+    this.name = name ?? "";
+    this.meals = meals ?? new List<Meal>();
+  }
 
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);
   Map<String, dynamic> toJson() => _$MenuToJson(this);

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/components/input_feald.dart';
@@ -40,33 +41,6 @@ class CreateMealPageState extends State<CreateMealPage> {
         // Do routing, set state
       }
     }
-  }
-
-  Future<void> _displayMakePublicDialog(BuildContext context) async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: true,
-        barrierColor: Colors.pink,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("WAAAAAAAAA"),
-            actions: [
-              FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      Navigator.of(context).pop();
-                      widget._meal.public = true;
-                    });
-                  },
-                  child: Text("jup")),
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("nup"))
-            ],
-          );
-        });
   }
 
   Widget _make_recipe_card(Recipe recipe) {
@@ -237,56 +211,7 @@ class CreateMealPageState extends State<CreateMealPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'Meal is: ',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    if (!widget._meal.public) ...[
-                      Text(
-                        "PRIVATE",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2
-                            .copyWith(color: YeahhhhhColor),
-                      ),
-                      Spacer(),
-                      MaterialButton(
-                        child: Text("Make public"),
-                        color: Theme.of(context).errorColor,
-                        onPressed: () {
-                          this._displayMakePublicDialog(context);
-                        },
-                        height: 20,
-                      ),
-                      Spacer(),
-                    ],
-                    if (widget._meal.public) ...[
-                      Text(
-                        "PUBLIC",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2
-                            .copyWith(color: errorColor),
-                      ),
-                      if (!widget._isEditing) ...[
-                        Spacer(),
-                        MaterialButton(
-                          child: Text("Make private"),
-                          color: YeahhhhhColor,
-                          onPressed: () {
-                            setState(() {
-                              widget._meal.public = false;
-                            });
-                          },
-                          height: 20,
-                        ),
-                        Spacer(),
-                      ],
-                    ],
-                  ],
-                ),
+                SetPublicDialog(widget._meal, widget._isEditing, "Meal"),
                 SizedBox(
                   height: 10,
                 ),

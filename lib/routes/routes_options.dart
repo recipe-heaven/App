@@ -25,9 +25,9 @@ class SearchRouteOptions {
 
   /// Returns true if we only have one type for the search, else false
   bool hasOnlyOneSearchSelector() {
-    if (searchMenus && !(searchRecipes && searchMeals)) return true;
-    if (searchMeals && !(searchRecipes && searchMenus)) return true;
-    if (searchRecipes && !(searchMeals && searchMenus)) return true;
+    if (searchMenus && (!searchRecipes && !searchMeals)) return true;
+    if (searchMeals && (!searchRecipes && !searchMenus)) return true;
+    if (searchRecipes && (!searchMeals && !searchMenus)) return true;
     return false;
   }
 }

@@ -36,7 +36,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   var _result;
-  String _searchString;
+  String _searchString = "";
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -125,7 +125,6 @@ class _SearchState extends State<Search> {
   }
 
   Widget createResultText(String text) {
-    print(text);
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10),
         child: Text(text, textAlign: TextAlign.left));
@@ -136,6 +135,7 @@ class _SearchState extends State<Search> {
       _searchString = state.searchString;
       _result = await SearchService(HttpClient()).search(SearchOptions(
           state.searchString,
+          widget.options.recipeType,
           state.ownedOnly,
           state.includeMeal,
           state.includeMenu,

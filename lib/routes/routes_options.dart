@@ -3,6 +3,8 @@
 /// Provides search route options padded to the router
 /// when routing to search.
 class SearchRouteOptions {
+  String recipeType = "";
+
   bool returnSelected;
 
   bool searchOwnedOnly;
@@ -15,6 +17,7 @@ class SearchRouteOptions {
 
   SearchRouteOptions(
       {this.returnSelected = false,
+      this.recipeType,
       this.searchOwnedOnly = false,
       this.searchMeals = true,
       this.searchMenus = true,

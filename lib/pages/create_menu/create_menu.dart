@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
@@ -257,56 +258,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'Menu is: ',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    if (!widget._menu.public) ...[
-                      Text(
-                        "PRIVATE",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2
-                            .copyWith(color: YeahhhhhColor),
-                      ),
-                      Spacer(),
-                      MaterialButton(
-                        child: Text("Make public"),
-                        color: Theme.of(context).errorColor,
-                        onPressed: () {
-                          this._displayMakePublicDialog(context);
-                        },
-                        height: 20,
-                      ),
-                      Spacer(),
-                    ],
-                    if (widget._menu.public) ...[
-                      Text(
-                        "PUBLIC",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2
-                            .copyWith(color: errorColor),
-                      ),
-                      if (!widget._isEditing) ...[
-                        Spacer(),
-                        MaterialButton(
-                          child: Text("Make private"),
-                          color: YeahhhhhColor,
-                          onPressed: () {
-                            setState(() {
-                              widget._menu.public = false;
-                            });
-                          },
-                          height: 20,
-                        ),
-                        Spacer(),
-                      ],
-                    ],
-                  ],
-                ),
+                SetPublicDialog(widget._menu, widget._isEditing, "Menu"),
                 SizedBox(
                   height: 10,
                 ),

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/components/navigation_scaffold.dart';
+import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
@@ -156,6 +157,7 @@ class NewRecipePageState extends State<NewRecipePage> {
             "NEW RECIPE",
             style: Theme.of(context).accentTextTheme.headline1,
           ),
+          SetPublicDialog(widget._recipe, false, "Recipe"),
           Container(
             child: Form(
                 key: _formKey,

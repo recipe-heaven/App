@@ -8,10 +8,13 @@ part of 'menu.dart';
 
 Menu _$MenuFromJson(Map<String, dynamic> json) {
   return Menu(
-    name: json['name'],
-    owner: json['owner'],
+    name: json['name'] as String,
+    meals: (json['meals'] as List)
+        ?.map(
+            (e) => e == null ? null : Meal.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     public: json['public'],
-    meals: json['meals'],
+    owner: json['owner'],
   );
 }
 
@@ -24,9 +27,9 @@ Map<String, dynamic> _$MenuToJson(Menu instance) {
     }
   }
 
-  writeNotNull('name', instance.name);
-  writeNotNull('owner', instance.owner);
+  writeNotNull('owner', instance.owner?.toJson());
   writeNotNull('public', instance.public);
+  writeNotNull('name', instance.name);
   writeNotNull('meals', instance.meals?.map((e) => e?.toJson())?.toList());
   return val;
 }

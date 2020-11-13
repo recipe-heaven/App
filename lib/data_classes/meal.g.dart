@@ -8,11 +8,11 @@ part of 'meal.dart';
 
 Meal _$MealFromJson(Map<String, dynamic> json) {
   return Meal(
+    name: json['name'] as String,
     recipe: json['recipe'],
-  )
-    ..name = json['name'] as String
-    ..owner = json['owner'] as String
-    ..public = json['public'] as bool;
+    owner: json['owner'],
+    public: json['public'],
+  );
 }
 
 Map<String, dynamic> _$MealToJson(Meal instance) {
@@ -24,9 +24,9 @@ Map<String, dynamic> _$MealToJson(Meal instance) {
     }
   }
 
-  writeNotNull('name', instance.name);
-  writeNotNull('owner', instance.owner);
+  writeNotNull('owner', instance.owner?.toJson());
   writeNotNull('public', instance.public);
+  writeNotNull('name', instance.name);
   writeNotNull('recipe', instance.recipe?.map((e) => e?.toJson())?.toList());
   return val;
 }

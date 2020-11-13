@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:App/data_classes/food_image.dart';
@@ -23,17 +24,21 @@ String _drinksToJson(List<String> drinks) {
   return drinks.join("@&@&@");
 }
 
-// Måltid
-@JsonSerializable(explicitToJson: true, includeIfNull: false)
-class Recipe {
+mixin UserOwned {
   @JsonKey(ignore: true)
   int id;
-  User creator;
+  User owner = null;
+  bool public = false;
+}
+
+// Måltid
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class Recipe with UserOwned {
   String name = "";
   List<Tag> tags = [];
   String description = "";
   int cookTime = 0;
-  String type = "main"; // starter/main/dessert
+  MealType type = MealType.main;
   bool visible = false;
   List<Ingredient> recipeIngredients = [];
 
@@ -54,21 +59,29 @@ class Recipe {
   }
 
   Recipe(
-      {this.creator,
-      this.name = "",
-      id,
+      {this.name,
       tags,
-      type,
       this.description,
       this.cookTime,
-      ingredients,
+      type,
+      this.visible,
+      recipeIngredients,
       cookingSteps,
-      this.recipeImage})
-      : this.recipeIngredients = ingredients ?? [],
-        this.cookingSteps = cookingSteps ?? [],
-        this.tags = tags ?? [],
-        this.type = type ?? "main",
-        this.id = id ?? 0;
+      this.recommendedDrinks,
+      this.recipeImage,
+      id,
+      owner,
+      public}) {
+    this.owner = owner;
+    this.public = public ?? false;
+    this.id = id;
+
+    this.recipeIngredients = recipeIngredients ?? [];
+    this.cookingSteps = cookingSteps ?? [];
+    this.tags = tags ?? [];
+    this.type = type ?? MealType.main;
+    this.id = id ?? null;
+  }
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
@@ -98,8 +111,11 @@ class Tag {
 List<String> volumeUnits;
 List<String> massUnits;
 List<String> unitUnits;
-
+enum MealType { starter, main, dessert }
 enum IngredientUnit { kg, cm, lumen, liter }
+
+HashMap<String, IngredientUnit> displayNames = HashMap();
+
 var _random = Random(928130938120983);
 
 class RecipeStep {

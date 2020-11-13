@@ -40,8 +40,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => SearchState(
-            widget.options.searchOwnedOnly, widget.options.returnSelected),
+        create: (context) => SearchState(widget.options),
         child: Scaffold(
           body: Builder(builder: (context) {
             return SafeArea(

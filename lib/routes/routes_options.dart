@@ -13,39 +13,18 @@ class SearchRouteOptions {
 
   bool searchRecipes;
 
-  bool onlyRecipes = false;
-
-  bool onlyMeals = false;
-
-  bool onlyMenus = false;
-
   SearchRouteOptions(
-      {bool returnSelcted = false,
-      bool searchOwnedOnly = false,
-      bool searchMeals = true,
-      bool searchMenus = true,
-      bool searchRecipes = true,
-      bool onlyRecipes = false,
-      bool onlyMeals = false,
-      bool onlyMenus = false}) {
-    this.returnSelected = returnSelcted;
-    this.searchOwnedOnly = searchOwnedOnly;
-    this.searchMeals = searchMeals;
-    this.searchMenus = searchMenus;
-    this.searchRecipes = searchRecipes;
+      {this.returnSelected = false,
+      this.searchOwnedOnly = false,
+      this.searchMeals = true,
+      this.searchMenus = true,
+      this.searchRecipes = true});
 
-    if (onlyRecipes && (!onlyMeals && !onlyMenus)) {
-      this.onlyRecipes = onlyRecipes;
-    } else if (onlyMeals && (!onlyRecipes && !onlyMenus)) {
-      this.onlyMeals = onlyMeals;
-    } else if (onlyMenus && (!onlyRecipes && !onlyMeals)) {
-      this.onlyMenus = onlyMenus;
-    } else if ((onlyRecipes || onlyMeals || onlyMenus)) {
-      throw ArgumentError("Can only have one ONLY selector");
-    }
-  }
-
-  bool hasOnlySelector() {
-    return (this.onlyMeals || this.onlyMenus || this.onlyRecipes);
+  /// Returns true if we only have one type for the search, else false
+  bool hasOnlyOneSearchSelector() {
+    if (searchMenus && !(searchRecipes && searchMeals)) return true;
+    if (searchMeals && !(searchRecipes && searchMenus)) return true;
+    if (searchRecipes && !(searchMeals && searchMenus)) return true;
+    return false;
   }
 }

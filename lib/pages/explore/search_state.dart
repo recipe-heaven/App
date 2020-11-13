@@ -1,4 +1,5 @@
 import 'package:App/pages/explore/result_item.dart';
+import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 
 /// Contains state data for search related
@@ -15,7 +16,13 @@ class SearchState extends ChangeNotifier {
 
   String _searchString;
 
-  SearchState(this._ownedOnly, this._returnSelected);
+  SearchState(SearchRouteOptions options) {
+    this._includeMenu = options.searchMenus;
+    this._includeMeal = options.searchMeals;
+    this._includeRecipe = options.searchRecipes;
+    this._returnSelected = options.returnSelected;
+    this._ownedOnly = options.searchOwnedOnly;
+  }
 
   set includeMeal(bool include) {
     _includeMeal = include;

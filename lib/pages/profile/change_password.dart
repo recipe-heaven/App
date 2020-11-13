@@ -1,7 +1,7 @@
 import 'package:App/components/form/form_validators.dart' as validators;
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/data_classes/user.dart';
-import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/components/input_feald.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/user_service.dart';
 import 'package:App/theme/themes.dart';

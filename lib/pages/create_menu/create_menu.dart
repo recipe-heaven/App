@@ -5,7 +5,7 @@ import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
-import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/components/input_feald.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/menu_service.dart';
 import 'package:App/theme/themes.dart';

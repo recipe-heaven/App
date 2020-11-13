@@ -6,7 +6,7 @@ import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/recipe.dart';
-import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/components/input_feald.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';

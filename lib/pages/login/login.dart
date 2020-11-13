@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:App/app_state.dart';
-import 'package:App/pages/common_widgets/input_feald.dart';
+import 'package:App/components/input_feald.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/service/auth_service.dart';
 import 'package:App/service/http_client.dart';

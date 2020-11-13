@@ -1,4 +1,5 @@
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/helpers/enumHelper.dart';
 import 'package:App/pages/explore/sear_result_card.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/theme/themes.dart';
@@ -34,11 +35,11 @@ List<Widget> getRecipeTypes(List<String> types, BuildContext context) {
   int dessert = 0;
 
   for (var type in types) {
-    if (type == MealType.starter.toString()) {
+    if (type == getStringFromEnum(MealType.starter)) {
       starters++;
-    } else if (type == MealType.main.toString()) {
+    } else if (type == getStringFromEnum(MealType.main)) {
       main++;
-    } else if (type == MealType.dessert.toString()) {
+    } else if (type == getStringFromEnum(MealType.dessert)) {
       dessert++;
     }
   }

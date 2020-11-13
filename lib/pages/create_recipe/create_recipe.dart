@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -31,6 +32,7 @@ class NewRecipePageState extends State<NewRecipePage> {
       formS.save();
       bool suc = await widget._service.newRecipe(widget._recipe, _image);
       print(suc);
+      //print(jsonEncode(widget._recipe.toJson()));
     }
   }
 
@@ -101,6 +103,38 @@ class NewRecipePageState extends State<NewRecipePage> {
     return FoodImage().default_image.image;
   }
 
+  Material _selectRecipeTypeDropdowm() {
+    return inputFealdShadowWrapper(
+      child: Container(
+        color: elementBackgroundColor,
+
+        child: DropdownButton<MealType>(
+          style: Theme.of(context).textTheme.bodyText1,
+          dropdownColor: elementBackgroundColor,
+          isExpanded: true,
+          value: widget._recipe.type,
+          onChanged: (value) {
+            setState(() {
+              widget._recipe.type = value;
+            });
+          },
+          isDense: true,
+          items: [
+            for (MealType type in MealType.values)
+              DropdownMenuItem(
+                value: type,
+                child: Text(
+                  mealTypeDisplayNames[type],
+                  style: TextStyle(color: primaryTextColor),
+                ),
+              ),
+          ],
+        ),
+        //width: MediaQuery.of(context).size.width * ,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
@@ -157,12 +191,13 @@ class NewRecipePageState extends State<NewRecipePage> {
             "NEW RECIPE",
             style: Theme.of(context).accentTextTheme.headline1,
           ),
-          SetPublicDialog(widget._recipe, false, "Recipe"),
           Container(
             child: Form(
                 key: _formKey,
                 child: Column(
                   children: [
+                    SetPublicDialog(widget._recipe, false, "Recipe"),
+                    _selectRecipeTypeDropdowm(),
                     newMealInputBox(context,
                         label: "Meal Name",
                         onSave: (newValue) => {widget._recipe.name = newValue},
@@ -324,8 +359,18 @@ class NewRecipePageState extends State<NewRecipePage> {
                             style: Theme.of(context).textTheme.headline4)
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
+                    Column(
+                      children: [
+                        Text(
+                          "Drinks",
+                          style: Theme.of(context).accentTextTheme.headline2,
+                        ),
+                        DrinksSelector(widget._recipe.recommendedDrinks),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     RawMaterialButton(
                       onPressed: _handleSaveMeal,
@@ -337,7 +382,7 @@ class NewRecipePageState extends State<NewRecipePage> {
                       ),
                       padding: EdgeInsets.all(25.0),
                       shape: CircleBorder(),
-                    )
+                    ),
                   ],
                 )),
             padding: const EdgeInsets.all(10),

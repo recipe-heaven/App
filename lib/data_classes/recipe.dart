@@ -16,14 +16,15 @@ String _stepsToJson(List<RecipeStep> steps) {
   return steps.map((e) => e.step).join("@&@&@");
 }
 
-List<String> _drinksFromJson(String json) {
-  return json.split("@&@&@");
+List<RecipeDrink> _drinksFromJson(String json) {
+  return json.split("@&@&@").map((e) => RecipeDrink(drink: e));
 }
 
-String _drinksToJson(List<String> drinks) {
-  return drinks.join("@&@&@");
+String _drinksToJson(List<RecipeDrink> drinks) {
+  return drinks.map((e) => e.drink).join("@&@&@");
 }
 
+var _random = Random(928130938120983);
 mixin UserOwned {
   @JsonKey(ignore: true)
   int id;
@@ -46,7 +47,7 @@ class Recipe with UserOwned {
   List<RecipeStep> cookingSteps = [];
 
   @JsonKey(toJson: _drinksToJson, fromJson: _drinksFromJson)
-  List<String> recommendedDrinks = [];
+  List<RecipeDrink> recommendedDrinks = [];
 
   FoodImage recipeImage = null;
 
@@ -67,7 +68,7 @@ class Recipe with UserOwned {
       this.visible,
       recipeIngredients,
       cookingSteps,
-      this.recommendedDrinks,
+      recommendedDrinks,
       this.recipeImage,
       id,
       owner,
@@ -76,6 +77,7 @@ class Recipe with UserOwned {
     this.public = public ?? false;
     this.id = id;
 
+    this.recommendedDrinks = recommendedDrinks ?? [];
     this.recipeIngredients = recipeIngredients ?? [];
     this.cookingSteps = cookingSteps ?? [];
     this.tags = tags ?? [];
@@ -85,6 +87,15 @@ class Recipe with UserOwned {
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
+}
+
+class RecipeDrink {
+  Key key;
+
+  String drink = "";
+  RecipeDrink({String drink})
+      : this.key = Key(_random.nextDouble().toString()),
+        this.drink = drink ?? "";
 }
 
 // tar ikke med hashtag til server
@@ -114,9 +125,15 @@ List<String> unitUnits;
 enum MealType { starter, main, dessert }
 enum IngredientUnit { kg, cm, lumen, liter }
 
-HashMap<String, IngredientUnit> displayNames = HashMap();
+Map<MealType, String> mealTypeDisplayNames = {
+  MealType.starter: "starter",
+  MealType.main: "main",
+  MealType.dessert: "dessert",
+};
 
-var _random = Random(928130938120983);
+Map<IngredientUnit, String> ingredientUnitDisplayNames = {
+  IngredientUnit.kg: "kg",
+};
 
 class RecipeStep {
   Key key;

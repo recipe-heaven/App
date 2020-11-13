@@ -1,17 +1,10 @@
+import 'dart:math';
+
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-Widget _inputFealdShadowWrapper({Widget child}) {
-  return Material(
-    color: Colors.transparent,
-    child: child,
-    elevation: 5,
-    borderRadius: BorderRadius.all(Radius.circular(10)),
-  );
-}
 
 /// Secondary input field has a different color scheme then the primary.
 Container secondaryInputField(BuildContext context,
@@ -30,7 +23,7 @@ Container secondaryInputField(BuildContext context,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
-        _inputFealdShadowWrapper(
+        inputFealdShadowWrapper(
           child: TextFormField(
             cursorColor: Colors.white,
             validator: validator,
@@ -53,17 +46,21 @@ Container secondaryInputField(BuildContext context,
 
 inputField(BuildContext context,
     {String label,
-    FormFieldSetter<String> onSave,
+    FormFieldSetter<String> onSaved,
     FormFieldValidator<String> validator,
     bool obscureInput = false,
     TextInputAction inputAction = TextInputAction.none,
     Function(String) onFieldSubmitted,
-    String hint = ""}) {
-  return _inputFealdShadowWrapper(
+    String initialValue,
+    String hint = "",
+    Key key}) {
+  return inputFealdShadowWrapper(
       child: TextFormField(
+          initialValue: initialValue,
+          key: key,
           style: TextStyle(color: primaryTextColor),
           validator: validator,
-          onSaved: onSave,
+          onSaved: onSaved,
           obscureText: obscureInput,
           textInputAction: inputAction,
           onFieldSubmitted: onFieldSubmitted,
@@ -91,7 +88,7 @@ Container newMealInputBox(BuildContext context,
           ),
           padding: const EdgeInsets.only(bottom: 4),
         ),
-        _inputFealdShadowWrapper(
+        inputFealdShadowWrapper(
           child: TextFormField(
             style: Theme.of(context).textTheme.bodyText1,
             validator: validator,
@@ -134,7 +131,7 @@ Container newTimeInputBox(BuildContext context,
         Row(
           children: [
             Container(
-              child: _inputFealdShadowWrapper(
+              child: inputFealdShadowWrapper(
                   child: TextFormField(
                       keyboardType: TextInputType.number,
                       validator: validator,
@@ -154,7 +151,7 @@ Container newTimeInputBox(BuildContext context,
               ),
             ),
             Container(
-              child: _inputFealdShadowWrapper(
+              child: inputFealdShadowWrapper(
                 child: TextFormField(
                     keyboardType: TextInputType.number,
                     validator: validator,
@@ -201,7 +198,7 @@ Container newMealIngredientInputBlock(
         Row(
           children: [
             Container(
-              child: _inputFealdShadowWrapper(
+              child: inputFealdShadowWrapper(
                 child: TextFormField(
                     keyboardType: TextInputType.number,
                     validator: validateFloatInput,
@@ -220,7 +217,7 @@ Container newMealIngredientInputBlock(
               width: 5,
             ),
             Container(
-              child: _inputFealdShadowWrapper(
+              child: inputFealdShadowWrapper(
                 child: DropdownButtonFormField<IngredientUnit>(
                     value: ingredient.unitType,
                     onSaved: onSavedType,
@@ -249,7 +246,7 @@ Container newMealIngredientInputBlock(
           ],
         ),
         Container(
-          child: _inputFealdShadowWrapper(
+          child: inputFealdShadowWrapper(
             child: TextFormField(
                 validator: validateNotEmptyInput,
                 onSaved: onSavedComment,
@@ -305,7 +302,7 @@ Container newMealStepInputBlock(BuildContext context, //int ingredient_idx,
           ],
         ),
         Container(
-          child: _inputFealdShadowWrapper(
+          child: inputFealdShadowWrapper(
             child: TextFormField(
                 initialValue: step.step,
                 validator: validateNotEmptyInput,
@@ -331,4 +328,58 @@ Container newMealStepInputBlock(BuildContext context, //int ingredient_idx,
     ),
     padding: const EdgeInsets.symmetric(vertical: 10),
   );
+}
+
+class DrinksSelector extends StatefulWidget {
+  final List<RecipeDrink> _drinks;
+
+  DrinksSelector(this._drinks, {Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _DrinksSelectorState();
+}
+
+class _DrinksSelectorState extends State<DrinksSelector> {
+  Row _drinkRow(String value, int index, BuildContext context) {
+    return Row(
+      key: widget._drinks[index].key,
+      children: [
+        Expanded(
+          child: inputField(
+            context,
+            initialValue: value,
+            onSaved: (newValue) =>
+                setState(() => widget._drinks[index].drink = newValue),
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.cancel_outlined),
+          onPressed: () => setState(() => widget._drinks.removeAt(index)),
+          color: Theme.of(context).errorColor,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ...[
+          for (MapEntry<int, RecipeDrink> entry
+              in widget._drinks.asMap().entries)
+            _drinkRow(entry.value.drink, entry.key, context)
+        ],
+        RawMaterialButton(
+          onPressed: () => setState(() => widget._drinks.add(RecipeDrink())),
+          elevation: 2.0,
+          fillColor: elementBackgroundColor,
+          child: Icon(Icons.add),
+          padding: EdgeInsets.all(5.0),
+          shape: CircleBorder(),
+        ),
+        Text("Add another", style: Theme.of(context).textTheme.headline4)
+      ],
+    );
+  }
 }

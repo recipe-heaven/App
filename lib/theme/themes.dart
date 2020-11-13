@@ -84,6 +84,15 @@ final primaryInputDecorationTheme = _sharedInputFeatures.copyWith(
         fontStyle: FontStyle.italic,
         fontSize: 12));
 
+Widget inputFealdShadowWrapper({Widget child}) {
+  return Material(
+    color: Colors.transparent,
+    child: child,
+    elevation: 5,
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+}
+
 final mainTheme = ThemeData(
     buttonColor: acceptColor,
     errorColor: errorColor,

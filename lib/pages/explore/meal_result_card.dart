@@ -1,11 +1,8 @@
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/pages/explore/sear_result_card.dart';
 import 'package:App/pages/explore/result_item.dart';
-import 'package:App/pages/explore/search.dart';
-import 'package:App/pages/explore/search_state.dart';
-import 'package:App/routes/routes.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 Widget createMealSearchResultCard(
     MealSearchResult mealResult, BuildContext context, bool selected) {
@@ -23,12 +20,35 @@ Widget createMealSearchResultCard(
       ],
     ),
     Text(mealResult.name, style: TextStyle(fontSize: 16)),
-    Text("1 Starter", style: Theme.of(context).accentTextTheme.headline4),
-    Text("1 Starter", style: Theme.of(context).accentTextTheme.headline4),
-    Text("1 Starter", style: Theme.of(context).accentTextTheme.headline4),
+    ...getRecipeTypes(mealResult.recipeType, context)
   ];
 
   //TODO: LOAD BACKGROUND DYNAMICLY
   return createSearchResultCard(widgets,
       background: "assets/images/y_6cfb1008.jpg", selected: selected);
+}
+
+List<Widget> getRecipeTypes(List<String> types, BuildContext context) {
+  int starters = 0;
+  int main = 0;
+  int dessert = 0;
+
+  for (var type in types) {
+    if (type == MealType.starter.toString()) {
+      starters++;
+    } else if (type == MealType.main.toString()) {
+      main++;
+    } else if (type == MealType.dessert.toString()) {
+      dessert++;
+    }
+  }
+  getText(int count, String text) =>
+      Text("$count $text", style: Theme.of(context).accentTextTheme.headline4);
+
+  List<Widget> typesList = List();
+
+  if (starters > 0) typesList.add(getText(starters, "Starter(s)"));
+  if (main > 0) typesList.add(getText(starters, "Main(s)"));
+  if (dessert > 0) typesList.add(getText(dessert, "Dessert(s)"));
+  return typesList;
 }

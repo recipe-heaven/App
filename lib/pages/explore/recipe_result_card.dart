@@ -5,7 +5,7 @@ import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
 Card createRecipeSearchResultCard(
-    RecipeSearchResult recipeResult, bool selected) {
+    RecipeSearchResult recipeResult, BuildContext context, bool selected) {
   final widgets = [
     Row(
       children: [
@@ -15,11 +15,8 @@ Card createRecipeSearchResultCard(
           size: 14.0,
           semanticLabel: 'List icon',
         ),
-        SizedBox(width: 2),
-        Text("Recipe",
-            style: TextStyle(
-              fontSize: 12,
-            )),
+        SizedBox(width: 4),
+        Text("Recipe", style: Theme.of(context).accentTextTheme.headline4)
       ],
     ),
     Text(recipeResult.name, style: TextStyle(fontSize: 16)),
@@ -33,7 +30,7 @@ Card createRecipeSearchResultCard(
         ),
         SizedBox(width: 2),
         Text(getHourSecndsStringFromSeconds(recipeResult.cookTime),
-            style: TextStyle(fontSize: 12)),
+            style: Theme.of(context).accentTextTheme.headline4),
       ],
     ),
   ];

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
         // for easy testing of pr
-        initialRoute: route_names.RouteRecipeView, //route_names.RouteHome,
+        initialRoute: route_names.RouteHome,
         onGenerateRoute: (settings) => router(context, settings));
   }
 }

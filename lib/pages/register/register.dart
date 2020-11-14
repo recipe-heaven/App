@@ -13,7 +13,7 @@ import 'new_user_form_data.dart';
 
 class NewUserPage extends StatefulWidget {
   NewUserPage({Key key}) : super(key: key);
-  final authService = AuthService(HttpClient());
+  final authService = AuthService(HttpServiceClient());
 
   @override
   NewUserPageState createState() => NewUserPageState();

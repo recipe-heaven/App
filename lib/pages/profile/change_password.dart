@@ -15,7 +15,7 @@ class _ChangePassForm {
 }
 
 class ChangePassPage extends StatefulWidget {
-  final _userService = UserService(HttpClient());
+  final _userService = UserService(HttpServiceClient());
   final _formData = _ChangePassForm();
   final _user = User(
       id: 11,

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
         // for easy testing of pr
-        initialRoute: route_names.RouteHome, //route_names.RouteHome,
+        initialRoute: route_names.RouteRecipeView, //route_names.RouteHome,
         onGenerateRoute: (settings) => router(context, settings));
   }
 }
@@ -57,7 +57,7 @@ class _StateSetup {
   /// Will try to get user from stored token, and set the user state, by fetching
   /// the user from the server.
   void _setInitialUserState() async {
-    var userService = UserService(HttpClient());
+    var userService = UserService(HttpServiceClient());
     _appState.user = await userService.getCurrentUser();
   }
 }

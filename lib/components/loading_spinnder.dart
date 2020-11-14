@@ -6,7 +6,12 @@ Container getCircularSpinner() {
   return Container(
     alignment: Alignment.center,
     padding: const EdgeInsets.only(top: 10),
-    child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(acceptColor)),
+    child: Column(
+      children: [
+        CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(acceptColor)),
+        Text("Loading")
+      ],
+    ),
   );
 }

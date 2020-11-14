@@ -135,7 +135,7 @@ class _SearchState extends State<Search> {
   Future<List<Widget>> fetchSearchResult(SearchState state, context) async {
     if (_searchString != state.searchString) {
       _searchString = state.searchString;
-      _result = await SearchService(HttpClient()).search(SearchOptions(
+      _result = await SearchService(HttpServiceClient()).search(SearchOptions(
           state.searchString,
           state.ownedOnly,
           state.includeMeal,

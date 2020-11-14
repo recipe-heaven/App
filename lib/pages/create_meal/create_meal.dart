@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
@@ -15,7 +16,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class CreateMealPage extends StatefulWidget {
-  final authService = MealService(HttpClient());
   final _meal = TEST_DATA;
   final _isEditing = false;
   CreateMealPage({Key key}) : super(key: key);
@@ -34,7 +34,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     if (formState.validate()) {
       formState.save();
 
-      var res = await widget.authService.addNewMeal(meal: widget._meal);
+      var res = await MealService.addNewMeal(meal: widget._meal);
       if (res == null) {
         setState(() {});
       } else {
@@ -140,7 +140,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWithNavigation(
       body: ListView(
         children: [
           Container(
@@ -270,7 +270,6 @@ class CreateMealPageState extends State<CreateMealPage> {
           ),
         ],
       ),
-      resizeToAvoidBottomInset: false,
     );
   }
 }

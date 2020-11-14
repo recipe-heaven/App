@@ -14,10 +14,9 @@ class ViewRecipePage extends StatelessWidget {
   final _recipeId;
   Future<Recipe> _recipeFuture;
 
-  ViewRecipePage(this._recipeId){
+  ViewRecipePage(this._recipeId) {
     _recipeFuture = RecipeService.getExample(_recipeId);
   }
-
 
   @override
   Widget build(BuildContext context) {

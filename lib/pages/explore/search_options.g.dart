@@ -9,6 +9,7 @@ part of 'search_options.dart';
 SearchOptions _$SearchOptionsFromJson(Map<String, dynamic> json) {
   return SearchOptions(
     json['searchString'] as String,
+    json['recipeType'] as String,
     json['ownedOnly'] as bool,
     json['includeMeals'] as bool,
     json['includeMenus'] as bool,
@@ -26,6 +27,7 @@ Map<String, dynamic> _$SearchOptionsToJson(SearchOptions instance) {
   }
 
   writeNotNull('searchString', instance.searchString);
+  writeNotNull('recipeType', instance.recipeType);
   writeNotNull('ownedOnly', instance.ownedOnly);
   writeNotNull('includeMeals', instance.includeMeals);
   writeNotNull('includeMenus', instance.includeMenus);

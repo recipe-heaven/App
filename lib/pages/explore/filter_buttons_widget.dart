@@ -17,32 +17,50 @@ class FilterButtons extends StatefulWidget {
 class _FilterButtonState extends State<FilterButtons> {
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Consumer<SearchState>(builder: (context, state, child) {
-        return createFilterButton(
-            buttonText: "Recipe",
-            enabled: state.includeRecipe,
-            onPressed: () {
-              state.includeRecipe = !state.includeRecipe;
-            });
-      }),
-      Consumer<SearchState>(builder: (context, state, child) {
-        return createFilterButton(
-            buttonText: "Meal",
-            enabled: state.includeMeal,
-            onPressed: () {
-              state.includeMeal = !state.includeMeal;
-            });
-      }),
-      Consumer<SearchState>(builder: (context, state, child) {
-        return createFilterButton(
-            buttonText: "Menu",
-            enabled: state.includeMenu,
-            onPressed: () {
-              state.includeMenu = !state.includeMenu;
-            });
-      }),
-    ]);
+    List<Widget> filterButtons = List();
+
+    if (!widget.options.hasOnlyOneSearchSelector()) {
+      if (widget.options.searchMenus) {
+        var filterButton =
+            Consumer<SearchState>(builder: (context, state, child) {
+          return createFilterButton(
+              buttonText: "Menu",
+              enabled: state.includeMenu,
+              onPressed: () {
+                state.includeMenu = !state.includeMenu;
+              });
+        });
+        filterButtons.add(filterButton);
+      }
+      if (widget.options.searchMeals) {
+        var mealButton =
+            Consumer<SearchState>(builder: (context, state, child) {
+          return createFilterButton(
+              buttonText: "Meal",
+              enabled: state.includeMeal,
+              onPressed: () {
+                state.includeMeal = !state.includeMeal;
+              });
+        });
+        filterButtons.add(mealButton);
+      }
+      if (widget.options.searchRecipes) {
+        var recipeButton =
+            Consumer<SearchState>(builder: (context, state, child) {
+          return createFilterButton(
+              buttonText: "Recipe",
+              enabled: state.includeRecipe,
+              onPressed: () {
+                state.includeRecipe = !state.includeRecipe;
+              });
+        });
+        filterButtons.add(recipeButton);
+      }
+    }
+
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: filterButtons);
   }
 
   FlatButton createFilterButton(

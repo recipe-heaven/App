@@ -8,6 +8,8 @@ part 'search_options.g.dart';
 class SearchOptions {
   String searchString;
 
+  String recipeType;
+
   bool ownedOnly;
 
   bool includeMeals;
@@ -16,8 +18,8 @@ class SearchOptions {
 
   bool includeRecipes;
 
-  SearchOptions(this.searchString, this.ownedOnly, this.includeMeals,
-      this.includeMenus, this.includeRecipes);
+  SearchOptions(this.searchString, this.recipeType, this.ownedOnly,
+      this.includeMeals, this.includeMenus, this.includeRecipes);
 
   String toJsonString() => jsonEncode(_$SearchOptionsToJson(this));
 }

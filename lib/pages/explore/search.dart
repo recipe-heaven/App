@@ -36,12 +36,11 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   var _result;
-  String _searchString;
+  String _searchString = "";
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => SearchState(
-            widget.options.searchOwnedOnly, widget.options.returnSelected),
+        create: (context) => SearchState(widget.options),
         child: Scaffold(
           body: Builder(builder: (context) {
             return SafeArea(
@@ -126,7 +125,6 @@ class _SearchState extends State<Search> {
   }
 
   Widget createResultText(String text) {
-    print(text);
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10),
         child: Text(text, textAlign: TextAlign.left));
@@ -137,6 +135,7 @@ class _SearchState extends State<Search> {
       _searchString = state.searchString;
       _result = await SearchService(HttpServiceClient()).search(SearchOptions(
           state.searchString,
+          widget.options.recipeType,
           state.ownedOnly,
           state.includeMeal,
           state.includeMenu,
@@ -169,13 +168,13 @@ class _SearchState extends State<Search> {
           it = RecipeSearchResult.fromMap(item.data);
           clickedRoute = RouteRecipeView;
           isSelected = state.selectedContains(type, it);
-          card = createRecipeSearchResultCard(it, isSelected);
+          card = createRecipeSearchResultCard(it, context, isSelected);
           break;
         case menu_type_name:
           it = MenuSearchResult.fromMap(item.data);
           clickedRoute = RouteMenuNew;
           isSelected = state.selectedContains(type, it);
-          card = createMenuSearchResultCard(it, isSelected);
+          card = createMenuSearchResultCard(it, context, isSelected);
           break;
         default:
       }

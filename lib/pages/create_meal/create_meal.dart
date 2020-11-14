@@ -106,7 +106,7 @@ class CreateMealPageState extends State<CreateMealPage> {
   Future<Recipe> _ChristoffersMagicSearchAlgorithm() async {
     final recipeObject = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
-            returnSelcted: true,
+            returnSelected: true,
             searchOwnedOnly: true,
             searchMenus: false,
             searchMeals: false));

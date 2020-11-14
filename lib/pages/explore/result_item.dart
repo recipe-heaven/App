@@ -52,7 +52,7 @@ class RecipeSearchResult extends TypeSearchResult {
 }
 
 class MenuSearchResult extends TypeSearchResult {
-  List<String> days;
+  List<int> days;
 
   MenuSearchResult();
 
@@ -71,16 +71,12 @@ class MenuSearchResult extends TypeSearchResult {
   inject({String name, num id, List<dynamic> days}) {
     this.name = name;
     this.id = id;
-    this.days = days.cast<String>();
+    this.days = days.cast<int>();
   }
 }
 
 class MealSearchResult extends TypeSearchResult {
-  num starters = 0;
-
-  num courses = 0;
-
-  num desserts = 0;
+  List<String> recipeType;
 
   MealSearchResult();
 
@@ -96,16 +92,9 @@ class MealSearchResult extends TypeSearchResult {
   }
 
   @override
-  inject(
-      {String name,
-      num id,
-      num starters = 0,
-      num courses = 0,
-      num desserts = 0}) {
+  inject({String name, num id, List<dynamic> recipeType}) {
     this.name = name;
     this.id = id;
-    this.starters = starters;
-    this.courses = courses;
-    this.desserts = desserts;
+    this.recipeType = recipeType.cast<String>();
   }
 }

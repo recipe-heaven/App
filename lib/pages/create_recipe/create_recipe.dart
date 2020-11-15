@@ -17,8 +17,6 @@ import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewRecipePage extends StatefulWidget {
-  final RecipeService _service = RecipeService(HttpClient());
-
   @override
   NewRecipePageState createState() => NewRecipePageState();
   final Recipe _recipe = Recipe();
@@ -30,7 +28,7 @@ class NewRecipePageState extends State<NewRecipePage> {
     if (_formKey.currentState.validate()) {
       final FormState formS = _formKey.currentState;
       formS.save();
-      bool suc = await widget._service.newRecipe(widget._recipe, _image);
+      bool suc = await RecipeService.newRecipe(widget._recipe, _image);
       print(suc);
       //print(jsonEncode(widget._recipe.toJson()));
     }
@@ -96,11 +94,9 @@ class NewRecipePageState extends State<NewRecipePage> {
   ImageProvider _getDisplayImage() {
     if (_image != null) {
       return Image.file(_image).image;
+    } else {
+      return widget._recipe.getDisplayImage().image;
     }
-    if (widget._recipe.recipeImage != null) {
-      return Image.network(widget._recipe.recipeImage.getImageUrl()).image;
-    }
-    return FoodImage().default_image.image;
   }
 
   Material _selectRecipeTypeDropdowm() {

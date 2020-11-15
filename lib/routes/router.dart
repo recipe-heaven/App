@@ -7,9 +7,19 @@ import 'package:App/pages/login/login.dart';
 import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
+import 'package:App/pages/view_recipe/view_recipe.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 import "routes.dart";
+
+int _tryGetId(RouteSettings settings) {
+  var mabyeId = settings.arguments;
+
+  if (mabyeId != null) {
+    return int.tryParse(mabyeId);
+  }
+  return null;
+}
 
 /// Performs routing logic and returns route pages for given path
 Route<dynamic> router(BuildContext context, RouteSettings settings) {
@@ -38,12 +48,27 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     //case RouteRecipeEdit:
     case RouteRecipeView:
+      var mabyid = _tryGetId(settings);
+      if (mabyid != null) {
+        page = ViewRecipePage(mabyid);
+      } else {
+        // TODO: what shold we do when an invalid id is requested to view
+        page = ViewRecipePage(0);
+      }
+
+      break;
     case RouteMealNew:
       page = CreateMealPage();
       break;
     case RouteMealEdit:
     case RouteMealView:
-      page = CourseMealPage();
+      var mabyid = _tryGetId(settings);
+      if (mabyid != null) {
+        page = CourseMealPage(mabyid);
+      } else {
+        // TODO: what shold we do when an invalid id is requested to view
+        page = CourseMealPage(0);
+      }
       break;
     case RouteMenuNew:
       page = CreateMenuPage();

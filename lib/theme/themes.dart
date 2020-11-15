@@ -23,7 +23,7 @@ final YeahhhhhColor = Color(0xFF00bb00);
 final navBarBackgroundColor = Color(0xFF222D33);
 final shadowColor = Color(0xCC111D22);
 
-final dialogBackgroundColor = Color(0x1C000000);
+final dialogBackgroundColor = Color(0xaa000000);
 
 final playfairFont = "Playfair_Display";
 final robotoFont = "Roboto";

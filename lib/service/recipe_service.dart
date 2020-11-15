@@ -8,16 +8,20 @@ import 'package:App/store/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 
+import '../main.dart';
 import 'http_client.dart';
 
 class RecipeService {
-  final Http httpClient;
+  static final Http _httpClient = HttpServiceClient();
 
-  RecipeService(this.httpClient);
+  static Future<Recipe> getExample(int recipeId) async {
+    return Future<Recipe>.delayed(
+        Duration(seconds: 3), () => TEST_DATA.recipe.first);
+  }
 
-  Future<Recipe> getRecipe(int recipeId) async {
+  static Future<Recipe> getRecipe(int recipeId) async {
     try {
-      var response = await httpClient.get(getRecipeEndpoint + "?id=$recipeId");
+      var response = await _httpClient.get(getRecipeEndpoint + "?id=$recipeId");
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body["data"] != null) {
@@ -32,7 +36,7 @@ class RecipeService {
     return null;
   }
 
-  Future<bool> newRecipe(Recipe recipe, File imageFile) async {
+  static Future<bool> newRecipe(Recipe recipe, File imageFile) async {
     var uri = Uri.parse(newRecipeEndpoint);
     final token = await Storage().getToken();
     var request = http.MultipartRequest("POST", uri)

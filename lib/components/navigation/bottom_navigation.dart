@@ -30,17 +30,17 @@ _bottomNavigationBar(
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10), child: Icon(Icons.home)),
-          label: ""),
+          label: "Week menu"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.local_dining)),
-          label: ""),
+          label: "New menu"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.shopping_bag)),
-          label: ""),
+          label: "New meal"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10), child: Icon(Icons.menu)),

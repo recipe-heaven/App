@@ -6,6 +6,7 @@ final formSecondaryHintColor = Color(0xFFCCCCCC);
 final formPrimaryHintColor = Color(0xFF2B3B40);
 final errorColor = Color(0xFFD96060);
 final acceptColor = Color(0xFF4F6E81);
+final disabledAcceptColor = Color(0xFF637283);
 final softTextColor = Color(0xFFD5E2E6);
 final fadeTextColor = Color(0xFF687A89);
 final mainBackgroundColor = Color(0xFF161D21);

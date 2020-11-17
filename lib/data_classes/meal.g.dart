@@ -36,3 +36,26 @@ Map<String, dynamic> _$MealToJson(Meal instance) {
   writeNotNull('recipes', instance.recipes?.map((e) => e?.toJson())?.toList());
   return val;
 }
+
+NewMeal _$NewMealFromJson(Map<String, dynamic> json) {
+  return NewMeal(
+    json['name'] as String,
+    json['public'] as bool,
+    (json['recipes'] as List)?.map((e) => e as int)?.toList(),
+  );
+}
+
+Map<String, dynamic> _$NewMealToJson(NewMeal instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  writeNotNull('public', instance.public);
+  writeNotNull('recipes', instance.recipes);
+  return val;
+}

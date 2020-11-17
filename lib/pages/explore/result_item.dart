@@ -29,6 +29,7 @@ abstract class TypeSearchResult {
 
 class RecipeSearchResult extends TypeSearchResult {
   num cookTime;
+  String type;
 
   RecipeSearchResult();
 
@@ -44,10 +45,11 @@ class RecipeSearchResult extends TypeSearchResult {
   }
 
   @override
-  inject({String name, int id, int cookTime = 1}) {
+  inject({String name, int id, int cookTime = 1, String type}) {
     this.name = name;
     this.id = id;
     this.cookTime = cookTime;
+    this.type = type;
   }
 }
 

@@ -1,21 +1,33 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
+import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/helpers/enumHelper.dart';
+import 'package:App/helpers/time.dart';
 import 'package:App/main.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/meal_service.dart';
 import 'package:App/theme/themes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+// TODO: Move to use Simplified recipe type instead of RecipeSearchResult
+// TODO: Make it possible to inject meal for editing
+// TODO: Create a common recipe widget
+
 class CreateMealPage extends StatefulWidget {
+  final mealSearvice = MealService();
+
   final _meal = TEST_DATA;
   final _isEditing = false;
   CreateMealPage({Key key}) : super(key: key);
@@ -27,6 +39,13 @@ class CreateMealPage extends StatefulWidget {
 final _fadeToCollor = Colors.black; // Color(0xdd000000);
 
 class CreateMealPageState extends State<CreateMealPage> {
+  Map<String, RecipeSearchResult> starters = Map();
+  Map<String, RecipeSearchResult> mains = Map();
+  Map<String, RecipeSearchResult> desserts = Map();
+
+  String _name = "";
+  bool _isPublic = false;
+
   final _formKey = GlobalKey<FormState>();
 
   void _handleNewMeal() async {
@@ -34,8 +53,21 @@ class CreateMealPageState extends State<CreateMealPage> {
     if (formState.validate()) {
       formState.save();
 
-      var res = await MealService.addNewMeal(meal: widget._meal);
-      if (res == null) {
+      List<int> recpideIds = List();
+
+      void addToIdList(Iterable<RecipeSearchResult> recipes) {
+        recipes.forEach((recipe) => recpideIds.add(recipe.id));
+      }
+
+      addToIdList(starters.values);
+      addToIdList(mains.values);
+      addToIdList(desserts.values);
+
+      NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
+
+      var res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
+
+      if (res) {
         setState(() {});
       } else {
         // Do routing, set state
@@ -43,26 +75,37 @@ class CreateMealPageState extends State<CreateMealPage> {
     }
   }
 
-  Widget _make_recipe_card(Recipe recipe) {
+  /// Returns true if there are any recipes in any of the categories, else false
+  bool _hasRecipes() {
+    return (starters.isNotEmpty || mains.isNotEmpty || desserts.isNotEmpty);
+  }
+
+  Widget _make_recipe_card(MapEntry<String, RecipeSearchResult> recipe,
+      VoidCallback removeCardCallback) {
     return Container(
-      height: 200,
+      height: 160,
       child: Card(
-        color: _fadeToCollor,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        color: Colors.transparent,
+        clipBehavior: Clip.antiAlias,
         child: Stack(
           fit: StackFit.expand,
           children: [
             ShaderMask(
                 shaderCallback: (rect) {
                   return LinearGradient(
-                          begin: Alignment(-0.55, 0.0),
-                          end: Alignment(-0.66, 1.3),
+                          begin: Alignment(-0.5, -0.3),
+                          end: Alignment(-0.60, 3),
                           colors: [_fadeToCollor, Colors.transparent])
                       .createShader(
                           Rect.fromLTRB(0, 0, rect.width, rect.height));
                 },
                 blendMode: BlendMode.dstIn,
                 child: Image.asset(
-                  "assets/images/123.gif",
+                  "assets/images/BANNER-NEW-MEAL.png",
                   fit: BoxFit.fitWidth,
                 )),
             Column(
@@ -74,24 +117,35 @@ class CreateMealPageState extends State<CreateMealPage> {
                         Icons.remove_circle_outline,
                         color: errorColor,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          widget._meal.recipes.remove(recipe);
-                        });
-                      },
+                      onPressed: removeCardCallback,
                     )
                   ],
                   mainAxisAlignment: MainAxisAlignment.end,
                 ),
                 Spacer(),
-                Padding(
+                Container(
+                  constraints: BoxConstraints.expand(height: 70),
                   padding: const EdgeInsets.all(10.0),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        recipe.name,
-                        style: Theme.of(context).textTheme.headline3,
-                      )
+                      Text(recipe.value.name, style: TextStyle(fontSize: 26)),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            color: primaryTextColor,
+                            size: 16.0,
+                            semanticLabel: 'Clock icon',
+                          ),
+                          SizedBox(width: 2),
+                          Text(
+                              getHourSecndsStringFromSeconds(
+                                  recipe.value.cookTime),
+                              style:
+                                  Theme.of(context).accentTextTheme.headline4),
+                        ],
+                      ),
                     ],
                   ),
                 )
@@ -103,34 +157,64 @@ class CreateMealPageState extends State<CreateMealPage> {
     );
   }
 
-  Future<Recipe> _ChristoffersMagicSearchAlgorithm() async {
-    final recipeObject = await Navigator.pushNamed(context, RouteSearch,
+  Future<Map<String, RecipeSearchResult>> _searchForType(
+      MealType mealtype) async {
+    final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true,
+            recipeType: describeEnum(mealtype),
             searchOwnedOnly: true,
             searchMenus: false,
             searchMeals: false));
-    print(recipeObject);
+
+    if (returnResult == null) return null;
+
+    // TODO IMPLEMENT FETCH OF RECIPES HERE WHEN TYPE IS READY
+    Map<String, TypeSearchResult> results = returnResult;
+    Map<String, RecipeSearchResult> recipes = Map();
+    for (var item in results.entries) {
+      recipes[item.key] = item.value as RecipeSearchResult;
+    }
+    return recipes;
   }
 
-  Widget _category_selector(
-      {String buttonText, VoidCallback onClick, String category}) {
+  Widget _create_category_selector(
+      {String buttonText,
+      VoidCallback onClick,
+      Map<String, RecipeSearchResult> categotyItems}) {
     return Column(
       children: [
         Column(
           children: [
-            for (Recipe mRecipe in widget._meal.recipes) ...[
-              if (mRecipe.type == category) _make_recipe_card(mRecipe),
+            for (var recipe in categotyItems.entries) ...[
+              _make_recipe_card(
+                recipe,
+                () {
+                  setState(() {
+                    categotyItems.remove(recipe.key);
+                  });
+                },
+              ),
             ],
+            SizedBox(
+              height: 20,
+            ),
             MaterialButton(
               color: elementBackgroundColor, //Theme.of(context).buttonColor,
+              height: 50,
+              elevation: 4,
               minWidth: double.maxFinite,
-              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: Text(
                 buttonText,
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).accentTextTheme.headline2,
               ),
               onPressed: onClick,
+            ),
+            SizedBox(
+              height: 20,
             )
           ],
         )
@@ -167,27 +251,20 @@ class CreateMealPageState extends State<CreateMealPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
                         child: Text(
-                          "Put together the",
+                          "Put together the\nperfect meal",
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      Text(
-                        "Pefect meal",
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
                       Spacer(),
-                      SizedBox(
-                        height: 20,
-                      ),
                       Container(
                         child: Form(
                           key: _formKey,
                           child: secondaryInputField(context,
                               label: "Meal title", onSave: (newValue) {
-                            widget._meal.name = newValue;
+                            _name = newValue;
                           },
                               validator: validateNotEmptyInput,
-                              hint: "recipe@mail.com"),
+                              hint: "Easy every day meal"),
                         ),
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
                       ),
@@ -202,69 +279,76 @@ class CreateMealPageState extends State<CreateMealPage> {
             ),
             height: MediaQuery.of(context).size.height * 0.4,
           ),
-          Container(
-            height: 10,
-            width: double.maxFinite,
-            color: Theme.of(context).backgroundColor,
+          SizedBox(
+            height: 15,
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
             child: Column(
               children: [
                 SetPublicDialog(widget._meal, widget._isEditing, "Meal"),
                 SizedBox(
                   height: 10,
                 ),
-                _category_selector(
-                  buttonText: "ADD STARTERS",
-                  category: "starters",
-                  onClick: () async {
-                    var newRecipe = this._ChristoffersMagicSearchAlgorithm();
-                    if (newRecipe != null) {
-                      widget._meal.recipes.add(await newRecipe);
-                    } else {
-                      print("selected unit is null christoffer is to blame");
-                    }
-                  },
-                ),
-                _category_selector(
-                  buttonText: "ADD COURSE",
-                  category: "course",
-                  onClick: () async {
-                    var newRecipe = this._ChristoffersMagicSearchAlgorithm();
-                    if (newRecipe != null) {
-                      widget._meal.recipes.add(await newRecipe);
-                    } else {
-                      print("selected unit is null christoffer is to blame");
-                    }
-                  },
-                ),
-                _category_selector(
-                  buttonText: "ADD DESSERT",
-                  category: "dessert",
-                  onClick: () async {
-                    var newRecipe = this._ChristoffersMagicSearchAlgorithm();
-                    if (newRecipe != null) {
-                      widget._meal.recipes.add(await newRecipe);
-                    } else {
-                      print("selected unit is null christoffer is to blame");
-                    }
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: MaterialButton(
-                      onPressed: _handleNewMeal,
-                      color: acceptColor,
-                      minWidth: double.infinity,
-                      child: Text(
-                        "SAVE",
-                        style: Theme.of(context).textTheme.headline2,
-                      )),
-                ),
+                _create_category_selector(
+                    buttonText: "ADD STARTERS",
+                    onClick: () async {
+                      var newRecipe =
+                          await this._searchForType(MealType.starter);
+                      if (newRecipe != null) {
+                        setState(() {
+                          starters.addAll(newRecipe);
+                        });
+                      }
+                    },
+                    categotyItems: starters),
+                _create_category_selector(
+                    buttonText: "ADD COURSE",
+                    onClick: () async {
+                      var newRecipe = await this._searchForType(MealType.main);
+                      if (newRecipe != null) {
+                        setState(() {
+                          mains.addAll(newRecipe);
+                        });
+                      }
+                    },
+                    categotyItems: mains),
+                _create_category_selector(
+                    buttonText: "ADD DESSERT",
+                    onClick: () async {
+                      var newRecipe =
+                          await this._searchForType(MealType.dessert);
+                      if (newRecipe != null) {
+                        setState(() {
+                          desserts.addAll(newRecipe);
+                        });
+                      }
+                    },
+                    categotyItems: desserts),
+
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                )
+                  height: 20,
+                ),
+                // TODO: MAYBE CHANGE TO CIRCULAR BUTTON SAME AS CREATE RECIPE
+                MaterialButton(
+                    onPressed: _hasRecipes() ? _handleNewMeal : null,
+                    disabledColor: disabledAcceptColor,
+                    color: acceptColor,
+                    height: 50,
+                    minWidth: double.maxFinite,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      "SAVE",
+                      style: _hasRecipes()
+                          ? Theme.of(context).textTheme.headline2
+                          : Theme.of(context)
+                              .textTheme
+                              .headline2
+                              .copyWith(color: Colors.grey),
+                    )),
               ],
             ),
           ),

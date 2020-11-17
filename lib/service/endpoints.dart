@@ -1,4 +1,4 @@
-const apiUrl = "http://10.50.50.60:8080/api/";
+const apiUrl = "http://192.168.1.100:9876/api/";
 
 /// -- User -- ///
 const loginEndpoint = "${apiUrl}authentication/login";
@@ -13,6 +13,6 @@ const currentUserEndpoint = "${apiUrl}authentication/currentuser";
 
 const newRecipeEndpoint = "${apiUrl}recipe/new";
 
-const newMealEndpoint = "${apiUrl}meal/new";
+const newMealEndpoint = "${apiUrl}meal";
 const searchEndpoint = "${apiUrl}search";
 const newMenuEndpoint = "${apiUrl}menu/new";

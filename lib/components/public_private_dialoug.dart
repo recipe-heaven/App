@@ -39,12 +39,12 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Text("yes")),
+                  child: Text("Yes")),
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text("no"))
+                  child: Text("No"))
             ],
           );
         });
@@ -73,7 +73,7 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
             onPressed: () {
               this._displayMakePublicDialog(context);
             },
-            height: 20,
+            height: 35,
           ),
           Spacer(),
         ],

@@ -192,7 +192,9 @@ class NewRecipePageState extends State<NewRecipePage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    SetPublicDialog(widget._recipe, false, "Recipe"),
+                    SetPublicDialog((state) {
+                      widget._recipe.public = state;
+                    }, widget._recipe.public, widget._recipe != null, "Meal"),
                     _selectRecipeTypeDropdowm(),
                     newMealInputBox(context,
                         label: "Meal Name",

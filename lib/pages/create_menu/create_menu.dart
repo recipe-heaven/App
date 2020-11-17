@@ -259,7 +259,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                SetPublicDialog(widget._menu, widget._isEditing, "Menu"),
+                SetPublicDialog((state) {
+                  widget._menu.public = state;
+                }, widget._menu.public, widget._isEditing, "Meal"),
                 SizedBox(
                   height: 10,
                 ),

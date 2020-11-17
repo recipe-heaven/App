@@ -7,9 +7,19 @@ import 'package:App/pages/login/login.dart';
 import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
+import 'package:App/pages/view_recipe/view_recipe.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 import "routes.dart";
+
+int _tryGetId(Map<String, String> settings) {
+  var mabyeId = settings["id"];
+
+  if (mabyeId != null) {
+    return int.tryParse(mabyeId);
+  }
+  return null;
+}
 
 /// Performs routing logic and returns route pages for given path
 Route<dynamic> router(BuildContext context, RouteSettings settings) {
@@ -38,12 +48,27 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     //case RouteRecipeEdit:
     case RouteRecipeView:
+      var mabyid = _tryGetId(queryParams);
+      if (mabyid != null) {
+        page = ViewRecipePage(mabyid);
+      } else {
+        // TODO: what shold we do when an invalid id is requested to view
+        page = ViewRecipePage(0);
+      }
+
+      break;
     case RouteMealNew:
       page = CreateMealPage();
       break;
     case RouteMealEdit:
     case RouteMealView:
-      page = CourseMealPage();
+      var mabyid = _tryGetId(queryParams);
+      if (mabyid != null) {
+        page = CourseMealPage(mabyid);
+      } else {
+        // TODO: what shold we do when an invalid id is requested to view
+        page = CourseMealPage(0);
+      }
       break;
     case RouteMenuNew:
       page = CreateMenuPage();
@@ -65,7 +90,8 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       return null;
   }
 
-  return MaterialPageRoute(builder: (context) => page);
+  return ScaleRotateRoute(page: page); //FadeRoute(page: page);
+  //MaterialPageRoute(builder: (context) => page);
 }
 
 /// Generatesa route ling with query parameters ?key=value
@@ -79,4 +105,70 @@ String pathWtihParameters(String route, Map<String, String> params) {
     }
   });
   return "$route$queryParams";
+}
+
+class ScaleRotateRoute extends PageRouteBuilder {
+  final Widget page;
+  ScaleRotateRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionDuration: Duration(seconds: 1),
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: RotationTransition(
+              turns: Tween<double>(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.linear,
+                ),
+              ),
+              child: child,
+            ),
+          ),
+        );
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }

@@ -12,7 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  final authService = AuthService(HttpClient());
+  final authService = AuthService(HttpServiceClient());
 
   LoginPage({Key key}) : super(key: key);
 

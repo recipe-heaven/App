@@ -12,7 +12,7 @@ void _onDrawerItemTap(BuildContext context, String route) {
 }
 
 Drawer getDrawer(BuildContext context) {
-  final _authServ = AuthService(HttpClient());
+  final _authServ = AuthService(HttpServiceClient());
   return Drawer(
       child: Container(
     decoration: BoxDecoration(color: elementBackgroundColor),

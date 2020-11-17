@@ -41,7 +41,7 @@ dev_dependencies:
     # Used by tests. Not required to use `json_serializable`.
   build_verify: ^1.0.0
 
-  json_serializable: ^3.2.0
+  json_serializable: ^3.5.0
 
   flutter_test:
     sdk: flutter

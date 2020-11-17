@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
@@ -25,7 +26,9 @@ import 'package:flutter/widgets.dart';
 // TODO: Create a common recipe widget
 
 class CreateMealPage extends StatefulWidget {
+
   final mealSearvice = MealService(HttpClient());
+
   final _meal = TEST_DATA;
   final _isEditing = false;
   CreateMealPage({Key key}) : super(key: key);
@@ -222,7 +225,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWithNavigation(
       body: ListView(
         children: [
           Container(
@@ -323,6 +326,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                       }
                     },
                     categotyItems: desserts),
+
                 SizedBox(
                   height: 20,
                 ),

@@ -9,10 +9,15 @@ part of 'meal.dart';
 Meal _$MealFromJson(Map<String, dynamic> json) {
   return Meal(
     name: json['name'] as String,
-    recipe: json['recipe'],
-    owner: json['owner'],
-    public: json['public'],
-  );
+    id: json['id'] as int,
+    owner: json['owner'] == null
+        ? null
+        : User.fromJson(json['owner'] as Map<String, dynamic>),
+    public: json['public'] as bool,
+  )..recipes = (json['recipes'] as List)
+      ?.map(
+          (e) => e == null ? null : Recipe.fromJson(e as Map<String, dynamic>))
+      ?.toList();
 }
 
 Map<String, dynamic> _$MealToJson(Meal instance) {
@@ -24,10 +29,11 @@ Map<String, dynamic> _$MealToJson(Meal instance) {
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('owner', instance.owner?.toJson());
   writeNotNull('public', instance.public);
   writeNotNull('name', instance.name);
-  writeNotNull('recipe', instance.recipe?.map((e) => e?.toJson())?.toList());
+  writeNotNull('recipes', instance.recipes?.map((e) => e?.toJson())?.toList());
   return val;
 }
 

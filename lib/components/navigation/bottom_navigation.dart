@@ -1,3 +1,4 @@
+import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,8 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteMenuNew);
       }
       if (i == 2) {
-        Navigator.pushNamed(context, RouteMealView);
+        Navigator.pushNamed(
+            context, pathWtihParameters(RouteMealView, {"id": "1"}));
       }
       if (i == 3) {
         navigateCallback(false);
@@ -30,17 +32,17 @@ _bottomNavigationBar(
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10), child: Icon(Icons.home)),
-          label: ""),
+          label: "Week menu"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.local_dining)),
-          label: ""),
+          label: "New menu"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.shopping_bag)),
-          label: ""),
+          label: "New meal"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10), child: Icon(Icons.menu)),

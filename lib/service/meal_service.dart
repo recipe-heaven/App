@@ -7,10 +7,31 @@ import 'package:App/service/http_client.dart';
 import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
 
-class MealService {
-  final Http httpClient;
+import '../main.dart';
 
-  MealService(this.httpClient);
+class MealService {
+  static final Http _httpClient = HttpServiceClient();
+
+  static Future<Meal> getExample(int recipeId) async {
+    return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
+  }
+
+  static Future<Meal> getFullMeal(int mealId) async {
+    try {
+      var response = await _httpClient.get(getFullMealEndpoint + "$mealId");
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+        if (body["data"] != null) {
+          return Meal.fromJson(body["data"]);
+        }
+      } else {
+        return null;
+      }
+    } on IOException catch (e) {
+      print(e);
+    }
+    return null;
+  }
 
   Future<bool> addNewMeal({@required NewMeal newMeal}) async {
     try {

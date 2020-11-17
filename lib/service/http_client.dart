@@ -22,10 +22,12 @@ abstract class Http {
 }
 
 /// Resposible for performing HTTP requests to a server
-class HttpClient implements Http {
+class HttpServiceClient implements Http {
   final _client = http.Client();
 
   Future<http.Response> get(dynamic url, {Map<String, String> headers}) {
+    // TODO: remove
+    print(url);
     return _client.get(url, headers: headers);
   }
 

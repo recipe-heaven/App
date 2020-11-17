@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/meal.dart';
@@ -15,7 +16,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class CreateMenuPage extends StatefulWidget {
-  final authService = MenuService(HttpClient());
+  final authService = MenuService(HttpServiceClient());
   final _menu = TEST_MENU;
   final _isEditing = false;
   CreateMenuPage({Key key}) : super(key: key);
@@ -187,7 +188,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWithNavigation(
       body: ListView(
         children: [
           Container(
@@ -283,7 +284,6 @@ class CreateMenuPageState extends State<CreateMenuPage> {
           ),
         ],
       ),
-      resizeToAvoidBottomInset: false,
     );
   }
 }

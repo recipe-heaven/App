@@ -20,6 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+// TODO: Move to use Simplified recipe type instead of RecipeSearchResult
+// TODO: Make it possible to inject meal for editing
+// TODO: Create a common recipe widget
+
 class CreateMealPage extends StatefulWidget {
   final mealSearvice = MealService(HttpClient());
   final _meal = TEST_DATA;
@@ -322,6 +326,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                 SizedBox(
                   height: 20,
                 ),
+                // TODO: MAYBE CHANGE TO CIRCULAR BUTTON SAME AS CREATE RECIPE
                 MaterialButton(
                     onPressed: _hasRecipes() ? _handleNewMeal : null,
                     disabledColor: disabledAcceptColor,

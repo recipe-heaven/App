@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/material.dart';
 

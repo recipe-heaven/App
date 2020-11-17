@@ -36,7 +36,7 @@ class MealService {
   Future<bool> addNewMeal({@required NewMeal newMeal}) async {
     try {
       final token = await Storage().getToken();
-      var response = await httpClient.post(newMealEndpoint,
+      var response = await _httpClient.post(newMealEndpoint,
           headers: {'Content-type': "application/json", "Authorization": token},
           body: newMeal.toJsonString());
 

@@ -26,8 +26,7 @@ import 'package:flutter/widgets.dart';
 // TODO: Create a common recipe widget
 
 class CreateMealPage extends StatefulWidget {
-
-  final mealSearvice = MealService(HttpClient());
+  final mealSearvice = MealService();
 
   final _meal = TEST_DATA;
   final _isEditing = false;

@@ -48,15 +48,7 @@ class InfoCard extends StatelessWidget {
                     fit: BoxFit.fitWidth,
                   )),
               Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.remove_circle_outline,
-                      color: errorColor,
-                    ),
-                    onPressed: removeCallback,
-                  )
-                ],
+                children: _createRemoveButton(),
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
@@ -72,5 +64,19 @@ class InfoCard extends StatelessWidget {
                     ],
                   ))
             ])));
+  }
+
+  dynamic _createRemoveButton() {
+    return removeCallback != null
+        ? [
+            IconButton(
+              icon: Icon(
+                Icons.remove_circle_outline,
+                color: errorColor,
+              ),
+              onPressed: removeCallback,
+            )
+          ]
+        : [];
   }
 }

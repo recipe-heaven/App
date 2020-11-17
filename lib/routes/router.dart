@@ -90,7 +90,8 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       return null;
   }
 
-  return MaterialPageRoute(builder: (context) => page);
+  return ScaleRotateRoute(page: page); //FadeRoute(page: page);
+  //MaterialPageRoute(builder: (context) => page);
 }
 
 /// Generatesa route ling with query parameters ?key=value
@@ -104,4 +105,70 @@ String pathWtihParameters(String route, Map<String, String> params) {
     }
   });
   return "$route$queryParams";
+}
+
+class ScaleRotateRoute extends PageRouteBuilder {
+  final Widget page;
+  ScaleRotateRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionDuration: Duration(seconds: 1),
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: RotationTransition(
+              turns: Tween<double>(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.linear,
+                ),
+              ),
+              child: child,
+            ),
+          ),
+        );
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }

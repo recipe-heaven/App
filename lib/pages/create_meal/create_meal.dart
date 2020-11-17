@@ -76,7 +76,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                       ),
                       onPressed: () {
                         setState(() {
-                          widget._meal.recipe.remove(recipe);
+                          widget._meal.recipes.remove(recipe);
                         });
                       },
                     )
@@ -119,7 +119,7 @@ class CreateMealPageState extends State<CreateMealPage> {
       children: [
         Column(
           children: [
-            for (Recipe mRecipe in widget._meal.recipe) ...[
+            for (Recipe mRecipe in widget._meal.recipes) ...[
               if (mRecipe.type == category) _make_recipe_card(mRecipe),
             ],
             MaterialButton(
@@ -221,7 +221,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                   onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(await newRecipe);
+                      widget._meal.recipes.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }
@@ -233,7 +233,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                   onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(await newRecipe);
+                      widget._meal.recipes.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }
@@ -245,7 +245,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                   onClick: () async {
                     var newRecipe = this._ChristoffersMagicSearchAlgorithm();
                     if (newRecipe != null) {
-                      widget._meal.recipe.add(await newRecipe);
+                      widget._meal.recipes.add(await newRecipe);
                     } else {
                       print("selected unit is null christoffer is to blame");
                     }

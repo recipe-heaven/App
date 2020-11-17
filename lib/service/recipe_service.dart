@@ -16,12 +16,12 @@ class RecipeService {
 
   static Future<Recipe> getExample(int recipeId) async {
     return Future<Recipe>.delayed(
-        Duration(seconds: 3), () => TEST_DATA.recipe.first);
+        Duration(seconds: 3), () => TEST_DATA.recipes.first);
   }
 
-  static Future<Recipe> getRecipe(int recipeId) async {
+  static Future<Recipe> getFullRecipe(int recipeId) async {
     try {
-      var response = await _httpClient.get(getRecipeEndpoint + "?id=$recipeId");
+      var response = await _httpClient.get(getFullRecipeEndpoint + "$recipeId");
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body["data"] != null) {

@@ -1,3 +1,4 @@
+import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,8 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteMenuNew);
       }
       if (i == 2) {
-        Navigator.pushNamed(context, RouteMealView);
+        Navigator.pushNamed(
+            context, pathWtihParameters(RouteMealView, {"id": "1"}));
       }
       if (i == 3) {
         navigateCallback(false);

@@ -12,8 +12,8 @@ import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 import "routes.dart";
 
-int _tryGetId(RouteSettings settings) {
-  var mabyeId = settings.arguments;
+int _tryGetId(Map<String, String> settings) {
+  var mabyeId = settings["id"];
 
   if (mabyeId != null) {
     return int.tryParse(mabyeId);
@@ -48,7 +48,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     //case RouteRecipeEdit:
     case RouteRecipeView:
-      var mabyid = _tryGetId(settings);
+      var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {
         page = ViewRecipePage(mabyid);
       } else {
@@ -62,7 +62,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     case RouteMealEdit:
     case RouteMealView:
-      var mabyid = _tryGetId(settings);
+      var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {
         page = CourseMealPage(mabyid);
       } else {

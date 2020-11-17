@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:App/components/default_builder.dart';
 import 'package:App/components/loading_spinnder.dart';
 import 'package:App/components/navigation/bottom_navigation.dart';
 import 'package:App/components/navigation_scaffold.dart';
@@ -30,7 +31,7 @@ class CourseMealState extends State<CourseMealPage> {
 
   @override
   void initState() {
-    _mealFuture = MealService.getExample(widget._mealId);
+    _mealFuture = MealService.getFullMeal(widget._mealId);
     super.initState();
   }
 
@@ -60,7 +61,7 @@ class CourseMealState extends State<CourseMealPage> {
             scrollDirection: Axis.horizontal,
             children: [
               for (MapEntry<int, Recipe> entry
-                  in meal.recipe.asMap().entries) ...[
+                  in meal.recipes.asMap().entries) ...[
                 TextButton(
                   child: Text(entry.value.name,
                       style: (_currentCourse == entry.key)
@@ -94,8 +95,8 @@ class CourseMealState extends State<CourseMealPage> {
 
                   _currentCourse++;
 
-                  if (_currentCourse >= meal.recipe.length) {
-                    _currentCourse = meal.recipe.length - 1;
+                  if (_currentCourse >= meal.recipes.length) {
+                    _currentCourse = meal.recipes.length - 1;
                   }
 
                   _pageController.animateToPage(
@@ -116,7 +117,7 @@ class CourseMealState extends State<CourseMealPage> {
           child: PageView(
         controller: _pageController,
         children: [
-          for (Recipe recipe in meal.recipe) DisplayRecipe(recipe),
+          for (Recipe recipe in meal.recipes) DisplayRecipe(recipe),
         ],
         onPageChanged: (int newVal) {
           setState(() {
@@ -132,31 +133,7 @@ class CourseMealState extends State<CourseMealPage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
-      body: FutureBuilder(
-          future: _mealFuture,
-          builder: (context, AsyncSnapshot<Meal> snapshot) {
-            if (snapshot.hasData) {
-              return _showMeal(snapshot.data);
-            } else if (snapshot.hasError) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 60,
-                    height: 60,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text('Awaiting result...'),
-                  )
-                ],
-              );
-            } else {
-              return getCircularSpinner();
-            }
-          }),
-    );
+        body:
+            defaultBuilder<Meal>(_mealFuture, (Meal meal) => _showMeal(meal)));
   }
 }

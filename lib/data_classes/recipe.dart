@@ -1,15 +1,24 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/user.dart';
+import 'package:App/helpers/enumHelper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recipe.g.dart';
 
 List<RecipeStep> _stepsFromJson(String json) {
-  return json.split("@&@&@").map((e) => RecipeStep(step: e));
+  List<RecipeStep> a = json
+      .split("@&@&@")
+      .map((e) => RecipeStep(step: e))
+      //   .where((element) => element.runtimeType == RecipeStep)
+      .toList();
+  print(a.runtimeType);
+  return a;
 }
 
 String _stepsToJson(List<RecipeStep> steps) {
@@ -17,16 +26,24 @@ String _stepsToJson(List<RecipeStep> steps) {
 }
 
 List<RecipeDrink> _drinksFromJson(String json) {
-  return json.split("@&@&@").map((e) => RecipeDrink(drink: e));
+  return json.split("@&@&@").map((e) => RecipeDrink(drink: e)).toList();
 }
 
 String _drinksToJson(List<RecipeDrink> drinks) {
   return drinks.map((e) => e.drink).join("@&@&@");
 }
 
+MealType _mealTypeFromJson(String json) {
+  return MealType.values.firstWhere((e) => getStringFromEnum(e) == json);
+}
+
+String _mealTypeToJson(MealType mealType) {
+  return describeEnum(mealType); //getStringFromEnum(mealType);
+}
+
 var _random = Random(928130938120983);
+
 mixin UserOwned {
-  @JsonKey(ignore: true)
   int id;
   User owner = null;
   bool public = false;
@@ -39,6 +56,8 @@ class Recipe with UserOwned {
   List<Tag> tags = [];
   String description = "";
   int cookTime = 0;
+
+  @JsonKey(toJson: _mealTypeToJson, fromJson: _mealTypeFromJson)
   MealType type = MealType.main;
   bool visible = false;
   List<Ingredient> recipeIngredients = [];
@@ -61,18 +80,20 @@ class Recipe with UserOwned {
 
   Recipe(
       {this.name,
-      tags,
+      List<Tag> tags,
       this.description,
       this.cookTime,
       type,
       this.visible,
-      recipeIngredients,
+      List<Ingredient> recipeIngredients,
       cookingSteps,
-      recommendedDrinks,
+      List<RecipeDrink> recommendedDrinks,
       this.recipeImage,
-      id,
-      owner,
-      public}) {
+      int id,
+      User owner,
+      bool public})
+  // : super(id: id, owner: owner, public: public ?? false)
+  {
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
@@ -82,7 +103,6 @@ class Recipe with UserOwned {
     this.cookingSteps = cookingSteps ?? [];
     this.tags = tags ?? [];
     this.type = type ?? MealType.main;
-    this.id = id ?? null;
   }
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

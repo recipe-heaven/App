@@ -14,19 +14,19 @@ class Meal with UserOwned {
   String name = "";
 
   Image getDisplayImage() {
-    if (recipe == null || recipe?.length == 0) {
+    if (recipes == null || recipes?.length == 0) {
       return FoodImage().default_image;
     }
-    return recipe.first.getDisplayImage();
+    return recipes.first.getDisplayImage();
   }
 
-  List<Recipe> recipe;
+  List<Recipe> recipes;
 
-  Meal({this.name, recipe, id, owner, public}) {
+  Meal({this.name, List<Recipe> recipe, int id, User owner, bool public}) {
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
-    this.recipe = recipe ?? List<Recipe>();
+    this.recipes = recipe ?? List<Recipe>();
   }
 
   factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);

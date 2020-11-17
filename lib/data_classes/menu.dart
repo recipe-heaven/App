@@ -1,4 +1,5 @@
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'meal.dart';
@@ -11,7 +12,7 @@ class Menu with UserOwned {
 
   List<Meal> meals;
 
-  Menu({this.name, this.meals, public, owner, id}) {
+  Menu({this.name, this.meals, int id, User owner, bool public}) {
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;

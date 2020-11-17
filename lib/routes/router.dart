@@ -12,8 +12,8 @@ import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 import "routes.dart";
 
-int _tryGetId(RouteSettings settings) {
-  var mabyeId = settings.arguments;
+int _tryGetId(Map<String, String> settings) {
+  var mabyeId = settings["id"];
 
   if (mabyeId != null) {
     return int.tryParse(mabyeId);
@@ -48,7 +48,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     //case RouteRecipeEdit:
     case RouteRecipeView:
-      var mabyid = _tryGetId(settings);
+      var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {
         page = ViewRecipePage(mabyid);
       } else {
@@ -62,7 +62,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       break;
     case RouteMealEdit:
     case RouteMealView:
-      var mabyid = _tryGetId(settings);
+      var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {
         page = CourseMealPage(mabyid);
       } else {
@@ -90,7 +90,8 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       return null;
   }
 
-  return MaterialPageRoute(builder: (context) => page);
+  return ScaleRotateRoute(page: page); //FadeRoute(page: page);
+  //MaterialPageRoute(builder: (context) => page);
 }
 
 /// Generatesa route ling with query parameters ?key=value
@@ -104,4 +105,70 @@ String pathWtihParameters(String route, Map<String, String> params) {
     }
   });
   return "$route$queryParams";
+}
+
+class ScaleRotateRoute extends PageRouteBuilder {
+  final Widget page;
+  ScaleRotateRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionDuration: Duration(seconds: 1),
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              ScaleTransition(
+            scale: Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.fastOutSlowIn,
+              ),
+            ),
+            child: RotationTransition(
+              turns: Tween<double>(
+                begin: 0.0,
+                end: 1.0,
+              ).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.linear,
+                ),
+              ),
+              child: child,
+            ),
+          ),
+        );
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }

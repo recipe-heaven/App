@@ -9,19 +9,27 @@ part of 'recipe.dart';
 Recipe _$RecipeFromJson(Map<String, dynamic> json) {
   return Recipe(
     name: json['name'] as String,
-    tags: json['tags'],
+    tags: (json['tags'] as List)
+        ?.map((e) => e == null ? null : Tag.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     description: json['description'] as String,
     cookTime: json['cookTime'] as int,
-    type: json['type'],
+    type: _mealTypeFromJson(json['type'] as String),
     visible: json['visible'] as bool,
-    recipeIngredients: json['recipeIngredients'],
+    recipeIngredients: (json['recipeIngredients'] as List)
+        ?.map((e) =>
+            e == null ? null : Ingredient.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     cookingSteps: _stepsFromJson(json['cookingSteps'] as String),
     recommendedDrinks: _drinksFromJson(json['recommendedDrinks'] as String),
     recipeImage: json['recipeImage'] == null
         ? null
         : FoodImage.fromJson(json['recipeImage'] as Map<String, dynamic>),
-    owner: json['owner'],
-    public: json['public'],
+    id: json['id'] as int,
+    owner: json['owner'] == null
+        ? null
+        : User.fromJson(json['owner'] as Map<String, dynamic>),
+    public: json['public'] as bool,
   );
 }
 
@@ -34,13 +42,15 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) {
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('owner', instance.owner?.toJson());
   writeNotNull('public', instance.public);
   writeNotNull('name', instance.name);
   writeNotNull('tags', instance.tags?.map((e) => e?.toJson())?.toList());
   writeNotNull('description', instance.description);
   writeNotNull('cookTime', instance.cookTime);
-  writeNotNull('type', _$MealTypeEnumMap[instance.type]);
+
+  writeNotNull('type', _mealTypeToJson(instance.type));
   writeNotNull('visible', instance.visible);
   writeNotNull('recipeIngredients',
       instance.recipeIngredients?.map((e) => e?.toJson())?.toList());
@@ -49,12 +59,6 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) {
   writeNotNull('recipeImage', instance.recipeImage?.toJson());
   return val;
 }
-
-const _$MealTypeEnumMap = {
-  MealType.starter: 'starter',
-  MealType.main: 'main',
-  MealType.dessert: 'dessert',
-};
 
 Tag _$TagFromJson(Map<String, dynamic> json) {
   return Tag(

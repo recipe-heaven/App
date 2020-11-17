@@ -13,8 +13,11 @@ Menu _$MenuFromJson(Map<String, dynamic> json) {
         ?.map(
             (e) => e == null ? null : Meal.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    public: json['public'],
-    owner: json['owner'],
+    id: json['id'] as int,
+    owner: json['owner'] == null
+        ? null
+        : User.fromJson(json['owner'] as Map<String, dynamic>),
+    public: json['public'] as bool,
   );
 }
 
@@ -27,6 +30,7 @@ Map<String, dynamic> _$MenuToJson(Menu instance) {
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('owner', instance.owner?.toJson());
   writeNotNull('public', instance.public);
   writeNotNull('name', instance.name);

@@ -6,7 +6,6 @@ String getStringFromEnum(enumType) {
 }
 
 /// Returns the enum type for the provided enum string representation
-getEnumType(enumType, stringRepresentation) {
-  return enumType.values
-      .firstWhere((e) => getStringFromEnum(e) == stringRepresentation);
+getEnumType<T>(List<T> types, stringRepresentation) {
+  return types.firstWhere((e) => getStringFromEnum(e) == stringRepresentation);
 }

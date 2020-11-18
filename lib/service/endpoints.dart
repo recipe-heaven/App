@@ -11,7 +11,7 @@ const getMultipleSimpleRecipeEndpoint = "${apiUrl}recipe/multiple/simple/";
 const getFullMealEndpoint = "${apiUrl}meal/full/";
 const getSimpleMealEndpoint = "${apiUrl}meal/simple/";
 
-const getImageEndpoint = "${apiUrl}images/";
+const getImageEndpoint = "${apiUrl}resource/image/";
 
 /// -- Requieres login -- ///
 const changePassEndpoint = "${apiUrl}authentication/changepassword";

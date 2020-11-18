@@ -13,15 +13,14 @@ import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/meal_service.dart';
+import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-// TODO: Move to use Simplified recipe type instead of RecipeSearchResult
 // TODO: Make it possible to inject meal for editing
-// TODO: Create a common recipe widget
 
 class CreateMealPage extends StatefulWidget {
   final MealService mealSearvice = MealService();
@@ -35,12 +34,10 @@ class CreateMealPage extends StatefulWidget {
   CreateMealPageState createState() => CreateMealPageState();
 }
 
-final _fadeToCollor = Colors.black; // Color(0xdd000000);
-
 class CreateMealPageState extends State<CreateMealPage> {
-  Map<String, RecipeSearchResult> starters = Map();
-  Map<String, RecipeSearchResult> mains = Map();
-  Map<String, RecipeSearchResult> desserts = Map();
+  Map<String, Recipe> starters = Map();
+  Map<String, Recipe> mains = Map();
+  Map<String, Recipe> desserts = Map();
 
   String _name = "";
   bool _isPublic = false;
@@ -54,7 +51,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
       List<int> recpideIds = List();
 
-      void addToIdList(Iterable<RecipeSearchResult> recipes) {
+      void addToIdList(Iterable<Recipe> recipes) {
         recipes.forEach((recipe) => recpideIds.add(recipe.id));
       }
 
@@ -79,8 +76,8 @@ class CreateMealPageState extends State<CreateMealPage> {
     return (starters.isNotEmpty || mains.isNotEmpty || desserts.isNotEmpty);
   }
 
-  Widget _createRecipeCard(MapEntry<String, RecipeSearchResult> recipe,
-      VoidCallback removeCardCallback) {
+  Widget _createRecipeCard(
+      MapEntry<String, Recipe> recipe, VoidCallback removeCardCallback) {
     return InfoCard(
         title: recipe.value.name,
         removeCallback: removeCardCallback,
@@ -88,8 +85,7 @@ class CreateMealPageState extends State<CreateMealPage> {
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 
-  Future<Map<String, RecipeSearchResult>> _searchForType(
-      MealType mealtype) async {
+  Future<Map<String, Recipe>> _searchForType(MealType mealtype) async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true,
@@ -100,19 +96,24 @@ class CreateMealPageState extends State<CreateMealPage> {
 
     if (returnResult == null) return null;
 
-    // TODO IMPLEMENT FETCH OF RECIPES HERE WHEN TYPE IS READY
     Map<String, TypeSearchResult> results = returnResult;
-    Map<String, RecipeSearchResult> recipes = Map();
-    for (var item in results.entries) {
-      recipes[item.key] = item.value as RecipeSearchResult;
+
+    List<int> ids = results.entries.map((e) => e.value.id).toList();
+    var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);
+
+    Map<String, Recipe> recipesMapped = Map();
+
+    for (var recipe in recipes) {
+      recipesMapped["${recipe.id}${recipe.type}"] = recipe;
     }
-    return recipes;
+
+    return recipesMapped;
   }
 
   Widget _createCategorySelector(
       {String buttonText,
       VoidCallback onClick,
-      Map<String, RecipeSearchResult> categotyItems}) {
+      Map<String, Recipe> categotyItems}) {
     return Column(
       children: [
         Column(

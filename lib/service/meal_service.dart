@@ -18,9 +18,16 @@ class MealService {
 
   static Future<Meal> getFullMeal(int mealId) async {
     try {
-      var response = await _httpClient.get(getFullMealEndpoint + "$mealId");
+      final token = await Storage().getToken();
+
+      var response = await _httpClient.get(getFullMealEndpoint + "$mealId",
+          headers: {
+            'Content-type': "application/json",
+            "Authorization": token
+          });
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
+        print(body);
         if (body["data"] != null) {
           return Meal.fromJson(body["data"]);
         }

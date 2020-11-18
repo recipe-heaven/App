@@ -21,13 +21,18 @@ class Meal with UserOwned {
     return recipes.first.getDisplayImage();
   }
 
-  List<Recipe> recipes;
+  List<CompleteRecipe> recipes;
 
-  Meal({this.name, List<Recipe> recipe, int id, User owner, bool public}) {
+  Meal(
+      {this.name,
+      List<CompleteRecipe> recipe,
+      int id,
+      User owner,
+      bool public}) {
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
-    this.recipes = recipe ?? List<Recipe>();
+    this.recipes = recipe ?? List<CompleteRecipe>();
   }
 
   factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
@@ -38,6 +43,8 @@ class Meal with UserOwned {
 /// and sent to the server for storing the new meal
 @JsonSerializable(explicitToJson: true)
 class NewMeal {
+  int id;
+
   String _name;
 
   bool _public = false;

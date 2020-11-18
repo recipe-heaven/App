@@ -15,8 +15,8 @@ Meal _$MealFromJson(Map<String, dynamic> json) {
         : User.fromJson(json['owner'] as Map<String, dynamic>),
     public: json['public'] as bool,
   )..recipes = (json['recipes'] as List)
-      ?.map(
-          (e) => e == null ? null : Recipe.fromJson(e as Map<String, dynamic>))
+      ?.map((e) =>
+          e == null ? null : CompleteRecipe.fromJson(e as Map<String, dynamic>))
       ?.toList();
 }
 
@@ -42,7 +42,7 @@ NewMeal _$NewMealFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['public'] as bool,
     (json['recipes'] as List)?.map((e) => e as int)?.toList(),
-  );
+  )..id = json['id'] as int;
 }
 
 Map<String, dynamic> _$NewMealToJson(NewMeal instance) {
@@ -54,6 +54,7 @@ Map<String, dynamic> _$NewMealToJson(NewMeal instance) {
     }
   }
 
+  writeNotNull('id', instance.id);
   writeNotNull('name', instance.name);
   writeNotNull('public', instance.public);
   writeNotNull('recipes', instance.recipes);

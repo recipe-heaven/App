@@ -19,7 +19,7 @@ import 'package:image_picker/image_picker.dart';
 class NewRecipePage extends StatefulWidget {
   @override
   NewRecipePageState createState() => NewRecipePageState();
-  final Recipe _recipe = Recipe();
+  final CompleteRecipe _recipe = CompleteRecipe();
 }
 
 class NewRecipePageState extends State<NewRecipePage> {

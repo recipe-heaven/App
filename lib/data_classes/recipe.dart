@@ -53,22 +53,16 @@ mixin UserOwned {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Recipe with UserOwned {
   String name = "";
-  List<Tag> tags = [];
+
   String description = "";
   int cookTime = 0;
 
   @JsonKey(toJson: _mealTypeToJson, fromJson: _mealTypeFromJson)
   MealType type = MealType.main;
-  bool visible = false;
-  List<Ingredient> recipeIngredients = [];
-
-  @JsonKey(toJson: _stepsToJson, fromJson: _stepsFromJson)
-  List<RecipeStep> cookingSteps = [];
-
-  @JsonKey(toJson: _drinksToJson, fromJson: _drinksFromJson)
-  List<RecipeDrink> recommendedDrinks = [];
 
   FoodImage recipeImage = null;
+
+  int updated;
 
   Image getDisplayImage() {
     return (recipeImage == null)
@@ -80,33 +74,66 @@ class Recipe with UserOwned {
 
   Recipe(
       {this.name,
-      List<Tag> tags,
       this.description,
       this.cookTime,
-      type,
-      this.visible,
-      List<Ingredient> recipeIngredients,
-      cookingSteps,
-      List<RecipeDrink> recommendedDrinks,
       this.recipeImage,
+      this.updated,
+      MealType type,
       int id,
       User owner,
-      bool public})
-  // : super(id: id, owner: owner, public: public ?? false)
-  {
+      bool public}) {
+    this.id = id;
     this.owner = owner;
     this.public = public ?? false;
-    this.id = id;
-
-    this.recommendedDrinks = recommendedDrinks ?? [];
-    this.recipeIngredients = recipeIngredients ?? [];
-    this.cookingSteps = cookingSteps ?? [];
-    this.tags = tags ?? [];
     this.type = type ?? MealType.main;
   }
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
+}
+
+/// A complete recipe includes all details and fields for displaying a recipe
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CompleteRecipe extends Recipe {
+  List<Tag> tags = [];
+
+  List<Ingredient> recipeIngredients = [];
+
+  @JsonKey(toJson: _stepsToJson, fromJson: _stepsFromJson)
+  List<RecipeStep> cookingSteps = [];
+
+  @JsonKey(toJson: _drinksToJson, fromJson: _drinksFromJson)
+  List<RecipeDrink> recommendedDrinks = [];
+
+  CompleteRecipe(
+      {String name,
+      List<Tag> tags,
+      description,
+      cookTime,
+      type,
+      cookingSteps,
+      List<Ingredient> recipeIngredients,
+      List<RecipeDrink> recommendedDrinks,
+      recipeImage,
+      int id,
+      User owner,
+      bool public})
+      : super(
+            name: name,
+            description: description,
+            cookTime: cookTime,
+            owner: owner,
+            recipeImage: recipeImage)
+  // : super(id: id, owner: owner, public: public ?? false)
+  {
+    this.tags = tags ?? [];
+    this.cookingSteps = cookingSteps ?? [];
+    this.recommendedDrinks = recommendedDrinks ?? [];
+    this.recipeIngredients = recipeIngredients ?? [];
+  }
+
+  factory CompleteRecipe.fromJson(Map<String, dynamic> json) =>
+      _$CompleteRecipeFromJson(json);
 }
 
 class RecipeDrink {

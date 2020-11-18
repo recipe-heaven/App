@@ -117,7 +117,7 @@ class CourseMealState extends State<CourseMealPage> {
           child: PageView(
         controller: _pageController,
         children: [
-          for (Recipe recipe in meal.recipes) DisplayRecipe(recipe),
+          for (CompleteRecipe recipe in meal.recipes) DisplayRecipe(recipe),
         ],
         onPageChanged: (int newVal) {
           setState(() {

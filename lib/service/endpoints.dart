@@ -4,7 +4,7 @@ const apiUrl = "http://192.168.1.100:9876/api/";
 const loginEndpoint = "${apiUrl}authentication/login";
 const createUserEndpoint = "${apiUrl}authentication/create";
 
-const getFullRecipeEndpoint = "${apiUrl}recipe/full/";
+const getFullRecipeEndpoint = "${apiUrl}recipe/";
 const getSimpleRecipeEndpoint = "${apiUrl}recipe/simple/";
 
 const getFullMealEndpoint = "${apiUrl}meal/full/";

@@ -73,7 +73,7 @@ class Path404Page extends StatelessWidget {
 }
 
 final TEST_DATA = Meal(name: "aslkdjal", recipe: [
-  Recipe(
+  CompleteRecipe(
       type: MealType.main,
       cookingSteps: [
         RecipeStep(step: "steg 1 jør noe"),
@@ -120,7 +120,7 @@ final TEST_DATA = Meal(name: "aslkdjal", recipe: [
             name: "keys",
             comment: "waaaa"),
       ]),
-  Recipe(
+  CompleteRecipe(
       type: MealType.dessert,
       cookingSteps: [
         RecipeStep(step: "steg 1 jør noe"),

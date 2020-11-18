@@ -6,6 +6,7 @@ const createUserEndpoint = "${apiUrl}authentication/create";
 
 const getFullRecipeEndpoint = "${apiUrl}recipe/";
 const getSimpleRecipeEndpoint = "${apiUrl}recipe/simple/";
+const getMultipleSimpleRecipeEndpoint = "${apiUrl}recipe/multiple/simple/";
 
 const getFullMealEndpoint = "${apiUrl}meal/full/";
 const getSimpleMealEndpoint = "${apiUrl}meal/simple/";

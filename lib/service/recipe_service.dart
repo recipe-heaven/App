@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:App/routes/router.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/service/endpoints.dart';
@@ -26,6 +27,40 @@ class RecipeService {
         var body = jsonDecode(response.body);
         if (body["data"] != null) {
           return Recipe.fromJson(body["data"]);
+        }
+      } else {
+        return null;
+      }
+    } on IOException catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  /// Tries to fetch multiple minified recipes from the server by their ids
+  /// provided as list.
+  Future<List<Recipe>> getMultipleMinifiedRecipes(List<int> recipeIds) async {
+    try {
+      final token = await Storage().getToken();
+      String ids = "";
+      recipeIds.forEach((id) {
+        ids += "$id,";
+      });
+      ids = ids.replaceRange(ids.length - 1, null, "");
+      var response = await _httpClient.get(
+          pathWtihParameters(getMultipleSimpleRecipeEndpoint, {"ids": ids}),
+          headers: {
+            'Content-type': "application/json",
+            "Authorization": token
+          });
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+        if (body["data"] != null) {
+          List<Recipe> simpleRecipes = List();
+          for (var simpleRecipe in body["data"]) {
+            simpleRecipes.add(Recipe.fromJson(simpleRecipe));
+          }
+          return simpleRecipes;
         }
       } else {
         return null;

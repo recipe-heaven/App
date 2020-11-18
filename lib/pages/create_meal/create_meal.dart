@@ -76,6 +76,21 @@ class CreateMealPageState extends State<CreateMealPage> {
     return (starters.isNotEmpty || mains.isNotEmpty || desserts.isNotEmpty);
   }
 
+  /// Creates map list of recipes with key as id and name of recipe.
+  /// To ensure only one of each ID/type is allowed
+  Map<String, Recipe> createRecipeMap(List<Recipe> recipes) {
+    Map<String, Recipe> recipesMapped = Map();
+
+    for (var recipe in recipes) {
+      recipesMapped["${recipe.id}${recipe.type}"] = recipe;
+    }
+    return recipesMapped;
+  }
+
+  @protected
+  void initState() {}
+
+  /// Creates the recipe card that is displayed on the screen with information.
   Widget _createRecipeCard(
       MapEntry<String, Recipe> recipe, VoidCallback removeCardCallback) {
     return InfoCard(
@@ -85,6 +100,8 @@ class CreateMealPageState extends State<CreateMealPage> {
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 
+  /// Handles the navigation to search screen, and returns selected results from
+  /// search as a map of recipes.
   Future<Map<String, Recipe>> _searchForType(MealType mealtype) async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
@@ -101,13 +118,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     List<int> ids = results.entries.map((e) => e.value.id).toList();
     var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);
 
-    Map<String, Recipe> recipesMapped = Map();
-
-    for (var recipe in recipes) {
-      recipesMapped["${recipe.id}${recipe.type}"] = recipe;
-    }
-
-    return recipesMapped;
+    return createRecipeMap(recipes);
   }
 
   Widget _createCategorySelector(

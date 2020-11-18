@@ -134,6 +134,8 @@ class CompleteRecipe extends Recipe {
 
   factory CompleteRecipe.fromJson(Map<String, dynamic> json) =>
       _$CompleteRecipeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompleteRecipeToJson(this);
 }
 
 class RecipeDrink {

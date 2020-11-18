@@ -16,7 +16,7 @@ class Meal with UserOwned {
 
   Image getDisplayImage() {
     if (recipes == null || recipes?.length == 0) {
-      return FoodImage().default_image;
+      return FoodImage().defaultImage;
     }
     return recipes.first.getDisplayImage();
   }

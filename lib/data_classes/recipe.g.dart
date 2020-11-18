@@ -11,9 +11,9 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     description: json['description'] as String,
     cookTime: json['cookTime'] as int,
-    recipeImage: json['recipeImage'] == null
+    image: json['image'] == null
         ? null
-        : FoodImage.fromJson(json['recipeImage'] as Map<String, dynamic>),
+        : FoodImage.fromJson(json['image'] as Map<String, dynamic>),
     updated: json['updated'] as int,
     type: _mealTypeFromJson(json['type'] as String),
     id: json['id'] as int,
@@ -40,7 +40,7 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) {
   writeNotNull('description', instance.description);
   writeNotNull('cookTime', instance.cookTime);
   writeNotNull('type', _mealTypeToJson(instance.type));
-  writeNotNull('recipeImage', instance.recipeImage?.toJson());
+  writeNotNull('image', instance.image?.toJson());
   writeNotNull('updated', instance.updated);
   return val;
 }
@@ -60,7 +60,7 @@ CompleteRecipe _$CompleteRecipeFromJson(Map<String, dynamic> json) {
             e == null ? null : Ingredient.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     recommendedDrinks: _drinksFromJson(json['recommendedDrinks'] as String),
-    recipeImage: json['recipeImage'],
+    image: json['image'],
     id: json['id'] as int,
     owner: json['owner'] == null
         ? null
@@ -85,7 +85,7 @@ Map<String, dynamic> _$CompleteRecipeToJson(CompleteRecipe instance) {
   writeNotNull('description', instance.description);
   writeNotNull('cookTime', instance.cookTime);
   writeNotNull('type', _mealTypeToJson(instance.type));
-  writeNotNull('recipeImage', instance.recipeImage?.toJson());
+  writeNotNull('image', instance.image?.toJson());
   writeNotNull('updated', instance.updated);
   writeNotNull('tags', instance.tags?.map((e) => e?.toJson())?.toList());
   writeNotNull('recipeIngredients',

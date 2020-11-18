@@ -11,7 +11,7 @@ FoodImage _$FoodImageFromJson(Map<String, dynamic> json) {
     ..id = json['id'] as int
     ..name = json['name'] as String
     ..mimeType = json['mimeType'] as String
-    ..size = json['size'] as int;
+    ..size = (json['size'] as num)?.toDouble();
 }
 
 Map<String, dynamic> _$FoodImageToJson(FoodImage instance) {

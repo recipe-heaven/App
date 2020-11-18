@@ -81,7 +81,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     return InfoCard(
         title: recipe.value.name,
         removeCallback: removeCardCallback,
-        background: "assets/images/BANNER-NEW-MEAL.png",
+        background: recipe.value.image.id.toString(),
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 

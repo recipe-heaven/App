@@ -1,3 +1,4 @@
+import 'package:App/service/endpoints.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -43,9 +44,8 @@ class InfoCard extends StatelessWidget {
                             Rect.fromLTRB(0, 0, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
-                  child: Image.asset(
-                    background,
-                    fit: BoxFit.fitWidth,
+                  child: Image.network(
+                    getImageEndpoint + background,
                   )),
               Row(
                 children: _createRemoveButton(),

@@ -60,15 +60,15 @@ class Recipe with UserOwned {
   @JsonKey(toJson: _mealTypeToJson, fromJson: _mealTypeFromJson)
   MealType type = MealType.main;
 
-  FoodImage recipeImage = null;
+  FoodImage image;
 
   int updated;
 
   Image getDisplayImage() {
-    return (recipeImage == null)
-        ? FoodImage().default_image
+    return (image == null)
+        ? FoodImage().defaultImage
         : Image.network(
-            recipeImage.getImageUrl(),
+            image.getImageUrl(),
           );
   }
 
@@ -76,7 +76,7 @@ class Recipe with UserOwned {
       {this.name,
       this.description,
       this.cookTime,
-      this.recipeImage,
+      this.image,
       this.updated,
       MealType type,
       int id,
@@ -114,7 +114,7 @@ class CompleteRecipe extends Recipe {
       cookingSteps,
       List<Ingredient> recipeIngredients,
       List<RecipeDrink> recommendedDrinks,
-      recipeImage,
+      image,
       int id,
       User owner,
       bool public})
@@ -123,7 +123,7 @@ class CompleteRecipe extends Recipe {
             description: description,
             cookTime: cookTime,
             owner: owner,
-            recipeImage: recipeImage)
+            image: image)
   // : super(id: id, owner: owner, public: public ?? false)
   {
     this.tags = tags ?? [];

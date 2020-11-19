@@ -20,5 +20,7 @@ const currentUserEndpoint = "${apiUrl}authentication/currentuser";
 const newRecipeEndpoint = "${apiUrl}recipe/new";
 
 const newMealEndpoint = "${apiUrl}meal";
+const editMealEndpoint = "${apiUrl}meal";
+
 const searchEndpoint = "${apiUrl}search";
 const newMenuEndpoint = "${apiUrl}menu/new";

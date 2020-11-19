@@ -91,31 +91,37 @@ class CreateMealPageState extends State<CreateMealPage> {
     return recipesMapped;
   }
 
+  /// Fills all neccassary fields with details from a provided meal
+  void _setupMealForEdit() {
+    _isEditing = true;
+    List<Recipe> starter = List();
+    List<Recipe> main = List();
+    List<Recipe> dessert = List();
+    _name = widget.meal.name;
+    _isPublic = widget.meal.public;
+    for (var recipe in widget.meal.recipes) {
+      switch (recipe.type) {
+        case MealType.starter:
+          starter.add(recipe);
+          break;
+        case MealType.main:
+          main.add(recipe);
+          break;
+        case MealType.dessert:
+          dessert.add(recipe);
+          break;
+        default:
+      }
+    }
+    this._starters = createRecipeMap(starter);
+    this._mains = createRecipeMap(main);
+    this._desserts = createRecipeMap(dessert);
+  }
+
   @protected
   void initState() {
     if (widget.meal != null) {
-      _isEditing = true;
-      List<Recipe> starter = List();
-      List<Recipe> main = List();
-      List<Recipe> dessert = List();
-      print(widget.meal.id);
-      for (var recipe in widget.meal.recipes) {
-        switch (recipe.type) {
-          case MealType.starter:
-            starter.add(recipe);
-            break;
-          case MealType.main:
-            main.add(recipe);
-            break;
-          case MealType.dessert:
-            dessert.add(recipe);
-            break;
-          default:
-        }
-      }
-      this._starters = createRecipeMap(starter);
-      this._mains = createRecipeMap(main);
-      this._desserts = createRecipeMap(dessert);
+      _setupMealForEdit();
     }
   }
 
@@ -125,7 +131,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     return InfoCard(
         title: recipe.value.name,
         removeCallback: removeCardCallback,
-        background: recipe.value.image.id.toString(),
+        background: recipe.value.getDisplayImage(),
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 
@@ -232,6 +238,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                         child: Form(
                           key: _formKey,
                           child: secondaryInputField(context,
+                              initialValue: _name,
                               label: "Meal title", onSave: (newValue) {
                             _name = newValue;
                           },

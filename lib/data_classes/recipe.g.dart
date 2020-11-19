@@ -51,8 +51,8 @@ CompleteRecipe _$CompleteRecipeFromJson(Map<String, dynamic> json) {
     tags: (json['tags'] as List)
         ?.map((e) => e == null ? null : Tag.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    description: json['description'],
-    cookTime: json['cookTime'],
+    description: json['description'] as String,
+    cookTime: json['cookTime'] as int,
     type: _mealTypeFromJson(json['type'] as String),
     cookingSteps: _stepsFromJson(json['cookingSteps'] as String),
     recipeIngredients: (json['recipeIngredients'] as List)
@@ -60,7 +60,9 @@ CompleteRecipe _$CompleteRecipeFromJson(Map<String, dynamic> json) {
             e == null ? null : Ingredient.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     recommendedDrinks: _drinksFromJson(json['recommendedDrinks'] as String),
-    image: json['image'],
+    image: json['image'] == null
+        ? null
+        : FoodImage.fromJson(json['image'] as Map<String, dynamic>),
     id: json['id'] as int,
     owner: json['owner'] == null
         ? null

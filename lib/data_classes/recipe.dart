@@ -108,13 +108,13 @@ class CompleteRecipe extends Recipe {
   CompleteRecipe(
       {String name,
       List<Tag> tags,
-      description,
-      cookTime,
-      type,
-      cookingSteps,
+      String description,
+      int cookTime,
+      MealType type,
+      List<RecipeStep> cookingSteps,
       List<Ingredient> recipeIngredients,
       List<RecipeDrink> recommendedDrinks,
-      image,
+      FoodImage image,
       int id,
       User owner,
       bool public})

@@ -21,22 +21,64 @@ class Meal with UserOwned {
     return recipes.first.getDisplayImage();
   }
 
-  List<CompleteRecipe> recipes;
+  List<Recipe> recipes;
 
-  Meal(
-      {this.name,
-      List<CompleteRecipe> recipe,
-      int id,
-      User owner,
-      bool public}) {
+  Meal({this.name, List<Recipe> recipes, int id, User owner, bool public}) {
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
-    this.recipes = recipe ?? List<CompleteRecipe>();
+    this.recipes = recipes ?? List<Recipe>();
   }
 
+  /// Create this object from json object map
   factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
+
+  /// Convert this object to json Map
   Map<String, dynamic> toJson() => _$MealToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class CompleteMeal extends Meal {
+  CompleteMeal(
+      {String name,
+      List<CompleteRecipe> recipes,
+      int id,
+      User owner,
+      bool public})
+      : super(
+          name: name,
+          id: id,
+          owner: owner,
+          public: public,
+          recipes: recipes,
+        );
+
+  /// Create this object from json object map
+  factory CompleteMeal.fromJson(Map<String, dynamic> json) =>
+      _$CompleteMealFromJson(json);
+
+  /// Convert this object to json Map
+  Map<String, dynamic> toJson() => _$CompleteMealToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class SimpleMeal extends Meal {
+  SimpleMeal(
+      {String name, List<Recipe> recipes, int id, User owner, bool public})
+      : super(
+          name: name,
+          id: id,
+          owner: owner,
+          public: public,
+          recipes: recipes,
+        );
+
+  /// Create this object from json object map
+  factory SimpleMeal.fromJson(Map<String, dynamic> json) =>
+      _$SimpleMealFromJson(json);
+
+  /// Convert this object to json Map
+  Map<String, dynamic> toJson() => _$SimpleMealToJson(this);
 }
 
 /// A represents a new meal object, this can be serialized
@@ -71,6 +113,9 @@ class NewMeal {
 
   set id(id) => _id = id;
 
+  /// Create this object from json object map
   String toJsonString() => jsonEncode(_$NewMealToJson(this));
+
+  /// Convert this object to json Map
   Map<String, dynamic> toJson() => _$NewMealToJson(this);
 }

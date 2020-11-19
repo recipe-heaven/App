@@ -20,25 +20,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-// TODO: Make it possible to inject meal for editing
-
+/// Creates or edits a meal
 class CreateMealPage extends StatefulWidget {
   final MealService mealSearvice = MealService();
   final Meal meal;
-  bool _isEditing = false;
-  CreateMealPage({Key key, this.meal}) : super(key: key) {
-    if (meal != null) _isEditing = true;
-  }
+
+  CreateMealPage({Key key, this.meal}) : super(key: key);
 
   @override
   CreateMealPageState createState() => CreateMealPageState();
 }
 
 class CreateMealPageState extends State<CreateMealPage> {
-  Map<String, Recipe> starters = Map();
-  Map<String, Recipe> mains = Map();
-  Map<String, Recipe> desserts = Map();
-
+  Map<String, Recipe> _starters = Map();
+  Map<String, Recipe> _mains = Map();
+  Map<String, Recipe> _desserts = Map();
+  bool _isEditing = false;
   String _name = "";
   bool _isPublic = false;
 
@@ -55,13 +52,20 @@ class CreateMealPageState extends State<CreateMealPage> {
         recipes.forEach((recipe) => recpideIds.add(recipe.id));
       }
 
-      addToIdList(starters.values);
-      addToIdList(mains.values);
-      addToIdList(desserts.values);
+      addToIdList(_starters.values);
+      addToIdList(_mains.values);
+      addToIdList(_desserts.values);
 
-      NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
+      var res = false;
+      if (_isEditing) {
+        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
 
-      var res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
+        newMeal.id = widget.meal.id;
+        res = await widget.mealSearvice.updateMeal(updatedMeal: newMeal);
+      } else {
+        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
+        res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
+      }
 
       if (res) {
         setState(() {});
@@ -73,7 +77,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   /// Returns true if there are any recipes in any of the categories, else false
   bool _hasRecipes() {
-    return (starters.isNotEmpty || mains.isNotEmpty || desserts.isNotEmpty);
+    return (_starters.isNotEmpty || _mains.isNotEmpty || _desserts.isNotEmpty);
   }
 
   /// Creates map list of recipes with key as id and name of recipe.
@@ -88,7 +92,32 @@ class CreateMealPageState extends State<CreateMealPage> {
   }
 
   @protected
-  void initState() {}
+  void initState() {
+    if (widget.meal != null) {
+      _isEditing = true;
+      List<Recipe> starter = List();
+      List<Recipe> main = List();
+      List<Recipe> dessert = List();
+      print(widget.meal.id);
+      for (var recipe in widget.meal.recipes) {
+        switch (recipe.type) {
+          case MealType.starter:
+            starter.add(recipe);
+            break;
+          case MealType.main:
+            main.add(recipe);
+            break;
+          case MealType.dessert:
+            dessert.add(recipe);
+            break;
+          default:
+        }
+      }
+      this._starters = createRecipeMap(starter);
+      this._mains = createRecipeMap(main);
+      this._desserts = createRecipeMap(dessert);
+    }
+  }
 
   /// Creates the recipe card that is displayed on the screen with information.
   Widget _createRecipeCard(
@@ -231,7 +260,7 @@ class CreateMealPageState extends State<CreateMealPage> {
               children: [
                 SetPublicDialog((state) {
                   _isPublic = state;
-                }, _isPublic, widget._isEditing, "Meal"),
+                }, _isPublic, _isEditing, "Meal"),
                 SizedBox(
                   height: 10,
                 ),
@@ -242,22 +271,22 @@ class CreateMealPageState extends State<CreateMealPage> {
                           await this._searchForType(MealType.starter);
                       if (newRecipe != null) {
                         setState(() {
-                          starters.addAll(newRecipe);
+                          _starters.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: starters),
+                    categotyItems: _starters),
                 _createCategorySelector(
                     buttonText: "ADD COURSE",
                     onClick: () async {
                       var newRecipe = await this._searchForType(MealType.main);
                       if (newRecipe != null) {
                         setState(() {
-                          mains.addAll(newRecipe);
+                          _mains.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: mains),
+                    categotyItems: _mains),
                 _createCategorySelector(
                     buttonText: "ADD DESSERT",
                     onClick: () async {
@@ -265,11 +294,11 @@ class CreateMealPageState extends State<CreateMealPage> {
                           await this._searchForType(MealType.dessert);
                       if (newRecipe != null) {
                         setState(() {
-                          desserts.addAll(newRecipe);
+                          _desserts.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: desserts),
+                    categotyItems: _desserts),
 
                 SizedBox(
                   height: 20,

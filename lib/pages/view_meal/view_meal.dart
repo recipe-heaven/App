@@ -10,6 +10,7 @@ import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/pages/view_recipe/recipe_displayer.dart';
 import 'package:App/pages/view_recipe/view_recipe.dart';
+import 'package:App/routes/routes.dart';
 import 'package:App/service/meal_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
@@ -117,7 +118,15 @@ class CourseMealState extends State<CourseMealPage> {
           child: PageView(
         controller: _pageController,
         children: [
-          for (CompleteRecipe recipe in meal.recipes) DisplayRecipe(recipe),
+          for (CompleteRecipe recipe in meal.recipes)
+            DisplayRecipe(
+              recipe,
+              editClickCallback: () async {
+                final returnResult = await Navigator.pushNamed(
+                    context, RouteMealNew,
+                    arguments: meal);
+              },
+            ),
         ],
         onPageChanged: (int newVal) {
           setState(() {

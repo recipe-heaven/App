@@ -60,7 +60,7 @@ class MealService {
   Future<bool> updateMeal({@required NewMeal updatedMeal}) async {
     try {
       final token = await Storage().getToken();
-      var response = await _httpClient.post(editMealEndpoint,
+      var response = await _httpClient.pathch(editMealEndpoint,
           headers: {'Content-type': "application/json", "Authorization": token},
           body: updatedMeal.toJsonString());
 

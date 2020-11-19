@@ -43,7 +43,7 @@ class Meal with UserOwned {
 /// and sent to the server for storing the new meal
 @JsonSerializable(explicitToJson: true)
 class NewMeal {
-  int id;
+  int _id;
 
   String _name;
 
@@ -68,6 +68,9 @@ class NewMeal {
   String get name => _name;
   bool get public => _public;
   List<Map<String, int>> get recipes => _recipes;
+  int get id => _id;
+
+  set id(id) => _id = id;
 
   String toJsonString() => jsonEncode(_$NewMealToJson(this));
   Map<String, dynamic> toJson() => _$NewMealToJson(this);

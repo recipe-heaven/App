@@ -54,9 +54,9 @@ Map<String, dynamic> _$NewMealToJson(NewMeal instance) {
     }
   }
 
-  writeNotNull('id', instance.id);
   writeNotNull('name', instance.name);
   writeNotNull('public', instance.public);
   writeNotNull('recipes', instance.recipes);
+  writeNotNull('id', instance.id);
   return val;
 }

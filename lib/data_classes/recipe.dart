@@ -119,6 +119,7 @@ class CompleteRecipe extends Recipe {
       User owner,
       bool public})
       : super(
+            id: id,
             name: name,
             description: description,
             cookTime: cookTime,

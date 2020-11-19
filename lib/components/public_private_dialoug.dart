@@ -1,20 +1,18 @@
-import 'package:App/data_classes/recipe.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
+/// Toggleable alert widget for setting state to true/false
+/// on button click. It is setup with a default state, and callback when state changes.
+/// When in edit mode, it is not possible to revert to falsy state.
 class SetPublicDialog extends StatefulWidget {
-  UserOwned _userOwned;
+  final Function(bool) _stateChange;
   final _typeText;
   final _isEditing;
-  // final dialougeText;
-  // final acceptText,
-  SetPublicDialog(this._userOwned, this._isEditing, this._typeText,
-      {Key key, String typeText
+  var _isPublic = false;
 
-      // String dialougeText,
-      // String acceptText,
-      // String denyText
-      })
+  SetPublicDialog(
+      this._stateChange, this._isPublic, this._isEditing, this._typeText,
+      {Key key, String typeText})
       : super(key: key);
 
   @override
@@ -29,13 +27,13 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
         barrierColor: dialogBackgroundColor,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:
-                Text("Make meal public? \nCannot be undone after publishing."),
+            title: Text("Are you sure? \nCannot be undone after publishing."),
             actions: [
               FlatButton(
                   onPressed: () {
                     setState(() {
-                      widget._userOwned.public = true;
+                      widget._isPublic = true;
+                      widget._stateChange(widget._isPublic);
                     });
                     Navigator.of(context).pop();
                   },
@@ -58,7 +56,7 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
           '${widget._typeText} is: ',
           style: Theme.of(context).textTheme.headline2,
         ),
-        if (!widget._userOwned.public) ...[
+        if (!widget._isPublic) ...[
           Text(
             "PRIVATE",
             style: Theme.of(context)
@@ -77,7 +75,7 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
           ),
           Spacer(),
         ],
-        if (widget._userOwned.public) ...[
+        if (widget._isPublic) ...[
           Text(
             "PUBLIC",
             style: Theme.of(context)
@@ -92,7 +90,8 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
               color: YeahhhhhColor,
               onPressed: () {
                 setState(() {
-                  widget._userOwned.public = false;
+                  widget._isPublic = false;
+                  widget._stateChange(widget._isPublic);
                 });
               },
               height: 20,

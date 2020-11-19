@@ -2,8 +2,12 @@ import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
+import 'package:App/components/time_widget.dart';
+import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/helpers/enumHelper.dart';
@@ -13,35 +17,32 @@ import 'package:App/components/input_feald.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
-import 'package:App/service/http_client.dart';
 import 'package:App/service/meal_service.dart';
+import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-// TODO: Move to use Simplified recipe type instead of RecipeSearchResult
-// TODO: Make it possible to inject meal for editing
-// TODO: Create a common recipe widget
 
+/// Creates or edits a meal
 class CreateMealPage extends StatefulWidget {
-  final mealSearvice = MealService();
+  final MealService mealSearvice = MealService();
+  final Meal meal;
 
-  final _meal = TEST_DATA;
-  final _isEditing = false;
-  CreateMealPage({Key key}) : super(key: key);
+  CreateMealPage({Key key, this.meal}) : super(key: key);
 
   @override
   CreateMealPageState createState() => CreateMealPageState();
 }
 
-final _fadeToCollor = Colors.black; // Color(0xdd000000);
-
 class CreateMealPageState extends State<CreateMealPage> {
-  Map<String, RecipeSearchResult> starters = Map();
-  Map<String, RecipeSearchResult> mains = Map();
-  Map<String, RecipeSearchResult> desserts = Map();
+
+  Map<String, Recipe> _starters = Map();
+  Map<String, Recipe> _mains = Map();
+  Map<String, Recipe> _desserts = Map();
+  bool _isEditing = false;
 
   String _name = "";
   bool _isPublic = false;
@@ -55,17 +56,24 @@ class CreateMealPageState extends State<CreateMealPage> {
 
       List<int> recpideIds = List();
 
-      void addToIdList(Iterable<RecipeSearchResult> recipes) {
+      void addToIdList(Iterable<Recipe> recipes) {
         recipes.forEach((recipe) => recpideIds.add(recipe.id));
       }
 
-      addToIdList(starters.values);
-      addToIdList(mains.values);
-      addToIdList(desserts.values);
+      addToIdList(_starters.values);
+      addToIdList(_mains.values);
+      addToIdList(_desserts.values);
 
-      NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
+      var res = false;
+      if (_isEditing) {
+        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
 
-      var res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
+        newMeal.id = widget.meal.id;
+        res = await widget.mealSearvice.updateMeal(updatedMeal: newMeal);
+      } else {
+        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
+        res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
+      }
 
       if (res) {
         setState(() {});
@@ -77,88 +85,69 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   /// Returns true if there are any recipes in any of the categories, else false
   bool _hasRecipes() {
-    return (starters.isNotEmpty || mains.isNotEmpty || desserts.isNotEmpty);
+
+    return (_starters.isNotEmpty || _mains.isNotEmpty || _desserts.isNotEmpty);
   }
 
-  Widget _make_recipe_card(MapEntry<String, RecipeSearchResult> recipe,
-      VoidCallback removeCardCallback) {
-    return Container(
-      height: 160,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Colors.transparent,
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ShaderMask(
-                shaderCallback: (rect) {
-                  return LinearGradient(
-                          begin: Alignment(-0.5, -0.3),
-                          end: Alignment(-0.60, 3),
-                          colors: [_fadeToCollor, Colors.transparent])
-                      .createShader(
-                          Rect.fromLTRB(0, 0, rect.width, rect.height));
-                },
-                blendMode: BlendMode.dstIn,
-                child: Image.asset(
-                  "assets/images/BANNER-NEW-MEAL.png",
-                  fit: BoxFit.fitWidth,
-                )),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.remove_circle_outline,
-                        color: errorColor,
-                      ),
-                      onPressed: removeCardCallback,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.end,
-                ),
-                Spacer(),
-                Container(
-                  constraints: BoxConstraints.expand(height: 70),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(recipe.value.name, style: TextStyle(fontSize: 26)),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.timer,
-                            color: primaryTextColor,
-                            size: 16.0,
-                            semanticLabel: 'Clock icon',
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                              getHourSecndsStringFromSeconds(
-                                  recipe.value.cookTime),
-                              style:
-                                  Theme.of(context).accentTextTheme.headline4),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+  /// Creates map list of recipes with key as id and name of recipe.
+  /// To ensure only one of each ID/type is allowed
+  Map<String, Recipe> createRecipeMap(List<Recipe> recipes) {
+    Map<String, Recipe> recipesMapped = Map();
+
+    for (var recipe in recipes) {
+      recipesMapped["${recipe.id}${recipe.type}"] = recipe;
+    }
+    return recipesMapped;
   }
 
-  Future<Map<String, RecipeSearchResult>> _searchForType(
-      MealType mealtype) async {
+  /// Fills all neccassary fields with details from a provided meal
+  void _setupMealForEdit() {
+    _isEditing = true;
+    List<Recipe> starter = List();
+    List<Recipe> main = List();
+    List<Recipe> dessert = List();
+    _name = widget.meal.name;
+    _isPublic = widget.meal.public;
+    for (var recipe in widget.meal.recipes) {
+      switch (recipe.type) {
+        case MealType.starter:
+          starter.add(recipe);
+          break;
+        case MealType.main:
+          main.add(recipe);
+          break;
+        case MealType.dessert:
+          dessert.add(recipe);
+          break;
+        default:
+      }
+    }
+    this._starters = createRecipeMap(starter);
+    this._mains = createRecipeMap(main);
+    this._desserts = createRecipeMap(dessert);
+  }
+
+  @protected
+  void initState() {
+    if (widget.meal != null) {
+      _setupMealForEdit();
+    }
+  }
+
+  /// Creates the recipe card that is displayed on the screen with information.
+  Widget _createRecipeCard(
+      MapEntry<String, Recipe> recipe, VoidCallback removeCardCallback) {
+    return InfoCard(
+        title: recipe.value.name,
+        removeCallback: removeCardCallback,
+        background: recipe.value.getDisplayImage(),
+        children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
+  }
+
+  /// Handles the navigation to search screen, and returns selected results from
+  /// search as a map of recipes.
+  Future<Map<String, Recipe>> _searchForType(MealType mealtype) async {
+
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true,
@@ -169,25 +158,24 @@ class CreateMealPageState extends State<CreateMealPage> {
 
     if (returnResult == null) return null;
 
-    // TODO IMPLEMENT FETCH OF RECIPES HERE WHEN TYPE IS READY
     Map<String, TypeSearchResult> results = returnResult;
-    Map<String, RecipeSearchResult> recipes = Map();
-    for (var item in results.entries) {
-      recipes[item.key] = item.value as RecipeSearchResult;
-    }
-    return recipes;
+
+    List<int> ids = results.entries.map((e) => e.value.id).toList();
+    var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);
+
+    return createRecipeMap(recipes);
   }
 
-  Widget _create_category_selector(
+  Widget _createCategorySelector(
       {String buttonText,
       VoidCallback onClick,
-      Map<String, RecipeSearchResult> categotyItems}) {
+      Map<String, Recipe> categotyItems}) {
     return Column(
       children: [
         Column(
           children: [
             for (var recipe in categotyItems.entries) ...[
-              _make_recipe_card(
+              _createRecipeCard(
                 recipe,
                 () {
                   setState(() {
@@ -260,6 +248,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                         child: Form(
                           key: _formKey,
                           child: secondaryInputField(context,
+                              initialValue: _name,
                               label: "Meal title", onSave: (newValue) {
                             _name = newValue;
                           },
@@ -286,45 +275,47 @@ class CreateMealPageState extends State<CreateMealPage> {
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
             child: Column(
               children: [
-                SetPublicDialog(widget._meal, widget._isEditing, "Meal"),
+                SetPublicDialog((state) {
+                  _isPublic = state;
+                }, _isPublic, _isEditing, "Meal"),
                 SizedBox(
                   height: 10,
                 ),
-                _create_category_selector(
+                _createCategorySelector(
                     buttonText: "ADD STARTERS",
                     onClick: () async {
                       var newRecipe =
                           await this._searchForType(MealType.starter);
                       if (newRecipe != null) {
                         setState(() {
-                          starters.addAll(newRecipe);
+                          _starters.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: starters),
-                _create_category_selector(
+                    categotyItems: _starters),
+                _createCategorySelector(
                     buttonText: "ADD COURSE",
                     onClick: () async {
                       var newRecipe = await this._searchForType(MealType.main);
                       if (newRecipe != null) {
                         setState(() {
-                          mains.addAll(newRecipe);
+                          _mains.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: mains),
-                _create_category_selector(
+                    categotyItems: _mains),
+                _createCategorySelector(
                     buttonText: "ADD DESSERT",
                     onClick: () async {
                       var newRecipe =
                           await this._searchForType(MealType.dessert);
                       if (newRecipe != null) {
                         setState(() {
-                          desserts.addAll(newRecipe);
+                          _desserts.addAll(newRecipe);
                         });
                       }
                     },
-                    categotyItems: desserts),
+                    categotyItems: _desserts),
 
                 SizedBox(
                   height: 20,

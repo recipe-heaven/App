@@ -46,7 +46,6 @@ class SearchState extends ChangeNotifier {
 
   void addSelected(String type, TypeSearchResult selected) {
     var id = type + selected.id.toString();
-    print(id);
     _selected[id] = selected;
     notifyListeners();
   }

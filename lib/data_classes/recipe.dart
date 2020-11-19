@@ -53,13 +53,50 @@ mixin UserOwned {
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Recipe with UserOwned {
   String name = "";
-  List<Tag> tags = [];
+
   String description = "";
   int cookTime = 0;
 
   @JsonKey(toJson: _mealTypeToJson, fromJson: _mealTypeFromJson)
   MealType type = MealType.main;
-  bool visible = false;
+
+  FoodImage image;
+
+  int updated;
+
+  Image getDisplayImage() {
+    return (image == null)
+        ? FoodImage().defaultImage
+        : Image.network(
+            image.getImageUrl(),
+          );
+  }
+
+  Recipe(
+      {this.name,
+      this.description,
+      this.cookTime,
+      this.image,
+      this.updated,
+      MealType type,
+      int id,
+      User owner,
+      bool public}) {
+    this.id = id;
+    this.owner = owner;
+    this.public = public ?? false;
+    this.type = type ?? MealType.main;
+  }
+
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
+}
+
+/// A complete recipe includes all details and fields for displaying a recipe
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class CompleteRecipe extends Recipe {
+  List<Tag> tags = [];
+
   List<Ingredient> recipeIngredients = [];
 
   @JsonKey(toJson: _stepsToJson, fromJson: _stepsFromJson)
@@ -68,45 +105,38 @@ class Recipe with UserOwned {
   @JsonKey(toJson: _drinksToJson, fromJson: _drinksFromJson)
   List<RecipeDrink> recommendedDrinks = [];
 
-  FoodImage recipeImage = null;
-
-  Image getDisplayImage() {
-    return (recipeImage == null)
-        ? FoodImage().default_image
-        : Image.network(
-            recipeImage.getImageUrl(),
-          );
-  }
-
-  Recipe(
-      {this.name,
+  CompleteRecipe(
+      {String name,
       List<Tag> tags,
-      this.description,
-      this.cookTime,
-      type,
-      this.visible,
+      String description,
+      int cookTime,
+      MealType type,
+      List<RecipeStep> cookingSteps,
       List<Ingredient> recipeIngredients,
-      cookingSteps,
       List<RecipeDrink> recommendedDrinks,
-      this.recipeImage,
+      FoodImage image,
       int id,
       User owner,
       bool public})
+      : super(
+            id: id,
+            name: name,
+            description: description,
+            cookTime: cookTime,
+            owner: owner,
+            image: image)
   // : super(id: id, owner: owner, public: public ?? false)
   {
-    this.owner = owner;
-    this.public = public ?? false;
-    this.id = id;
-
+    this.tags = tags ?? [];
+    this.cookingSteps = cookingSteps ?? [];
     this.recommendedDrinks = recommendedDrinks ?? [];
     this.recipeIngredients = recipeIngredients ?? [];
-    this.cookingSteps = cookingSteps ?? [];
-    this.tags = tags ?? [];
-    this.type = type ?? MealType.main;
   }
 
-  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
-  Map<String, dynamic> toJson() => _$RecipeToJson(this);
+  factory CompleteRecipe.fromJson(Map<String, dynamic> json) =>
+      _$CompleteRecipeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompleteRecipeToJson(this);
 }
 
 class RecipeDrink {

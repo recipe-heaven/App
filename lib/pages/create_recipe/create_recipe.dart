@@ -19,7 +19,7 @@ import 'package:image_picker/image_picker.dart';
 class NewRecipePage extends StatefulWidget {
   @override
   NewRecipePageState createState() => NewRecipePageState();
-  final Recipe _recipe = Recipe();
+  final CompleteRecipe _recipe = CompleteRecipe();
 }
 
 class NewRecipePageState extends State<NewRecipePage> {
@@ -192,7 +192,9 @@ class NewRecipePageState extends State<NewRecipePage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    SetPublicDialog(widget._recipe, false, "Recipe"),
+                    SetPublicDialog((state) {
+                      widget._recipe.public = state;
+                    }, widget._recipe.public, widget._recipe != null, "Meal"),
                     _selectRecipeTypeDropdowm(),
                     newMealInputBox(context,
                         label: "Meal Name",

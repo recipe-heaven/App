@@ -18,9 +18,16 @@ class MealService {
 
   static Future<Meal> getFullMeal(int mealId) async {
     try {
-      var response = await _httpClient.get(getFullMealEndpoint + "$mealId");
+      final token = await Storage().getToken();
+
+      var response = await _httpClient.get(getFullMealEndpoint + "$mealId",
+          headers: {
+            'Content-type': "application/json",
+            "Authorization": token
+          });
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
+        print(body);
         if (body["data"] != null) {
           return Meal.fromJson(body["data"]);
         }
@@ -39,6 +46,23 @@ class MealService {
       var response = await _httpClient.post(newMealEndpoint,
           headers: {'Content-type': "application/json", "Authorization": token},
           body: newMeal.toJsonString());
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on IOException {
+      return false;
+    }
+  }
+
+  Future<bool> updateMeal({@required NewMeal updatedMeal}) async {
+    try {
+      final token = await Storage().getToken();
+      var response = await _httpClient.pathch(editMealEndpoint,
+          headers: {'Content-type': "application/json", "Authorization": token},
+          body: updatedMeal.toJsonString());
 
       if (response.statusCode == 200) {
         return true;

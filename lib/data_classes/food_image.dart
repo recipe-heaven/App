@@ -9,20 +9,21 @@ part 'food_image.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class FoodImage {
-  final default_image = Image.network(
+  final defaultImage = Image.network(
       "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1599px-RedDot_Burger.jpg");
   int id;
   String name;
   String mimeType;
-  int size;
+  double size;
 
-  FoodImage() {}
+  FoodImage();
 
   factory FoodImage.fromJson(Map<String, dynamic> json) =>
       _$FoodImageFromJson(json);
+
   Map<String, dynamic> toJson() => _$FoodImageToJson(this);
 
   String getImageUrl() {
-    return getImageEndpoint + "/$name";
+    return getImageEndpoint + "$id";
   }
 }

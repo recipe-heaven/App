@@ -57,10 +57,10 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       }
 
       break;
-    case RouteMealNew:
-      page = CreateMealPage();
-      break;
     case RouteMealEdit:
+    case RouteMealNew:
+      page = CreateMealPage(meal: settings.arguments);
+      break;
     case RouteMealView:
       var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {
@@ -90,7 +90,7 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       return null;
   }
 
-  return ScaleRotateRoute(page: page); //FadeRoute(page: page);
+  return FadeRoute(page: page); //FadeRoute(page: page);
   //MaterialPageRoute(builder: (context) => page);
 }
 

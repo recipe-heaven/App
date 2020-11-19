@@ -29,7 +29,7 @@ class MealService {
         var body = jsonDecode(response.body);
         print(body);
         if (body["data"] != null) {
-          return Meal.fromJson(body["data"]);
+          return CompleteMeal.fromJson(body["data"]);
         }
       } else {
         return null;
@@ -60,7 +60,7 @@ class MealService {
   Future<bool> updateMeal({@required NewMeal updatedMeal}) async {
     try {
       final token = await Storage().getToken();
-      var response = await _httpClient.pathch(editMealEndpoint,
+      var response = await _httpClient.pathch(updateMealEndpoint,
           headers: {'Content-type': "application/json", "Authorization": token},
           body: updatedMeal.toJsonString());
 

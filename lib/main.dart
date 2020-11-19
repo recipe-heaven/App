@@ -72,7 +72,7 @@ class Path404Page extends StatelessWidget {
   }
 }
 
-final TEST_DATA = Meal(name: "aslkdjal", recipe: [
+final TEST_DATA = CompleteMeal(name: "aslkdjal", recipes: [
   CompleteRecipe(
       type: MealType.main,
       cookingSteps: [
@@ -168,4 +168,4 @@ final TEST_DATA = Meal(name: "aslkdjal", recipe: [
             comment: "waaaa"),
       ]),
 ]);
-final TEST_MENU = Menu(meals: [TEST_DATA, TEST_DATA, null, null, TEST_DATA]);
+// final TEST_MENU = Menu(meals: [TEST_DATA, TEST_DATA, null, null, TEST_DATA]);

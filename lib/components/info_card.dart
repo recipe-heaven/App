@@ -1,3 +1,4 @@
+import 'package:App/data_classes/food_image.dart';
 import 'package:App/service/endpoints.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class InfoCard extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final String background;
+  final Image background;
   final VoidCallback removeCallback;
   final List<Widget> children;
 
@@ -44,9 +45,7 @@ class InfoCard extends StatelessWidget {
                             Rect.fromLTRB(0, 0, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
-                  child: Image.network(
-                    getImageEndpoint + background,
-                  )),
+                  child: background),
               Row(
                 children: _createRemoveButton(),
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -66,7 +65,9 @@ class InfoCard extends StatelessWidget {
             ])));
   }
 
-  dynamic _createRemoveButton() {
+  /// Creates a remove button which calls the removeCallback method
+  /// when pressed. If the callback is not provided, it returns an empty list e.g no button
+  List<Widget> _createRemoveButton() {
     return removeCallback != null
         ? [
             IconButton(

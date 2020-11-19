@@ -1,4 +1,5 @@
 const apiUrl = "http://192.168.1.100:9876/api/";
+//const apiUrl = "http://10.50.50.60:8080/api/";
 
 /// -- User -- ///
 const loginEndpoint = "${apiUrl}authentication/login";

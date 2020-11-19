@@ -1,25 +1,33 @@
+import 'dart:core';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
+import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
-import 'package:App/data_classes/food_image.dart';
+import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
-import 'package:App/data_classes/recipe.dart';
-import 'package:App/main.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/data_classes/menu.dart';
+import 'package:App/data_classes/recipe.dart';
+import 'package:App/pages/explore/result_item.dart';
+import 'package:App/routes/routes.dart';
+import 'package:App/routes/routes_options.dart';
 import 'package:App/service/http_client.dart';
+import 'package:App/service/meal_service.dart';
 import 'package:App/service/menu_service.dart';
+import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class CreateMenuPage extends StatefulWidget {
   final authService = MenuService(HttpServiceClient());
-  final _menu = TEST_MENU;
+  final Menu menu;
   final _isEditing = false;
-  CreateMenuPage({Key key}) : super(key: key);
+  CreateMenuPage({Key key, this.menu}) : super(key: key);
 
   @override
   CreateMenuPageState createState() => CreateMenuPageState();
@@ -38,20 +46,29 @@ final _fadeToCollor = Colors.black; // Color(0xdd000000);
 
 class CreateMenuPageState extends State<CreateMenuPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _isEditing = false;
+
+  String _name;
+
+  bool _isPublic = false;
+
+  Map<String, MenuRecipe> _recipes = Map();
+
+  Map<String, MenuMeal> _meals = Map();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // validatate the menu have all 7 slots fill with null if nececery
-    widget._menu.meals = widget._menu.meals ?? List.filled(7, null);
 
-    if (widget._menu.meals.length < 7) {
-      widget._menu.meals = [
-        ...widget._menu.meals,
-        ...List.filled(7 - widget._menu.meals.length, null)
-      ];
-    }
+    // validatate the menu have all 7 slots fill with null if nececery
+    // widget.menu.meals = widget.menu.meals ?? List.filled(7, null);
+
+    // if (widget.menu.meals.length < 7) {
+    //   widget.menu.meals = [
+    //     ...widget.menu.meals,
+    //     ...List.filled(7 - widget.menu.meals.length, null)
+    //   ];
+    // }
   }
 
   void _handleNewMeal() async {
@@ -59,12 +76,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     if (formState.validate()) {
       formState.save();
 
-      var res = await widget.authService.addNewMenu(menu: widget._menu);
-      if (res == null) {
-        setState(() {});
-      } else {
-        // Do routing, set state
-      }
+      // var res = await widget.authService.addNewMenu(menu: widget.menu);
+      // if (res == null) {
+      //   setState(() {});
+      // } else {
+      //   // Do routing, set state
+      // }
     }
   }
 
@@ -81,7 +98,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                   onPressed: () {
                     setState(() {
                       Navigator.of(context).pop();
-                      widget._menu.public = true;
+                      widget.menu.public = true;
                     });
                   },
                   child: Text("jup")),
@@ -95,74 +112,68 @@ class CreateMenuPageState extends State<CreateMenuPage> {
         });
   }
 
-  Widget _make_meal_card(Meal meal, VoidCallback onClick) {
-    return Container(
-      height: 200,
-      child: Card(
-        color: _fadeToCollor,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ShaderMask(
-                shaderCallback: (rect) {
-                  return LinearGradient(
-                          begin: Alignment(-0.55, 0.0),
-                          end: Alignment(-0.66, 1.3),
-                          colors: [_fadeToCollor, Colors.transparent])
-                      .createShader(
-                          Rect.fromLTRB(0, 0, rect.width, rect.height));
-                },
-                blendMode: BlendMode.dstIn,
-                child: meal.getDisplayImage()),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.remove_circle_outline,
-                        color: errorColor,
-                      ),
-                      onPressed: onClick,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.end,
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        meal.name,
-                        style: Theme.of(context).textTheme.headline3,
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+  /// Creates the recipe card that is displayed on the screen with information.
+  Widget _createDisplayCard(String title, Image background,
+      List<Widget> extraWidgets, VoidCallback removeCardCallback) {
+    return InfoCard(
+        title: title,
+        removeCallback: removeCardCallback,
+        background: background,
+        children: extraWidgets);
   }
 
-  Meal _ChristoffersMagicSearchAlgorithm() {
-    return null;
+  /// Handles the navigation to search screen, and returns selected results from
+  /// search as a map of recipes.
+  Future<Map<String, Recipe>> _searchForRecipesMeals() async {
+    final returnResult = await Navigator.pushNamed(context, RouteSearch,
+        arguments: SearchRouteOptions(
+            returnSelected: true, searchOwnedOnly: true, searchMenus: false));
+
+    if (returnResult == null) return null;
+
+    Map<String, TypeSearchResult> results = returnResult;
+
+    List<int> recipeIds = List();
+    List<int> mealIds = List();
+
+    for (var item in results.values) {
+      if (item.runtimeType == RecipeSearchResult) {
+        recipeIds.add(item.id);
+      } else if (item.runtimeType == MealSearchResult) {
+        mealIds.add(item.id);
+      }
+    }
+
+    if (recipeIds.length > 0) {
+      var recipes = await RecipeService().getMultipleMinifiedRecipes(recipeIds);
+    }
+    if (mealIds.length > 0) {
+      var meals = await MealService().getMultipleMinifiedMeals(mealIds);
+    }
+
+    // return createRecipeMap(recipes);
   }
 
-  Widget _make_day_button({String buttonText, int dayNum}) {
+  Widget _make_day_button({String buttonText, int day}) {
+    var dayRecipes = _recipes.values.map((e) {
+      if (e.day == day) {
+        return _createDisplayCard(e.recipe.name, e.recipe.getDisplayImage(),
+            [TimeWidget(timeInSeconds: e.recipe.cookTime)], () {});
+      }
+    });
+    var dayMeals = _meals.values.map((e) {
+      if (e.day == day) {
+        return _createDisplayCard(
+            e.meal.name, e.meal.getDisplayImage(), [], () {});
+      }
+    });
+
     return Column(
       children: [
         Column(
           children: [
-            if (widget._menu.meals[dayNum] != null)
-              _make_meal_card(widget._menu.meals[dayNum], () {
-                setState(() {
-                  widget._menu.meals[dayNum] = null;
-                });
-              }),
+            ...dayRecipes,
+            ...dayMeals,
             MaterialButton(
               color: elementBackgroundColor, //Theme.of(context).buttonColor,
               minWidth: double.maxFinite,
@@ -172,10 +183,10 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                 style: Theme.of(context).textTheme.headline2,
               ),
               onPressed: () {
-                Meal newMeal = _ChristoffersMagicSearchAlgorithm();
+                dynamic newMeal = _searchForRecipesMeals();
                 if (newMeal != null) {
                   setState(() {
-                    widget._menu.meals[dayNum] = newMeal;
+                    // widget.menu.meals[dayNum] = newMeal;
                   });
                 }
               },
@@ -232,7 +243,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                           key: _formKey,
                           child: secondaryInputField(context,
                               label: "Menu title", onSave: (newValue) {
-                            widget._menu.name = newValue;
+                            widget.menu.name = newValue;
                           },
                               validator: validateNotEmptyInput,
                               hint: "recipe@mail.com"),
@@ -260,13 +271,13 @@ class CreateMenuPageState extends State<CreateMenuPage> {
             child: Column(
               children: [
                 SetPublicDialog((state) {
-                  widget._menu.public = state;
-                }, widget._menu.public, widget._isEditing, "Meal"),
+                  _isPublic = state;
+                }, _isPublic, _isEditing, "Menu"),
                 SizedBox(
                   height: 10,
                 ),
                 for (MapEntry<int, String> entry in _days.asMap().entries)
-                  _make_day_button(buttonText: entry.value, dayNum: entry.key),
+                  _make_day_button(buttonText: entry.value, day: entry.key),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: MaterialButton(

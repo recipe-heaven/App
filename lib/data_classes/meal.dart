@@ -44,7 +44,6 @@ class Meal with UserOwned {
 @JsonSerializable(explicitToJson: true)
 class NewMeal {
   int _id;
-
   String _name;
 
   bool _public = false;

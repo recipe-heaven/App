@@ -11,6 +11,7 @@ Container secondaryInputField(BuildContext context,
     {String label,
     FormFieldSetter<String> onSave,
     FormFieldValidator<String> validator,
+    String initialValue,
     bool obscureInput = false,
     String hint = ""}) {
   return Container(
@@ -28,6 +29,7 @@ Container secondaryInputField(BuildContext context,
             cursorColor: Colors.white,
             validator: validator,
             onSaved: onSave,
+            initialValue: initialValue,
             obscureText: obscureInput,
             decoration: const InputDecoration()
                 .applyDefaults(secondaryInputDecorationTheme)

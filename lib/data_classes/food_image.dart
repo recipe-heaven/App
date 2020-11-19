@@ -24,6 +24,6 @@ class FoodImage {
   Map<String, dynamic> toJson() => _$FoodImageToJson(this);
 
   String getImageUrl() {
-    return getImageEndpoint + "/$name";
+    return getImageEndpoint + "$id";
   }
 }

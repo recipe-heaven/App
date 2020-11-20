@@ -1,16 +1,12 @@
 import 'dart:core';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
-import 'package:App/components/time_widget.dart';
-import 'package:App/data_classes/meal.dart';
 import 'package:App/components/input_feald.dart';
 import 'package:App/data_classes/menu.dart';
-import 'package:App/data_classes/recipe.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
@@ -44,7 +40,7 @@ final _days = [
 ];
 
 class CreateMenuPageState extends State<CreateMenuPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   bool _isEditing = false;
 
@@ -81,12 +77,10 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     return (_recipes.isNotEmpty || _meals.isNotEmpty);
   }
 
-  void _handleNewMenu() async {
+  void _handleNewMenu(BuildContext context) async {
     final FormState formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
-
-      print("SAVING");
 
       NewMenu newMenu = NewMenu(
           _name, _isPublic, _recipes.values.toList(), _meals.values.toList());
@@ -238,7 +232,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
-      body: ListView(
+      body: Builder(
+        builder: (context) => SingleChildScrollView(
+          child: Column(
         children: [
           Container(
             child: Stack(
@@ -285,8 +281,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                             _name = newValue;
                           },
                               validator: validateNotEmptyInput,
-                              hint: "Menu for hectic days"),
-                        ),
+                                    hint: "Menu for hectic days")),
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
                       ),
                     ],
@@ -301,12 +296,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
             height: MediaQuery.of(context).size.height * 0.4,
           ),
           Container(
-            height: 10,
-            width: double.maxFinite,
-            color: Theme.of(context).backgroundColor,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
             child: Column(
               children: [
                 SetPublicDialog((state) {
@@ -320,7 +310,11 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: MaterialButton(
-                      onPressed: _hasItemsInAnyDay() ? _handleNewMenu : null,
+                          onPressed: () {
+                            return _hasItemsInAnyDay()
+                                ? _handleNewMenu(context)
+                                : null;
+                          },
                       disabledColor: disabledAcceptColor,
                       color: acceptColor,
                       height: 50,
@@ -339,13 +333,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                                 .copyWith(color: Colors.grey),
                       )),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                )
               ],
             ),
           ),
         ],
+      ),
+        ),
       ),
     );
   }

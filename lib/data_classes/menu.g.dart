@@ -110,8 +110,14 @@ NewMenu _$NewMenuFromJson(Map<String, dynamic> json) {
   return NewMenu(
     json['name'] as String,
     json['public'] as bool,
-    (json['recipes'] as List)?.map((e) => e as int)?.toList(),
-    (json['meals'] as List)?.map((e) => e as int)?.toList(),
+    (json['recipes'] as List)
+        ?.map((e) =>
+            e == null ? null : MenuRecipe.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    (json['meals'] as List)
+        ?.map((e) =>
+            e == null ? null : MenuMeal.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   )..id = json['id'] as int;
 }
 
@@ -126,8 +132,8 @@ Map<String, dynamic> _$NewMenuToJson(NewMenu instance) {
 
   writeNotNull('name', instance.name);
   writeNotNull('public', instance.public);
-  writeNotNull('recipes', instance.recipes);
-  writeNotNull('meals', instance.meals);
+  writeNotNull('recipes', instance.recipes?.map((e) => e?.toJson())?.toList());
+  writeNotNull('meals', instance.meals?.map((e) => e?.toJson())?.toList());
   writeNotNull('id', instance.id);
   return val;
 }

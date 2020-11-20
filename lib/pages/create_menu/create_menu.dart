@@ -25,9 +25,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class CreateMenuPage extends StatefulWidget {
-  final authService = MenuService(HttpServiceClient());
+  final menuService = MenuService(HttpServiceClient());
   final Menu menu;
-  final _isEditing = false;
   CreateMenuPage({Key key, this.menu}) : super(key: key);
 
   @override
@@ -43,7 +42,6 @@ final _days = [
   "Saturday",
   "Sunday"
 ];
-final _fadeToCollor = Colors.black; // Color(0xdd000000);
 
 class CreateMenuPageState extends State<CreateMenuPage> {
   final _formKey = GlobalKey<FormState>();
@@ -60,16 +58,6 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   @override
   void initState() {
     super.initState();
-
-    // validatate the menu have all 7 slots fill with null if nececery
-    // widget.menu.meals = widget.menu.meals ?? List.filled(7, null);
-
-    // if (widget.menu.meals.length < 7) {
-    //   widget.menu.meals = [
-    //     ...widget.menu.meals,
-    //     ...List.filled(7 - widget.menu.meals.length, null)
-    //   ];
-    // }
   }
 
   void _handleNewMeal() async {
@@ -77,43 +65,28 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     if (formState.validate()) {
       formState.save();
 
-      // var res = await widget.authService.addNewMenu(menu: widget.menu);
-      // if (res == null) {
-      //   setState(() {});
-      // } else {
-      //   // Do routing, set state
-      // }
+      var p = NewMenu(
+          _name, _isPublic, _recipes.values.toList(), _meals.values.toList());
+      var res = await widget.menuService.addNewMenu(newMenu: p);
+      if (res == null) {
+        setState(() {});
+      } else {
+        // Do routing, set state
+      }
     }
   }
 
-  Future<void> _displayMakePublicDialog(BuildContext context) async {
-    return showDialog<void>(
-        context: context,
-        barrierDismissible: true,
-        barrierColor: Colors.pink,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("WAAAAAAAAA"),
-            actions: [
-              FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      Navigator.of(context).pop();
-                      widget.menu.public = true;
-                    });
-                  },
-                  child: Text("jup")),
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("nup"))
-            ],
-          );
-        });
+  void _addMenuRecipeToDisplayMap(MenuRecipe menuRecipe) {
+    _recipes["${menuRecipe.recipe.id}-${menuRecipe.day}"] = menuRecipe;
   }
 
-  /// Creates the recipe card that is displayed on the screen with information.
+  void _addMenuMealToDisplayMap(MenuMeal menuMeal) {
+    _meals["${menuMeal.meal.id}-${menuMeal.day}"] = menuMeal;
+  }
+
+  /// Creates the recipe card that is displayed on the screen with information about the meal/recipe.
+  /// It contains a title, a background image, optional eextra widgets and a callback for
+  /// removing the card.
   Widget _createDisplayCard(String title, Image background,
       List<Widget> extraWidgets, VoidCallback removeCardCallback) {
     return InfoCard(
@@ -124,18 +97,20 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   }
 
   /// Handles the navigation to search screen, and returns selected results from
-  /// search as a map of recipes.
-  Future<Map<String, TypeSearchResult>> _searchForRecipesMeals() async {
+  /// search as a map of TypeSearchResult.
+  Future<Map<String, TypeSearchResult>> _searchForRecipesAndMeals() async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true, searchOwnedOnly: true, searchMenus: false));
 
-    if (returnResult == null) return null;
-
-    Map<String, TypeSearchResult> results = returnResult;
-    return results;
+    if (returnResult == null) return Map();
+    return returnResult as Map<String, TypeSearchResult>;
   }
 
+  /// Filters the types from the search result into their belonging category
+  /// MenuRecipe / MenuMeal and adds them to their beloning map with key as
+  /// id-day so that a type can be added to two different days, but only
+  /// one of same for any day.
   Future _handleSearchResult(
       Map<String, TypeSearchResult> result, int day) async {
     List<int> recipeIds = List();
@@ -151,25 +126,59 @@ class CreateMenuPageState extends State<CreateMenuPage> {
 
     var recipes = await RecipeService().getMultipleMinifiedRecipes(recipeIds);
     for (var recipe in recipes) {
-      _recipes["${recipe.id}-$day"] = new MenuRecipe(recipe, day);
+      _addMenuRecipeToDisplayMap(MenuRecipe(recipe, day));
     }
 
     var meals = await MealService().getMultipleMinifiedMeals(mealIds);
     for (var meal in meals) {
-      _meals["${meal.id}-$day"] = new MenuMeal(meal, day);
+      _addMenuMealToDisplayMap(MenuMeal(meal, day));
     }
   }
 
-  Widget _make_day_button({String buttonText, int day}) {
+  /// Creates clickable button which directs a click to the search screen.
+  /// The selected results are passed to filtering so that the results are
+  /// added to a dispaly map where the results are added to the day tht is provied
+  /// to this function.
+  Widget _createDayButton(String buttonText, int day) {
+    return MaterialButton(
+      color: elementBackgroundColor, //Theme.of(context).buttonColor,
+      minWidth: double.maxFinite,
+      elevation: 10,
+      child: Text(
+        buttonText,
+        style: Theme.of(context).textTheme.headline2,
+      ),
+      onPressed: () async {
+        Map<String, TypeSearchResult> result =
+            await _searchForRecipesAndMeals();
+        await _handleSearchResult(result, day);
+        // Force redraw of UI
+        setState(() {});
+      },
+    );
+  }
+
+  /// Creates a widget that represents a day. The widget includes a button for adding
+  /// new recipes/meals to the day, and list of all recipes/meals for that day.
+  Widget _createDayWidget({String buttonText, int day}) {
     var dayRecipes =
-        _recipes.values.where((recipe) => recipe.day == day).map((e) {
+        _recipes.entries.where((recipe) => recipe.value.day == day).map((e) {
       return _createDisplayCard(
-          e.recipe.name, e.recipe.getDisplayImage(), [], () {});
+          e.value.recipe.name, e.value.recipe.getDisplayImage(), [], () {
+        setState(() {
+          _recipes.remove(e.key);
+        });
+      });
     });
 
-    var dayMeals = _meals.values.where((meal) => meal.day == day).map((e) {
+    var dayMeals =
+        _meals.entries.where((meal) => meal.value.day == day).map((e) {
       return _createDisplayCard(
-          e.meal.name, e.meal.getDisplayImage(), [], () {});
+          e.value.meal.name, e.value.meal.getDisplayImage(), [], () {
+        setState(() {
+          _meals.remove(e.key);
+        });
+      });
     });
 
     return Column(
@@ -178,22 +187,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
           children: [
             if (dayMeals != null) ...dayMeals,
             if (dayRecipes != null) ...dayRecipes,
-            MaterialButton(
-              color: elementBackgroundColor, //Theme.of(context).buttonColor,
-              minWidth: double.maxFinite,
-              elevation: 10,
-              child: Text(
-                buttonText,
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              onPressed: () async {
-                Map<String, TypeSearchResult> result =
-                    await _searchForRecipesMeals();
-                await _handleSearchResult(result, day);
-                // Force redraw of UI
-                setState(() {});
-              },
-            )
+            _createDayButton(buttonText, day)
           ],
         )
       ],
@@ -245,11 +239,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                         child: Form(
                           key: _formKey,
                           child: secondaryInputField(context,
+                              initialValue: _name,
                               label: "Menu title", onSave: (newValue) {
-                            widget.menu.name = newValue;
+                            _name = newValue;
                           },
                               validator: validateNotEmptyInput,
-                              hint: "recipe@mail.com"),
+                              hint: "Menu for hectic days"),
                         ),
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
                       ),
@@ -280,7 +275,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                   height: 10,
                 ),
                 for (MapEntry<int, String> entry in _days.asMap().entries)
-                  _make_day_button(buttonText: entry.value, day: entry.key),
+                  _createDayWidget(buttonText: entry.value, day: entry.key),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: MaterialButton(

@@ -75,29 +75,26 @@ class NewMenu {
 
   bool _public = false;
 
-  List<Map<String, int>> _recipes = new List();
+  List<MenuRecipe> _recipes = new List();
 
-  List<Map<String, int>> _meals = new List();
+  List<MenuMeal> _meals = new List();
 
-  NewMenu(String name, bool public, List<int> recipes, List<int> meals) {
+  NewMenu(String name, bool public, List<MenuRecipe> recipes,
+      List<MenuMeal> meals) {
     this._name = name;
     this._public = public;
-    this._recipes = this.createIdList(recipes);
-    this._meals = this.createIdList(recipes);
-  }
-
-  List<Map<String, int>> createIdList(List<int> recipeIds) {
-    List<Map<String, int>> recipemap = new List();
-    for (var id in recipeIds) {
-      recipemap.add({"id": id});
-    }
-    return recipemap;
+    this._recipes = recipes;
+    this._meals = meals;
   }
 
   String get name => _name;
+
   bool get public => _public;
-  List<Map<String, int>> get recipes => _recipes;
-  List<Map<String, int>> get meals => _meals;
+
+  List<MenuRecipe> get recipes => _recipes;
+
+  List<MenuMeal> get meals => _meals;
+
   int get id => _id;
 
   set id(id) => _id = id;

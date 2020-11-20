@@ -61,11 +61,12 @@ Map<String, dynamic> _$MenuDayToJson(MenuDay instance) {
 }
 
 MenuMeal _$MenuMealFromJson(Map<String, dynamic> json) {
-  return MenuMeal()
-    ..day = json['day'] as int
-    ..meal = json['meal'] == null
+  return MenuMeal(
+    json['meal'] == null
         ? null
-        : SimpleMeal.fromJson(json['meal'] as Map<String, dynamic>);
+        : SimpleMeal.fromJson(json['meal'] as Map<String, dynamic>),
+    json['day'] as int,
+  );
 }
 
 Map<String, dynamic> _$MenuMealToJson(MenuMeal instance) {
@@ -83,11 +84,12 @@ Map<String, dynamic> _$MenuMealToJson(MenuMeal instance) {
 }
 
 MenuRecipe _$MenuRecipeFromJson(Map<String, dynamic> json) {
-  return MenuRecipe()
-    ..day = json['day'] as int
-    ..recipe = json['recipe'] == null
+  return MenuRecipe(
+    json['recipe'] == null
         ? null
-        : Recipe.fromJson(json['recipe'] as Map<String, dynamic>);
+        : Recipe.fromJson(json['recipe'] as Map<String, dynamic>),
+    json['day'] as int,
+  );
 }
 
 Map<String, dynamic> _$MenuRecipeToJson(MenuRecipe instance) {

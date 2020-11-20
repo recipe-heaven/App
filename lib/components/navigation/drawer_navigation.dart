@@ -1,6 +1,7 @@
 import 'package:App/routes/routes.dart';
 import 'package:App/service/auth_service.dart';
 import 'package:App/service/http_client.dart';
+import 'package:App/service/menu_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,9 @@ Drawer getDrawer(BuildContext context) {
             ),
             title: Text("DEBUG LOGIN"),
             onTap: () {
+              _authServ.loginEmailPassword(
+                  email: 'mail@mail.com', password: '123456789');
+            }),
         ListTile(
             leading: Icon(
               Icons.send,

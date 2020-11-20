@@ -93,11 +93,21 @@ class CreateMenuPageState extends State<CreateMenuPage> {
       } else {
         res = await widget.menuService.addNewMenu(newMenu: newMenu);
       }
-      if (res == null) {
-        setState(() {});
+
+      String feedbackText = "";
+      if (res) {
+        feedbackText = "The menu was successfully ";
+        if (_isEditing) {
+          feedbackText += "updated!";
+        } else {
+          feedbackText += "created!";
+        }
       } else {
-        // Do routing, set state
+        feedbackText = "Ooops, something went wrong!";
       }
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(feedbackText)),
+      );
     }
   }
 
@@ -235,109 +245,109 @@ class CreateMenuPageState extends State<CreateMenuPage> {
       body: Builder(
         builder: (context) => SingleChildScrollView(
           child: Column(
-        children: [
-          Container(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: ExactAssetImage(
-                              "assets/images/BANNER-NEW-MEAL.png"),
-                          fit: BoxFit.cover)),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.white.withOpacity(0.0)),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
-                        child: Text(
-                          "Put together the",
-                          style: Theme.of(context).textTheme.headline1,
+            children: [
+              Container(
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: ExactAssetImage(
+                                  "assets/images/BANNER-NEW-MEAL.png"),
+                              fit: BoxFit.cover)),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                        child: new Container(
+                          decoration: new BoxDecoration(
+                              color: Colors.white.withOpacity(0.0)),
                         ),
                       ),
-                      Text(
-                        "Pefect menu",
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Spacer(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        child: Form(
-                          key: _formKey,
-                          child: secondaryInputField(context,
-                              initialValue: _name,
-                              label: "Menu title", onSave: (newValue) {
-                            _name = newValue;
-                          },
-                              validator: validateNotEmptyInput,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
+                            child: Text(
+                              "Put together the",
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                          ),
+                          Text(
+                            "Pefect menu",
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            child: Form(
+                                key: _formKey,
+                                child: secondaryInputField(context,
+                                    initialValue: _name,
+                                    label: "Menu title", onSave: (newValue) {
+                                  _name = newValue;
+                                },
+                                    validator: validateNotEmptyInput,
                                     hint: "Menu for hectic days")),
-                        padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
+                            padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
+                          ),
+                        ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       ),
-                    ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ),
+                    ),
+                  ],
+                  alignment: Alignment.center,
+                  fit: StackFit.expand,
                 ),
-              ],
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-            ),
-            height: MediaQuery.of(context).size.height * 0.4,
-          ),
-          Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+              ),
+              Container(
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-            child: Column(
-              children: [
-                SetPublicDialog((state) {
-                  _isPublic = state;
-                }, _isPublic, _isEditing, "Menu"),
-                SizedBox(
-                  height: 10,
-                ),
-                for (MapEntry<int, String> entry in _days.asMap().entries)
-                  _createDayWidget(buttonText: entry.value, day: entry.key),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: MaterialButton(
+                child: Column(
+                  children: [
+                    SetPublicDialog((state) {
+                      _isPublic = state;
+                    }, _isPublic, _isEditing, "Menu"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    for (MapEntry<int, String> entry in _days.asMap().entries)
+                      _createDayWidget(buttonText: entry.value, day: entry.key),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: MaterialButton(
                           onPressed: () {
                             return _hasItemsInAnyDay()
                                 ? _handleNewMenu(context)
                                 : null;
                           },
-                      disabledColor: disabledAcceptColor,
-                      color: acceptColor,
-                      height: 50,
-                      minWidth: double.maxFinite,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        "SAVE",
-                        style: _hasItemsInAnyDay()
-                            ? Theme.of(context).textTheme.headline2
-                            : Theme.of(context)
-                                .textTheme
-                                .headline2
-                                .copyWith(color: Colors.grey),
-                      )),
+                          disabledColor: disabledAcceptColor,
+                          color: acceptColor,
+                          height: 50,
+                          minWidth: double.maxFinite,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                            "SAVE",
+                            style: _hasItemsInAnyDay()
+                                ? Theme.of(context).textTheme.headline2
+                                : Theme.of(context)
+                                    .textTheme
+                                    .headline2
+                                    .copyWith(color: Colors.grey),
+                          )),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
         ),
       ),
     );

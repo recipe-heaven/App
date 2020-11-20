@@ -44,7 +44,8 @@ final _days = [
 ];
 
 class CreateMenuPageState extends State<CreateMenuPage> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   bool _isEditing = false;
 
   String _name;
@@ -65,7 +66,6 @@ class CreateMenuPageState extends State<CreateMenuPage> {
       _isPublic = widget.menu.public;
 
       for (var recipe in widget.menu.recipes) {
-        print(recipe.recipe);
         _addMenuRecipeToDisplayMap(recipe);
       }
 
@@ -75,10 +75,18 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     }
   }
 
-  void _handleNewMeal() async {
+  /// Checks if there are any recipes or meals, returns true if atleast one of them
+  /// is not empty
+  bool _hasItemsInAnyDay() {
+    return (_recipes.isNotEmpty || _meals.isNotEmpty);
+  }
+
+  void _handleNewMenu() async {
     final FormState formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
+
+      print("SAVING");
 
       NewMenu newMenu = NewMenu(
           _name, _isPublic, _recipes.values.toList(), _meals.values.toList());
@@ -165,11 +173,15 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   Widget _createDayButton(String buttonText, int day) {
     return MaterialButton(
       color: elementBackgroundColor, //Theme.of(context).buttonColor,
+      height: 50,
+      elevation: 4,
       minWidth: double.maxFinite,
-      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: Text(
         buttonText,
-        style: Theme.of(context).textTheme.headline2,
+        style: Theme.of(context).accentTextTheme.headline2,
       ),
       onPressed: () async {
         Map<String, TypeSearchResult> result =
@@ -210,7 +222,13 @@ class CreateMenuPageState extends State<CreateMenuPage> {
           children: [
             if (dayMeals != null) ...dayMeals,
             if (dayRecipes != null) ...dayRecipes,
-            _createDayButton(buttonText, day)
+            SizedBox(
+              height: 20,
+            ),
+            _createDayButton(buttonText, day),
+            SizedBox(
+              height: 20,
+            )
           ],
         )
       ],
@@ -302,12 +320,23 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: MaterialButton(
-                      onPressed: _handleNewMeal,
+                      onPressed: _hasItemsInAnyDay() ? _handleNewMenu : null,
+                      disabledColor: disabledAcceptColor,
                       color: acceptColor,
-                      minWidth: double.infinity,
+                      height: 50,
+                      minWidth: double.maxFinite,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                       child: Text(
                         "SAVE",
-                        style: Theme.of(context).textTheme.headline2,
+                        style: _hasItemsInAnyDay()
+                            ? Theme.of(context).textTheme.headline2
+                            : Theme.of(context)
+                                .textTheme
+                                .headline2
+                                .copyWith(color: Colors.grey),
                       )),
                 ),
                 SizedBox(

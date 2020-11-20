@@ -97,7 +97,8 @@ Widget inputFealdShadowWrapper({Widget child}) {
 final mainTheme = ThemeData(
     buttonColor: acceptColor,
     errorColor: errorColor,
-
+    snackBarTheme:
+        SnackBarThemeData(backgroundColor: Colors.teal, elevation: 5),
     // The background color for major parts of the app (toolbars, tab bars, etc) [...]
     primaryColor: elementBackgroundColor,
     //

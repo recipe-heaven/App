@@ -8,11 +8,6 @@ import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
-import 'package:App/data_classes/meal.dart';
-import 'package:App/data_classes/recipe.dart';
-import 'package:App/helpers/enumHelper.dart';
-import 'package:App/helpers/time.dart';
-import 'package:App/main.dart';
 import 'package:App/components/input_feald.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
@@ -24,7 +19,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-
 
 /// Creates or edits a meal
 class CreateMealPage extends StatefulWidget {
@@ -38,7 +32,6 @@ class CreateMealPage extends StatefulWidget {
 }
 
 class CreateMealPageState extends State<CreateMealPage> {
-
   Map<String, Recipe> _starters = Map();
   Map<String, Recipe> _mains = Map();
   Map<String, Recipe> _desserts = Map();
@@ -85,7 +78,6 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   /// Returns true if there are any recipes in any of the categories, else false
   bool _hasRecipes() {
-
     return (_starters.isNotEmpty || _mains.isNotEmpty || _desserts.isNotEmpty);
   }
 
@@ -129,6 +121,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
   @protected
   void initState() {
+    super.initState();
     if (widget.meal != null) {
       _setupMealForEdit();
     }
@@ -147,7 +140,6 @@ class CreateMealPageState extends State<CreateMealPage> {
   /// Handles the navigation to search screen, and returns selected results from
   /// search as a map of recipes.
   Future<Map<String, Recipe>> _searchForType(MealType mealtype) async {
-
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true,

@@ -71,10 +71,8 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       }
       break;
     case RouteMenuNew:
-      page = CreateMenuPage();
-      break;
     case RouteMenuEdit:
-      page = CreateMealPage();
+      page = CreateMenuPage(menu: settings.arguments);
       break;
     case RouteMenuView:
     case RouteMenuShoppingList:

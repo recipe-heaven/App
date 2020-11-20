@@ -79,6 +79,7 @@ class MealService {
   /// provided as list.
   Future<List<SimpleMeal>> getMultipleMinifiedMeals(List<int> mealIds) async {
     try {
+      if (mealIds.length == 0) return List();
       final token = await Storage().getToken();
       String ids = "";
       mealIds.forEach((id) {

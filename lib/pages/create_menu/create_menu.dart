@@ -58,6 +58,21 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.menu != null) {
+      _isEditing = true;
+      _name = widget.menu.name;
+      _isPublic = widget.menu.public;
+
+      for (var recipe in widget.menu.recipes) {
+        print(recipe.recipe);
+        _addMenuRecipeToDisplayMap(recipe);
+      }
+
+      for (var meal in widget.menu.meals) {
+        _addMenuMealToDisplayMap(meal);
+      }
+    }
   }
 
   void _handleNewMeal() async {
@@ -65,9 +80,17 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     if (formState.validate()) {
       formState.save();
 
-      var p = NewMenu(
+      NewMenu newMenu = NewMenu(
           _name, _isPublic, _recipes.values.toList(), _meals.values.toList());
-      var res = await widget.menuService.addNewMenu(newMenu: p);
+
+      var res = false;
+
+      if (_isEditing) {
+        newMenu.id = widget.menu.id;
+        res = await widget.menuService.updateMenu(updatedMenu: newMenu);
+      } else {
+        res = await widget.menuService.addNewMenu(newMenu: newMenu);
+      }
       if (res == null) {
         setState(() {});
       } else {

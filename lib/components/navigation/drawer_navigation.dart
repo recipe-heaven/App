@@ -50,7 +50,18 @@ Drawer getDrawer(BuildContext context) {
             ),
             title: Text("DEBUG LOGIN"),
             onTap: () {
-              _authServ.loginEmailPassword(email: 'a@a', password: 'a');
+        ListTile(
+            leading: Icon(
+              Icons.send,
+              color: primaryTextColor,
+            ),
+            title: Text("EDIT MENU id 1"),
+            onTap: () async {
+              var ms = MenuService(HttpServiceClient());
+              var q = await ms.getMenu(menuId: 1);
+              var returnResult = await Navigator.pushNamed(
+                  context, RouteMenuEdit,
+                  arguments: q);
             })
       ],
     ),

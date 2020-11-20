@@ -22,6 +22,7 @@ class Menu with UserOwned {
     this.id = id;
     this.name = name ?? "";
     this.meals = meals ?? new List<Meal>();
+    this.recipes = recipes ?? new List<Meal>();
   }
 
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);

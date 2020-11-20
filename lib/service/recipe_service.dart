@@ -41,6 +41,8 @@ class RecipeService {
   /// provided as list.
   Future<List<Recipe>> getMultipleMinifiedRecipes(List<int> recipeIds) async {
     try {
+      if (recipeIds.length == 0) return List();
+
       final token = await Storage().getToken();
       String ids = "";
       recipeIds.forEach((id) {
@@ -63,12 +65,12 @@ class RecipeService {
           return simpleRecipes;
         }
       } else {
-        return null;
+        return List();
       }
     } on IOException catch (e) {
       print(e);
     }
-    return null;
+    return List();
   }
 
   static Future<bool> newRecipe(Recipe recipe, File imageFile) async {

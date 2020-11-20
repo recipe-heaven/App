@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
@@ -124,7 +125,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
 
   /// Handles the navigation to search screen, and returns selected results from
   /// search as a map of recipes.
-  Future<Map<String, Recipe>> _searchForRecipesMeals() async {
+  Future<Map<String, TypeSearchResult>> _searchForRecipesMeals() async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true, searchOwnedOnly: true, searchMenus: false));
@@ -132,11 +133,15 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     if (returnResult == null) return null;
 
     Map<String, TypeSearchResult> results = returnResult;
+    return results;
+  }
 
+  Future _handleSearchResult(
+      Map<String, TypeSearchResult> result, int day) async {
     List<int> recipeIds = List();
     List<int> mealIds = List();
 
-    for (var item in results.values) {
+    for (var item in result.values) {
       if (item.runtimeType == RecipeSearchResult) {
         recipeIds.add(item.id);
       } else if (item.runtimeType == MealSearchResult) {
@@ -144,36 +149,35 @@ class CreateMenuPageState extends State<CreateMenuPage> {
       }
     }
 
-    if (recipeIds.length > 0) {
-      var recipes = await RecipeService().getMultipleMinifiedRecipes(recipeIds);
-    }
-    if (mealIds.length > 0) {
-      var meals = await MealService().getMultipleMinifiedMeals(mealIds);
+    var recipes = await RecipeService().getMultipleMinifiedRecipes(recipeIds);
+    for (var recipe in recipes) {
+      _recipes["${recipe.id}-$day"] = new MenuRecipe(recipe, day);
     }
 
-    // return createRecipeMap(recipes);
+    var meals = await MealService().getMultipleMinifiedMeals(mealIds);
+    for (var meal in meals) {
+      _meals["${meal.id}-$day"] = new MenuMeal(meal, day);
+    }
   }
 
   Widget _make_day_button({String buttonText, int day}) {
-    var dayRecipes = _recipes.values.map((e) {
-      if (e.day == day) {
-        return _createDisplayCard(e.recipe.name, e.recipe.getDisplayImage(),
-            [TimeWidget(timeInSeconds: e.recipe.cookTime)], () {});
-      }
+    var dayRecipes =
+        _recipes.values.where((recipe) => recipe.day == day).map((e) {
+      return _createDisplayCard(
+          e.recipe.name, e.recipe.getDisplayImage(), [], () {});
     });
-    var dayMeals = _meals.values.map((e) {
-      if (e.day == day) {
-        return _createDisplayCard(
-            e.meal.name, e.meal.getDisplayImage(), [], () {});
-      }
+
+    var dayMeals = _meals.values.where((meal) => meal.day == day).map((e) {
+      return _createDisplayCard(
+          e.meal.name, e.meal.getDisplayImage(), [], () {});
     });
 
     return Column(
       children: [
         Column(
           children: [
-            ...dayRecipes,
-            ...dayMeals,
+            if (dayMeals != null) ...dayMeals,
+            if (dayRecipes != null) ...dayRecipes,
             MaterialButton(
               color: elementBackgroundColor, //Theme.of(context).buttonColor,
               minWidth: double.maxFinite,
@@ -182,13 +186,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                 buttonText,
                 style: Theme.of(context).textTheme.headline2,
               ),
-              onPressed: () {
-                dynamic newMeal = _searchForRecipesMeals();
-                if (newMeal != null) {
-                  setState(() {
-                    // widget.menu.meals[dayNum] = newMeal;
-                  });
-                }
+              onPressed: () async {
+                Map<String, TypeSearchResult> result =
+                    await _searchForRecipesMeals();
+                await _handleSearchResult(result, day);
+                // Force redraw of UI
+                setState(() {});
               },
             )
           ],

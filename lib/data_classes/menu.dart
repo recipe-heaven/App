@@ -43,7 +43,9 @@ abstract class Displayable {
 class MenuMeal with MenuDay {
   SimpleMeal meal;
 
-  MenuMeal();
+  MenuMeal(this.meal, int day) {
+    this.day = day;
+  }
 
   factory MenuMeal.fromJson(Map<String, dynamic> json) =>
       _$MenuMealFromJson(json);
@@ -54,7 +56,9 @@ class MenuMeal with MenuDay {
 class MenuRecipe with MenuDay {
   Recipe recipe;
 
-  MenuRecipe();
+  MenuRecipe(this.recipe, int day) {
+    this.day = day;
+  }
 
   factory MenuRecipe.fromJson(Map<String, dynamic> json) =>
       _$MenuRecipeFromJson(json);

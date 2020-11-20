@@ -14,7 +14,7 @@ Widget createMealSearchResultCard(
           Icons.restaurant,
           color: primaryTextColor,
           size: 14.0,
-          semanticLabel: 'Text to announce in accessibility modes',
+          semanticLabel: 'Recipe icon',
         ),
         SizedBox(width: 2),
         Text("Meal", style: Theme.of(context).accentTextTheme.headline4),

@@ -86,7 +86,7 @@ class MealService {
       });
       ids = ids.replaceRange(ids.length - 1, null, "");
       var response = await _httpClient.get(
-          pathWtihParameters(getMultipleSimpleRecipeEndpoint, {"ids": ids}),
+          pathWtihParameters(getMultipleSimpleMealsEndpoint, {"ids": ids}),
           headers: {
             'Content-type': "application/json",
             "Authorization": token

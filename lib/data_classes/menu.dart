@@ -28,6 +28,7 @@ class Menu with UserOwned {
   Map<String, dynamic> toJson() => _$MenuToJson(this);
 }
 
+/// Mixin that provides a day field.
 @JsonSerializable()
 class MenuDay {
   int day;
@@ -39,6 +40,8 @@ abstract class Displayable {
   String get update;
 }
 
+/// Menu meal is a meal that belongs to a
+/// menu for a particular day in the menu.
 @JsonSerializable(explicitToJson: true)
 class MenuMeal with MenuDay {
   SimpleMeal meal;
@@ -52,6 +55,8 @@ class MenuMeal with MenuDay {
   Map<String, dynamic> toJson() => _$MenuMealToJson(this);
 }
 
+/// Menu recipe is a recipe that belongs to a
+/// menu for a particular day in the menu.
 @JsonSerializable(explicitToJson: true)
 class MenuRecipe with MenuDay {
   Recipe recipe;

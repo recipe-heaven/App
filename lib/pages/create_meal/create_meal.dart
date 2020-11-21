@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:App/components/form/form_validators.dart';
@@ -210,7 +209,8 @@ class CreateMealPageState extends State<CreateMealPage> {
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
       body: Builder(
-        builder: (context) => ListView(
+        builder: (context) => SingleChildScrollView(
+        child: Column(
           children: [
             Container(
               child: Stack(

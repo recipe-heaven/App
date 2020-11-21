@@ -94,20 +94,15 @@ class CreateMenuPageState extends State<CreateMenuPage> {
         res = await widget.menuService.addNewMenu(newMenu: newMenu);
       }
 
-      String feedbackText = "";
       if (res) {
-        feedbackText = "The menu was successfully ";
         if (_isEditing) {
-          feedbackText += "updated!";
+          displaySavedSnackbar("menu", context, updated: true);
         } else {
-          feedbackText += "created!";
+          displaySavedSnackbar("menu", context);
         }
       } else {
-        feedbackText = "Ooops, something went wrong!";
+        displaySavedSnackbar("menu", context, error: true);
       }
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(feedbackText)),
-      );
     }
   }
 

@@ -209,143 +209,149 @@ class CreateMealPageState extends State<CreateMealPage> {
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
       body: Builder(
-        builder: (context) => SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: ExactAssetImage(
-                                "assets/images/BANNER-NEW-MEAL.png"),
-                            fit: BoxFit.cover)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                      child: new Container(
-                        decoration: new BoxDecoration(
-                            color: Colors.white.withOpacity(0.0)),
+          builder: (context) => SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: ExactAssetImage(
+                                        "assets/images/BANNER-NEW-MEAL.png"),
+                                    fit: BoxFit.cover)),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                              child: new Container(
+                                decoration: new BoxDecoration(
+                                    color: Colors.white.withOpacity(0.0)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
+                                  child: Text(
+                                    "Put together the\nperfect meal",
+                                    style:
+                                        Theme.of(context).textTheme.headline1,
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  child: Form(
+                                    key: _formKey,
+                                    child: secondaryInputField(context,
+                                        initialValue: _name,
+                                        label: "Meal title",
+                                        onSave: (newValue) {
+                                      _name = newValue;
+                                    },
+                                        validator: validateNotEmptyInput,
+                                        hint: "Easy every day meal"),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 5, 30, 20),
+                                ),
+                              ],
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                            ),
+                          ),
+                        ],
+                        alignment: Alignment.center,
+                        fit: StackFit.expand,
                       ),
+                      height: MediaQuery.of(context).size.height * 0.4,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
-                          child: Text(
-                            "Put together the\nperfect meal",
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
-                        ),
-                        Spacer(),
-                        Container(
-                          child: Form(
-                            key: _formKey,
-                            child: secondaryInputField(context,
-                                initialValue: _name,
-                                label: "Meal title", onSave: (newValue) {
-                              _name = newValue;
-                            },
-                                validator: validateNotEmptyInput,
-                                hint: "Easy every day meal"),
-                          ),
-                          padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
-                        ),
-                      ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    SizedBox(
+                      height: 15,
                     ),
-                  ),
-                ],
-                alignment: Alignment.center,
-                fit: StackFit.expand,
-              ),
-              height: MediaQuery.of(context).size.height * 0.4,
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
-              child: Column(
-                children: [
-                  SetPublicDialog((state) {
-                    _isPublic = state;
-                  }, _isPublic, _isEditing, "Meal"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _createCategorySelector(
-                      buttonText: "ADD STARTERS",
-                      onClick: () async {
-                        var newRecipe =
-                            await this._searchForType(MealType.starter);
-                        if (newRecipe != null) {
-                          setState(() {
-                            _starters.addAll(newRecipe);
-                          });
-                        }
-                      },
-                      categotyItems: _starters),
-                  _createCategorySelector(
-                      buttonText: "ADD COURSE",
-                      onClick: () async {
-                        var newRecipe =
-                            await this._searchForType(MealType.main);
-                        if (newRecipe != null) {
-                          setState(() {
-                            _mains.addAll(newRecipe);
-                          });
-                        }
-                      },
-                      categotyItems: _mains),
-                  _createCategorySelector(
-                      buttonText: "ADD DESSERT",
-                      onClick: () async {
-                        var newRecipe =
-                            await this._searchForType(MealType.dessert);
-                        if (newRecipe != null) {
-                          setState(() {
-                            _desserts.addAll(newRecipe);
-                          });
-                        }
-                      },
-                      categotyItems: _desserts),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
+                      child: Column(
+                        children: [
+                          SetPublicDialog((state) {
+                            _isPublic = state;
+                          }, _isPublic, _isEditing, "Meal"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          _createCategorySelector(
+                              buttonText: "ADD STARTERS",
+                              onClick: () async {
+                                var newRecipe =
+                                    await this._searchForType(MealType.starter);
+                                if (newRecipe != null) {
+                                  setState(() {
+                                    _starters.addAll(newRecipe);
+                                  });
+                                }
+                              },
+                              categotyItems: _starters),
+                          _createCategorySelector(
+                              buttonText: "ADD COURSE",
+                              onClick: () async {
+                                var newRecipe =
+                                    await this._searchForType(MealType.main);
+                                if (newRecipe != null) {
+                                  setState(() {
+                                    _mains.addAll(newRecipe);
+                                  });
+                                }
+                              },
+                              categotyItems: _mains),
+                          _createCategorySelector(
+                              buttonText: "ADD DESSERT",
+                              onClick: () async {
+                                var newRecipe =
+                                    await this._searchForType(MealType.dessert);
+                                if (newRecipe != null) {
+                                  setState(() {
+                                    _desserts.addAll(newRecipe);
+                                  });
+                                }
+                              },
+                              categotyItems: _desserts),
 
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // TODO: MAYBE CHANGE TO CIRCULAR BUTTON SAME AS CREATE RECIPE
-                  MaterialButton(
-                      onPressed: () {
-                        return _hasRecipes() ? _handleNewMeal(context) : null;
-                      },
-                      disabledColor: disabledAcceptColor,
-                      color: acceptColor,
-                      height: 50,
-                      minWidth: double.maxFinite,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          // TODO: MAYBE CHANGE TO CIRCULAR BUTTON SAME AS CREATE RECIPE
+                          MaterialButton(
+                              onPressed: () {
+                                return _hasRecipes()
+                                    ? _handleNewMeal(context)
+                                    : null;
+                              },
+                              disabledColor: disabledAcceptColor,
+                              color: acceptColor,
+                              height: 50,
+                              minWidth: double.maxFinite,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text(
+                                "SAVE",
+                                style: _hasRecipes()
+                                    ? Theme.of(context).textTheme.headline2
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(color: Colors.grey),
+                              )),
+                        ],
                       ),
-                      child: Text(
-                        "SAVE",
-                        style: _hasRecipes()
-                            ? Theme.of(context).textTheme.headline2
-                            : Theme.of(context)
-                                .textTheme
-                                .headline2
-                                .copyWith(color: Colors.grey),
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                    ),
+                  ],
+                ),
+              )),
     );
   }
 }

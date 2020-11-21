@@ -5,6 +5,7 @@ import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
+import 'package:App/components/saved_snackbar.dart';
 import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
@@ -57,31 +58,25 @@ class CreateMealPageState extends State<CreateMealPage> {
       addToIdList(_mains.values);
       addToIdList(_desserts.values);
 
+      NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
       var res = false;
-      if (_isEditing) {
-        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
 
+      if (_isEditing) {
         newMeal.id = widget.meal.id;
         res = await widget.mealSearvice.updateMeal(updatedMeal: newMeal);
       } else {
-        NewMeal newMeal = NewMeal(_name, _isPublic, recpideIds);
         res = await widget.mealSearvice.addNewMeal(newMeal: newMeal);
       }
 
-      String feedbackText = "";
       if (res) {
-        feedbackText = "The meal was successfully ";
         if (_isEditing) {
-          feedbackText += "updated!";
+          displaySavedSnackbar("meal", context, updated: true);
         } else {
-          feedbackText += "created!";
+          displaySavedSnackbar("meal", context);
         }
       } else {
-        feedbackText = "Ooops, something went wrong!";
+        displaySavedSnackbar("meal", context, error: true);
       }
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(feedbackText)),
-      );
     }
   }
 

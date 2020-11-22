@@ -1,29 +1,42 @@
+import 'package:App/data_classes/menu.dart';
 import 'package:App/pages/explore/sear_result_card.dart';
-import 'package:App/pages/explore/result_item.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
-Card createMenuSearchResultCard(
-    MenuSearchResult menuResult, BuildContext context, bool selected) {
-  final widgets = [
-    Row(
-      children: [
-        Icon(
-          Icons.menu_book,
-          color: primaryTextColor,
-          size: 14.0,
-          semanticLabel: 'Text to announce in accessibility modes',
-        ),
-        SizedBox(width: 2),
-        Text("Menu", style: Theme.of(context).accentTextTheme.headline4)
-      ],
-    ),
-    Text(menuResult.name, style: TextStyle(fontSize: 16)),
-    Row(children: getDays(menuResult.days, context))
-  ];
-  //TODO: LOAD BACKGROUND DYNAMICLY
-  return createSearchResultCard(widgets,
-      background: "assets/images/y_6cfb1008.jpg", selected: selected);
+class MenuSearchResultCard extends StatelessWidget {
+  final Menu menu;
+
+  final BuildContext context;
+
+  final bool selected;
+
+  MenuSearchResultCard(this.menu, this.context, {this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchResultCard(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.menu_book,
+                color: primaryTextColor,
+                size: 14.0,
+                semanticLabel: 'Text to announce in accessibility modes',
+              ),
+              SizedBox(width: 2),
+              Text("Menu", style: Theme.of(context).accentTextTheme.headline4)
+            ],
+          ),
+          Text(menu.name, style: TextStyle(fontSize: 16)),
+          // TODO: Add days from menu
+          Row(children: getDays([1], context))
+          // TODO ADD IMAGE FROM MENU
+          // menu.getDisplayImage()
+        ],
+        background: Image.asset("assets/images/BANNER-NEW-MEAL.png"),
+        selected: selected);
+  }
 }
 
 List<Widget> getDays(List<int> days, BuildContext context) {

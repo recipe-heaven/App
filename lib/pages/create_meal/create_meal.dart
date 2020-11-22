@@ -10,7 +10,6 @@ import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
-import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/meal_service.dart';
@@ -154,7 +153,7 @@ class CreateMealPageState extends State<CreateMealPage> {
 
     if (returnResult == null) return null;
 
-    Map<String, TypeSearchResult> results = returnResult;
+    Map<String, dynamic> results = returnResult;
 
     List<int> ids = results.entries.map((e) => e.value.id).toList();
     var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);

@@ -1,4 +1,4 @@
-import 'package:App/pages/explore/result_item.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class SearchState extends ChangeNotifier {
   bool _includeMenu = true;
   bool _ownedOnly = false;
   bool _returnSelected = false;
-  Map<String, TypeSearchResult> _selected = Map<String, TypeSearchResult>();
+  Map<String, UserOwned> _selected = Map<String, UserOwned>();
 
   String _searchString;
 
@@ -44,19 +44,19 @@ class SearchState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSelected(String type, TypeSearchResult selected) {
+  void addSelected(String type, UserOwned selected) {
     var id = type + selected.id.toString();
     _selected[id] = selected;
     notifyListeners();
   }
 
-  void removeSelected(String type, TypeSearchResult selected) {
+  void removeSelected(String type, UserOwned selected) {
     var id = type + selected.id.toString();
     _selected.remove(id);
     notifyListeners();
   }
 
-  bool selectedContains(String type, TypeSearchResult selected) {
+  bool selectedContains(String type, UserOwned selected) {
     var id = type + selected.id.toString();
     return this._selected.containsKey(id);
   }
@@ -73,5 +73,5 @@ class SearchState extends ChangeNotifier {
 
   String get searchString => _searchString;
 
-  Map<String, TypeSearchResult> get selected => _selected;
+  Map<String, UserOwned> get selected => _selected;
 }

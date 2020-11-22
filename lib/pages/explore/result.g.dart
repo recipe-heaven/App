@@ -8,10 +8,7 @@ part of 'result.dart';
 
 Result _$ResultFromJson(Map<String, dynamic> json) {
   return Result(
-    (json['result'] as List)
-        ?.map((e) =>
-            e == null ? null : ResultItem.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    _resultItemToType(json['result'] as List),
   );
 }
 
@@ -24,6 +21,6 @@ Map<String, dynamic> _$ResultToJson(Result instance) {
     }
   }
 
-  writeNotNull('result', instance.result?.map((e) => e?.toJson())?.toList());
+  writeNotNull('result', instance.result);
   return val;
 }

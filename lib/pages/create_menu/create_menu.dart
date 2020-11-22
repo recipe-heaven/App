@@ -9,7 +9,6 @@ import 'package:App/components/input_feald.dart';
 import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/data_classes/menu.dart';
-import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/http_client.dart';
@@ -129,29 +128,28 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   }
 
   /// Handles the navigation to search screen, and returns selected results from
-  /// search as a map of TypeSearchResult.
-  Future<Map<String, TypeSearchResult>> _searchForRecipesAndMeals() async {
+  /// search as a map of dynamic.
+  Future<Map<String, dynamic>> _searchForRecipesAndMeals() async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
             returnSelected: true, searchOwnedOnly: true, searchMenus: false));
 
     if (returnResult == null) return Map();
-    return returnResult as Map<String, TypeSearchResult>;
+    return returnResult as Map<String, dynamic>;
   }
 
   /// Filters the types from the search result into their belonging category
   /// MenuRecipe / MenuMeal and adds them to their beloning map with key as
   /// id-day so that a type can be added to two different days, but only
   /// one of same for any day.
-  Future _handleSearchResult(
-      Map<String, TypeSearchResult> result, int day) async {
+  Future _handleSearchResult(Map<String, dynamic> result, int day) async {
     List<int> recipeIds = List();
     List<int> mealIds = List();
 
     for (var item in result.values) {
-      if (item.runtimeType == RecipeSearchResult) {
+      if (item.runtimeType == dynamic) {
         recipeIds.add(item.id);
-      } else if (item.runtimeType == MealSearchResult) {
+      } else if (item.runtimeType == dynamic) {
         mealIds.add(item.id);
       }
     }
@@ -185,8 +183,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
         style: Theme.of(context).accentTextTheme.headline2,
       ),
       onPressed: () async {
-        Map<String, TypeSearchResult> result =
-            await _searchForRecipesAndMeals();
+        Map<String, dynamic> result = await _searchForRecipesAndMeals();
         await _handleSearchResult(result, day);
         // Force redraw of UI
         setState(() {});

@@ -1,11 +1,13 @@
 import 'package:App/components/loading_spinnder.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/menu.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/pages/explore/filter_buttons_widget.dart';
 import 'package:App/pages/explore/meal_result_card.dart';
 import 'package:App/pages/explore/menu_result_card.dart';
 import 'package:App/pages/explore/recipe_result_card.dart';
 import 'package:App/pages/explore/result.dart';
-import 'package:App/pages/explore/result_item.dart';
 import 'package:App/pages/explore/search_options.dart';
 import 'package:App/pages/explore/search_state.dart';
 import 'package:App/routes/router.dart';
@@ -19,7 +21,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Disable navigation if search is from Create(menu, meal) page
-// TODO: Implement filter buttons removal in search type
 
 const meal_type_name = "meal";
 const recipe_type_name = "recipe";
@@ -152,44 +153,41 @@ class _SearchState extends State<Search> {
 
     for (var item in res.result) {
       Widget card;
-      String type = item.type;
-      TypeSearchResult it;
       bool isSelected = false;
       String clickedRoute;
+      String type;
 
-      switch (type) {
-        case meal_type_name:
-          it = MealSearchResult.fromMap(item.data);
-          clickedRoute = RouteMealView;
-          isSelected = state.selectedContains(type, it);
-          card = createMealSearchResultCard(it, context, isSelected);
-          break;
-        case recipe_type_name:
-          it = RecipeSearchResult.fromMap(item.data);
-          clickedRoute = RouteRecipeView;
-          isSelected = state.selectedContains(type, it);
-          card = createRecipeSearchResultCard(it, context, isSelected);
-          break;
-        case menu_type_name:
-          it = MenuSearchResult.fromMap(item.data);
-          clickedRoute = RouteMenuNew;
-          isSelected = state.selectedContains(type, it);
-          card = createMenuSearchResultCard(it, context, isSelected);
-          break;
-        default:
+      if (item.runtimeType == Recipe) {
+        type = "recipe";
+        clickedRoute = RouteRecipeView;
+        isSelected = state.selectedContains(type, item);
+        card = RecipeSearchResultCard(item, context, selected: isSelected);
+      } else if (item.runtimeType == Meal) {
+        type = "meal";
+        clickedRoute = RouteMealView;
+        isSelected = state.selectedContains(type, item);
+        card = MealSearchResultCard(item, context, selected: isSelected);
+      } else if (item.runtimeType == Menu) {
+        type = "menu";
+        clickedRoute = RouteMenuNew;
+        isSelected = state.selectedContains(type, item);
+        card = MenuSearchResultCard(item, context, selected: isSelected);
       }
+
       if (card != null) {
         cards.add(GestureDetector(
             onTap: () {
               if (state.returnSelected) {
                 if (isSelected) {
-                  state.removeSelected(type, it);
+                  state.removeSelected(type, item);
                 } else {
-                  state.addSelected(type, it);
+                  state.addSelected(type, item);
                 }
               } else {
-                Navigator.pushNamed(context,
-                    pathWtihParameters(clickedRoute, {"id": it.id.toString()}));
+                Navigator.pushNamed(
+                    context,
+                    pathWtihParameters(
+                        clickedRoute, {"id": item.id.toString()}));
               }
             },
             child: card));

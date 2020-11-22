@@ -1,32 +1,42 @@
+import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/helpers/enumHelper.dart';
 import 'package:App/pages/explore/sear_result_card.dart';
-import 'package:App/pages/explore/result_item.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
-Widget createMealSearchResultCard(
-    MealSearchResult mealResult, BuildContext context, bool selected) {
-  final widgets = [
-    Row(
-      children: [
-        Icon(
-          Icons.restaurant,
-          color: primaryTextColor,
-          size: 14.0,
-          semanticLabel: 'Recipe icon',
-        ),
-        SizedBox(width: 2),
-        Text("Meal", style: Theme.of(context).accentTextTheme.headline4),
-      ],
-    ),
-    Text(mealResult.name, style: TextStyle(fontSize: 16)),
-    ...getRecipeTypes(mealResult.recipeType, context)
-  ];
+class MealSearchResultCard extends StatelessWidget {
+  final Meal meal;
 
-  //TODO: LOAD BACKGROUND DYNAMICLY
-  return createSearchResultCard(widgets,
-      background: "assets/images/y_6cfb1008.jpg", selected: selected);
+  final BuildContext context;
+
+  final bool selected;
+
+  MealSearchResultCard(this.meal, this.context, {this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchResultCard(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.restaurant,
+                color: primaryTextColor,
+                size: 14.0,
+                semanticLabel: 'Recipe icon',
+              ),
+              SizedBox(width: 2),
+              Text("Meal", style: Theme.of(context).accentTextTheme.headline4),
+            ],
+          ),
+          Text(meal.name, style: TextStyle(fontSize: 16)),
+          // TODO Add recipes for resolving of type
+          ...getRecipeTypes([], context)
+        ],
+        background: Image.asset("assets/images/BANNER-NEW-MEAL.png"),
+        selected: selected);
+  }
 }
 
 List<Widget> getRecipeTypes(List<String> types, BuildContext context) {

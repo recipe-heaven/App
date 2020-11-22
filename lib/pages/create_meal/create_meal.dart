@@ -5,6 +5,7 @@ import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
+import 'package:App/components/round_button.dart';
 import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/recipe.dart';
@@ -308,30 +309,10 @@ class CreateMealPageState extends State<CreateMealPage> {
                       }
                     },
                     categotyItems: _desserts),
-
                 SizedBox(
                   height: 20,
                 ),
-                // TODO: MAYBE CHANGE TO CIRCULAR BUTTON SAME AS CREATE RECIPE
-                MaterialButton(
-                    onPressed: _hasRecipes() ? _handleNewMeal : null,
-                    disabledColor: disabledAcceptColor,
-                    color: acceptColor,
-                    height: 50,
-                    minWidth: double.maxFinite,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Text(
-                      "SAVE",
-                      style: _hasRecipes()
-                          ? Theme.of(context).textTheme.headline2
-                          : Theme.of(context)
-                              .textTheme
-                              .headline2
-                              .copyWith(color: Colors.grey),
-                    )),
+                RoundButton(_hasRecipes() ? () => _handleNewMeal : null),
               ],
             ),
           ),

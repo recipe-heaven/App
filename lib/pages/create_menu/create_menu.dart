@@ -6,6 +6,7 @@ import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/components/round_button.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
@@ -318,31 +319,10 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                     for (MapEntry<int, String> entry in _days.asMap().entries)
                       _createDayWidget(buttonText: entry.value, day: entry.key),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: MaterialButton(
-                          onPressed: () {
-                            return _hasItemsInAnyDay()
-                                ? _handleNewMenu(context)
-                                : null;
-                          },
-                          disabledColor: disabledAcceptColor,
-                          color: acceptColor,
-                          height: 50,
-                          minWidth: double.maxFinite,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Text(
-                            "SAVE",
-                            style: _hasItemsInAnyDay()
-                                ? Theme.of(context).textTheme.headline2
-                                : Theme.of(context)
-                                    .textTheme
-                                    .headline2
-                                    .copyWith(color: Colors.grey),
-                          )),
-                    ),
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: RoundButton(_hasItemsInAnyDay()
+                            ? () => _handleNewMenu(context)
+                            : null)),
                   ],
                 ),
               ),

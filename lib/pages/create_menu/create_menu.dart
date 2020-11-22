@@ -23,23 +23,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class CreateMenuPage extends StatefulWidget {
-  final menuService = MenuService(HttpServiceClient());
   final Menu menu;
   CreateMenuPage({Key key, this.menu}) : super(key: key);
 
   @override
   CreateMenuPageState createState() => CreateMenuPageState();
 }
-
-final _days = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
-];
 
 class CreateMenuPageState extends State<CreateMenuPage> {
   final _formKey = GlobalKey<FormState>();
@@ -91,9 +80,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
 
       if (_isEditing) {
         newMenu.id = widget.menu.id;
-        res = await widget.menuService.updateMenu(updatedMenu: newMenu);
+        res = await MenuService.updateMenu(updatedMenu: newMenu);
       } else {
-        res = await widget.menuService.addNewMenu(newMenu: newMenu);
+        res = await MenuService.addNewMenu(newMenu: newMenu);
       }
 
       if (res) {
@@ -312,7 +301,8 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    for (MapEntry<int, String> entry in _days.asMap().entries)
+                    for (MapEntry<int, String> entry
+                        in Menu.days.asMap().entries)
                       _createDayWidget(buttonText: entry.value, day: entry.key),
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),

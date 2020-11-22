@@ -1,3 +1,4 @@
+import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/service/auth_service.dart';
 import 'package:App/service/http_client.dart';
@@ -59,14 +60,11 @@ Drawer getDrawer(BuildContext context) {
               Icons.send,
               color: primaryTextColor,
             ),
-            title: Text("EDIT MENU id 1"),
-            onTap: () async {
-              var ms = MenuService(HttpServiceClient());
-              var q = await ms.getMenu(menuId: 1);
-              var returnResult = await Navigator.pushNamed(
-                  context, RouteMenuEdit,
-                  arguments: q);
-            })
+            title: Text("view menu 4"),
+            onTap: () {
+              Navigator.pushNamed(
+                  context, pathWtihParameters(RouteMenuView, {"id": "4"}));
+            }),
       ],
     ),
   ));

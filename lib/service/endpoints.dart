@@ -42,3 +42,10 @@ const changePassEndpoint = "${apiUrl}authentication/changepassword";
 /// -- SEARCH -- ///
 
 const searchEndpoint = "${apiUrl}search";
+
+/// -- user info -- //
+
+const userGetCurrentMenuEndpoint = "${apiUrl}user-info/current-menu";
+const userChangeCurrentMenuEndpoint = "${apiUrl}user-info/current-menu/";
+const userStarItemEndpoint = "${apiUrl}user-info/star";
+const userUnstarItemEndpoint = "${apiUrl}user-info/unstar";

@@ -16,10 +16,10 @@ import 'http_client.dart';
 class RecipeService {
   static final HttpServiceClient _httpClient = HttpServiceClient();
 
-  static Future<Recipe> getExample(int recipeId) async {
-    return Future<Recipe>.delayed(
-        Duration(seconds: 3), () => TEST_DATA.recipes.first);
-  }
+  // static Future<Recipe> getExample(int recipeId) async {
+  //   return Future<Recipe>.delayed(
+  //       Duration(seconds: 3), () => TEST_DATA.recipes.first);
+  // }
 
   static Future<CompleteRecipe> getFullRecipe(int recipeId) async {
     var response =

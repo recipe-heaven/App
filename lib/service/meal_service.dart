@@ -14,9 +14,9 @@ import '../main.dart';
 class MealService {
   static final HttpServiceClient _httpClient = HttpServiceClient();
 
-  static Future<Meal> getExample(int recipeId) async {
-    return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
-  }
+  // static Future<Meal> getExample(int recipeId) async {
+  //   return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
+  // }
 
   static Future<CompleteMeal> getFullMeal(int mealId) async {
     var response =

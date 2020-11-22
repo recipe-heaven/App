@@ -7,6 +7,7 @@ import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/input_feald.dart';
 import 'package:App/components/round_button.dart';
+import 'package:App/components/saved_snackbar.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/pages/explore/result_item.dart';
 import 'package:App/routes/routes.dart';
@@ -95,20 +96,15 @@ class CreateMenuPageState extends State<CreateMenuPage> {
         res = await widget.menuService.addNewMenu(newMenu: newMenu);
       }
 
-      String feedbackText = "";
       if (res) {
-        feedbackText = "The menu was successfully ";
         if (_isEditing) {
-          feedbackText += "updated!";
+          displaySavedSnackbar("menu", context, updated: true);
         } else {
-          feedbackText += "created!";
+          displaySavedSnackbar("menu", context);
         }
       } else {
-        feedbackText = "Ooops, something went wrong!";
+        displaySavedSnackbar("menu", context, error: true);
       }
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(feedbackText)),
-      );
     }
   }
 

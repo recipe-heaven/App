@@ -213,73 +213,61 @@ class CreateMealPageState extends State<CreateMealPage> {
                   child: Column(
                     children: [
                       Container(
-                          child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: ExactAssetImage(
-                                        "assets/images/BANNER-NEW-MEAL.png"),
-                                    fit: BoxFit.cover)),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                              child: new Container(
-                                decoration: new BoxDecoration(
-                                    color: Colors.white.withOpacity(0.0)),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: ExactAssetImage(
+                                          "assets/images/BANNER-NEW-MEAL.png"),
+                                      fit: BoxFit.cover)),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                child: new Container(
+                                  decoration: new BoxDecoration(
+                                      color: Colors.white.withOpacity(0.0)),
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
-                                  child: Text(
-                                    "Put together the\nperfect meal",
-                                    style:
-                                        Theme.of(context).textTheme.headline1,
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 30.0, 0, 10),
+                                    child: Text(
+                                      "Put together the\nperfect meal",
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  child: Form(
-                                    key: _formKey,
-                                    child: secondaryInputField(context,
-                                        initialValue: _name,
-                                        label: "Meal title",
-                                        onSave: (newValue) {
-                                      _name = newValue;
-                                    },
-                                        validator: validateNotEmptyInput,
-                                        hint: "Easy every day meal"),
+                                  Spacer(),
+                                  Container(
+                                    child: Form(
+                                      key: _formKey,
+                                      child: secondaryInputField(context,
+                                          initialValue: _name,
+                                          label: "Meal title",
+                                          onSave: (newValue) {
+                                        _name = newValue;
+                                      },
+                                          validator: validateNotEmptyInput,
+                                          hint: "Easy every day meal"),
+                                    ),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 5, 30, 20),
                                   ),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 30, 20),
-                                ),
-                              ],
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                                ],
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
                             ),
-                          ),
-                        ],
-                        alignment: Alignment.center,
-                        fit: StackFit.expand,
-                      )),
-                      Spacer(),
-                      Container(
-                        child: Form(
-                          key: _formKey,
-                          child: secondaryInputField(context,
-                              initialValue: _name,
-                              label: "Meal title", onSave: (newValue) {
-                            _name = newValue;
-                          },
-                              validator: validateNotEmptyInput,
-                              hint: "Easy every day meal"),
+                          ],
+                          alignment: Alignment.center,
+                          fit: StackFit.expand,
                         ),
-                        padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
+                        height: MediaQuery.of(context).size.height * 0.4,
                       ),
                       SizedBox(
                         height: 15,

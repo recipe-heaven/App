@@ -7,6 +7,7 @@ import 'package:App/pages/login/login.dart';
 import 'package:App/pages/profile/change_password.dart';
 import 'package:App/pages/register/register.dart';
 import 'package:App/pages/view_meal/view_meal.dart';
+import 'package:App/pages/view_menu/view_menu.dart';
 import 'package:App/pages/view_recipe/view_recipe.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,14 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
       page = CreateMenuPage(menu: settings.arguments);
       break;
     case RouteMenuView:
+      var mabyid = _tryGetId(queryParams);
+      if (mabyid != null) {
+        page = ViewMenuPage(mabyid);
+      } else {
+        // TODO: what shold we do when an invalid id is requested to view
+        page = ViewMenuPage(4);
+      }
+      break;
     case RouteMenuShoppingList:
       break;
     case RouteSearch:

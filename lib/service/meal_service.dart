@@ -7,36 +7,30 @@ import 'package:App/service/endpoints.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 
 import '../main.dart';
 
 class MealService {
-  static final Http _httpClient = HttpServiceClient();
+  static final HttpServiceClient _httpClient = HttpServiceClient();
 
   static Future<Meal> getExample(int recipeId) async {
     return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
   }
 
-  static Future<Meal> getFullMeal(int mealId) async {
-    try {
-      final token = await Storage().getToken();
+  static Future<CompleteMeal> getFullMeal(int mealId) async {
+    var response =
+        _httpClient.get(getFullMealEndpoint + "$mealId", addAuth: true);
 
-      var response = await _httpClient.get(getFullMealEndpoint + "$mealId",
-          headers: {
-            'Content-type': "application/json",
-            "Authorization": token
-          });
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        print(body);
-        if (body["data"] != null) {
-          return CompleteMeal.fromJson(body["data"]);
-        }
-      } else {
-        return null;
+    return response.then((value) => _handleGetFullMeal(value));
+  }
+
+  static CompleteMeal _handleGetFullMeal(Response response) {
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (body["data"] != null) {
+        return CompleteMeal.fromJson(body["data"]);
       }
-    } on IOException catch (e) {
-      print(e);
     }
     return null;
   }

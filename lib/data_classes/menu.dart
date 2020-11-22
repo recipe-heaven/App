@@ -25,20 +25,29 @@ class Menu with UserOwned {
     this.recipes = recipes ?? new List<Meal>();
   }
 
+  List<MenuDay> getMenuItems() {
+    return [...meals, ...recipes];
+  }
+
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);
   Map<String, dynamic> toJson() => _$MenuToJson(this);
+
+  @JsonKey(ignore: true)
+  static final days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
 }
 
 /// Mixin that provides a day field.
 @JsonSerializable()
 class MenuDay {
   int day;
-}
-
-abstract class Displayable {
-  String get name;
-  String get public;
-  String get update;
 }
 
 /// Menu meal is a meal that belongs to a

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:App/routes/router.dart';
+import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/service/endpoints.dart';
@@ -13,26 +14,25 @@ import '../main.dart';
 import 'http_client.dart';
 
 class RecipeService {
-  static final Http _httpClient = HttpServiceClient();
+  static final HttpServiceClient _httpClient = HttpServiceClient();
 
   static Future<Recipe> getExample(int recipeId) async {
     return Future<Recipe>.delayed(
         Duration(seconds: 3), () => TEST_DATA.recipes.first);
   }
 
-  static Future<Recipe> getFullRecipe(int recipeId) async {
-    try {
-      var response = await _httpClient.get(getFullRecipeEndpoint + "$recipeId");
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        if (body["data"] != null) {
-          return Recipe.fromJson(body["data"]);
-        }
-      } else {
-        return null;
+  static Future<CompleteRecipe> getFullRecipe(int recipeId) async {
+    var response =
+        _httpClient.get(getFullRecipeEndpoint + "$recipeId", addAuth: true);
+    return response.then((value) => _handleGetFullRecipe(value));
+  }
+
+  static CompleteRecipe _handleGetFullRecipe(Response response) {
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (body["data"] != null) {
+        return CompleteRecipe.fromJson(body["data"]);
       }
-    } on IOException catch (e) {
-      print(e);
     }
     return null;
   }

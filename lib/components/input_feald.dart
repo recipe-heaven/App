@@ -46,7 +46,7 @@ Container secondaryInputField(BuildContext context,
   );
 }
 
-inputField(BuildContext context,
+Widget inputField(BuildContext context,
     {String label,
     FormFieldSetter<String> onSaved,
     FormFieldValidator<String> validator,
@@ -97,12 +97,9 @@ Container newMealInputBox(BuildContext context,
             initialValue: initVal,
             onSaved: onSave,
             obscureText: obscureInput,
-            decoration: const InputDecoration()
-                .applyDefaults(Theme.of(context).inputDecorationTheme.copyWith(
-                    fillColor: Theme.of(context).dialogBackgroundColor))
-                .copyWith(
-                  hintText: hint,
-                ),
+            decoration: const InputDecoration().copyWith(
+              hintText: hint,
+            ),
           ),
         )
       ],
@@ -135,14 +132,11 @@ Container newTimeInputBox(BuildContext context,
             Container(
               child: inputFealdShadowWrapper(
                   child: TextFormField(
+                      style: TextStyle(color: primaryTextColor),
                       keyboardType: TextInputType.number,
                       validator: validator,
                       onSaved: onSaveHour,
-                      obscureText: obscureInput,
-                      decoration: const InputDecoration().applyDefaults(
-                          Theme.of(context).inputDecorationTheme.copyWith(
-                              fillColor:
-                                  Theme.of(context).dialogBackgroundColor)))),
+                      obscureText: obscureInput)),
               width: MediaQuery.of(context).size.width * 0.1,
             ),
             Padding(
@@ -155,14 +149,12 @@ Container newTimeInputBox(BuildContext context,
             Container(
               child: inputFealdShadowWrapper(
                 child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    validator: validator,
-                    onSaved: onSaveMin,
-                    obscureText: obscureInput,
-                    decoration: const InputDecoration().applyDefaults(
-                        Theme.of(context).inputDecorationTheme.copyWith(
-                            fillColor:
-                                Theme.of(context).dialogBackgroundColor))),
+                  style: TextStyle(color: primaryTextColor),
+                  keyboardType: TextInputType.number,
+                  validator: validator,
+                  onSaved: onSaveMin,
+                  obscureText: obscureInput,
+                ),
               ),
               width: MediaQuery.of(context).size.width * 0.1,
             ),
@@ -202,6 +194,7 @@ Container newMealIngredientInputBlock(
             Container(
               child: inputFealdShadowWrapper(
                 child: TextFormField(
+                    style: TextStyle(color: primaryTextColor),
                     keyboardType: TextInputType.number,
                     validator: validateFloatInput,
                     onSaved: onSavedAmmount,
@@ -215,13 +208,12 @@ Container newMealIngredientInputBlock(
               //decoration: shadowBoxDecoration,
               padding: const EdgeInsets.only(right: 10),
             ),
-            SizedBox(
-              width: 5,
-            ),
             Container(
               child: inputFealdShadowWrapper(
                 child: DropdownButtonFormField<IngredientUnit>(
+                    style: TextStyle(color: primaryTextColor),
                     value: ingredient.unitType,
+                    dropdownColor: elementBackgroundColor,
                     onSaved: onSavedType,
                     onChanged: onDropdownChanged,
                     isDense: true,
@@ -250,6 +242,7 @@ Container newMealIngredientInputBlock(
         Container(
           child: inputFealdShadowWrapper(
             child: TextFormField(
+                style: TextStyle(color: primaryTextColor),
                 validator: validateNotEmptyInput,
                 onSaved: onSavedComment,
                 obscureText: false,
@@ -306,6 +299,7 @@ Container newMealStepInputBlock(BuildContext context, //int ingredient_idx,
         Container(
           child: inputFealdShadowWrapper(
             child: TextFormField(
+                style: TextStyle(color: primaryTextColor),
                 initialValue: step.step,
                 validator: validateNotEmptyInput,
                 maxLines: null,

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:App/components/form/form_validators.dart';
 import 'package:App/components/navigation_scaffold.dart';
 import 'package:App/components/public_private_dialoug.dart';
+import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
@@ -375,17 +376,7 @@ class NewRecipePageState extends State<NewRecipePage> {
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
                       ),
-                      RawMaterialButton(
-                        onPressed: () => _handleSaveMeal(context),
-                        elevation: 2.0,
-                        fillColor: Theme.of(context).buttonColor,
-                        child: Text(
-                          "SAVE",
-                          style: Theme.of(context).accentTextTheme.headline3,
-                        ),
-                        padding: EdgeInsets.all(25.0),
-                        shape: CircleBorder(),
-                      ),
+                      RoundButton(() => _handleSaveMeal(context))
                     ],
                   )),
               padding: const EdgeInsets.all(10),

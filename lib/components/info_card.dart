@@ -64,7 +64,8 @@ class InfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
-              TextButton(onPressed: onPressed, child: null),
+              if (onPressed != null)
+                TextButton(onPressed: onPressed, child: null)
             ])));
   }
 

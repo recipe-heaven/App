@@ -60,6 +60,10 @@ class Menu extends Displayable {
     return [...meals, ...recipes];
   }
 
+  List<MenuDay> getMenuItems() {
+    return [...meals, ...recipes];
+  }
+
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);
   Map<String, dynamic> toJson() => _$MenuToJson(this);
 
@@ -89,6 +93,7 @@ class Menu extends Displayable {
 Displayable _menuItemFromJson(String displayable) {
   return null;
 }
+
 
 Map<String, dynamic> _menuItemToJson(Displayable json) {
   return null;

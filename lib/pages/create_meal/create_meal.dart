@@ -7,10 +7,12 @@ import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/components/time_widget.dart';
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
-import 'package:App/pages/explore/result_item.dart';
+import 'package:App/data_classes/user_owned.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/meal_service.dart';
@@ -36,8 +38,8 @@ class CreateMealPageState extends State<CreateMealPage> {
   Map<String, Recipe> _starters = Map();
   Map<String, Recipe> _mains = Map();
   Map<String, Recipe> _desserts = Map();
-  bool _isEditing = false;
 
+  bool _isEditing = false;
   String _name = "";
   bool _isPublic = false;
 
@@ -137,7 +139,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     return InfoCard(
         title: recipe.value.name,
         removeCallback: removeCardCallback,
-        background: recipe.value.getDisplayImage(),
+        background: recipe.value.displayImage,
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 
@@ -150,16 +152,15 @@ class CreateMealPageState extends State<CreateMealPage> {
             recipeType: describeEnum(mealtype),
             searchOwnedOnly: true,
             searchMenus: false,
+            multiSelect: true,
             searchMeals: false));
 
-    if (returnResult == null) return null;
-
-    Map<String, TypeSearchResult> results = returnResult;
-
-    List<int> ids = results.entries.map((e) => e.value.id).toList();
-    var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);
-
-    return createRecipeMap(recipes);
+    var results;
+    try {
+      results =
+          (returnResult as Map<String, Displayable>).cast<String, Recipe>();
+    } catch (e) {}
+    return results;
   }
 
   Widget _createCategorySelector(
@@ -214,73 +215,61 @@ class CreateMealPageState extends State<CreateMealPage> {
                   child: Column(
                     children: [
                       Container(
-                          child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: ExactAssetImage(
-                                        "assets/images/BANNER-NEW-MEAL.png"),
-                                    fit: BoxFit.cover)),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                              child: new Container(
-                                decoration: new BoxDecoration(
-                                    color: Colors.white.withOpacity(0.0)),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: ExactAssetImage(
+                                          "assets/images/BANNER-NEW-MEAL.png"),
+                                      fit: BoxFit.cover)),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                child: new Container(
+                                  decoration: new BoxDecoration(
+                                      color: Colors.white.withOpacity(0.0)),
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
-                                  child: Text(
-                                    "Put together the\nperfect meal",
-                                    style:
-                                        Theme.of(context).textTheme.headline1,
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 30.0, 0, 10),
+                                    child: Text(
+                                      "Put together the\nperfect meal",
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  child: Form(
-                                    key: _formKey,
-                                    child: secondaryInputField(context,
-                                        initialValue: _name,
-                                        label: "Meal title",
-                                        onSave: (newValue) {
-                                      _name = newValue;
-                                    },
-                                        validator: validateNotEmptyInput,
-                                        hint: "Easy every day meal"),
+                                  Spacer(),
+                                  Container(
+                                    child: Form(
+                                      key: _formKey,
+                                      child: secondaryInputField(context,
+                                          initialValue: _name,
+                                          label: "Meal title",
+                                          onSave: (newValue) {
+                                        _name = newValue;
+                                      },
+                                          validator: validateNotEmptyInput,
+                                          hint: "Easy every day meal"),
+                                    ),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 5, 30, 20),
                                   ),
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 30, 20),
-                                ),
-                              ],
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                                ],
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
                             ),
-                          ),
-                        ],
-                        alignment: Alignment.center,
-                        fit: StackFit.expand,
-                      )),
-                      Spacer(),
-                      Container(
-                        child: Form(
-                          key: _formKey,
-                          child: secondaryInputField(context,
-                              initialValue: _name,
-                              label: "Meal title", onSave: (newValue) {
-                            _name = newValue;
-                          },
-                              validator: validateNotEmptyInput,
-                              hint: "Easy every day meal"),
+                          ],
+                          alignment: Alignment.center,
+                          fit: StackFit.expand,
                         ),
-                        padding: const EdgeInsets.fromLTRB(0, 5, 30, 20),
+                        height: MediaQuery.of(context).size.height * 0.4,
                       ),
                       SizedBox(
                         height: 15,

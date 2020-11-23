@@ -97,7 +97,7 @@ class NewRecipePageState extends State<NewRecipePage> {
     if (_image != null) {
       return Image.file(_image).image;
     } else {
-      return widget._recipe.getDisplayImage().image;
+      return widget._recipe.displayImage.image;
     }
   }
 
@@ -270,7 +270,6 @@ class NewRecipePageState extends State<NewRecipePage> {
                                 validator: null,
                                 onDropdownChanged: (value) {
                                   setState(() {
-                                    print(value);
                                     ing.unitType = value;
                                   });
                                 },

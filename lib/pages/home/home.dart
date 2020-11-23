@@ -1,15 +1,11 @@
 import 'package:App/components/default_builder.dart';
-import 'package:App/components/info_card.dart';
 import 'package:App/components/navigation_scaffold.dart';
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/data_classes/menu.dart';
-import 'package:App/pages/explore/result_item.dart';
-import 'package:App/pages/home/labeled_card.dart';
 import 'package:App/pages/view_menu/menu_displayer.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/home_service.dart';
-import 'package:App/service/meal_service.dart';
-import 'package:App/service/menu_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -66,12 +62,10 @@ class _HomeState extends State<Home> {
             searchMeals: false,
             searchRecipes: false));
 
-    //Future<Menu> result = returnResult.then((value) => (value as List<Menu>).first);
-
-    return MenuService.getMenu(menuId: 4);
+    return (returnResult as Map<String, Displayable>).values.first as Menu;
   }
 
-  Future<bool> _updateCurrentMenu(Menu current) async {
+  Future<void> _updateCurrentMenu(Menu current) async {
     Menu candidate = await _startMenuSearch();
 
     if (candidate != null && candidate?.id != current?.id) {

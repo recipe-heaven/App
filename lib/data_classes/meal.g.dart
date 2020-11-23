@@ -8,7 +8,7 @@ part of 'meal.dart';
 
 Meal _$MealFromJson(Map<String, dynamic> json) {
   return Meal(
-    name: json['name'] as String,
+    name: json['name'],
     recipes: (json['recipes'] as List)
         ?.map((e) =>
             e == null ? null : Recipe.fromJson(e as Map<String, dynamic>))
@@ -76,7 +76,7 @@ SimpleMeal _$SimpleMealFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     recipes: (json['recipes'] as List)
         ?.map((e) =>
-            e == null ? null : Recipe.fromJson(e as Map<String, dynamic>))
+            e == null ? null : SimpleRecipe.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     id: json['id'] as int,
     owner: json['owner'] == null

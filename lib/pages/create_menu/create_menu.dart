@@ -8,14 +8,12 @@ import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/input_feald.dart';
 import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
+import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/menu.dart';
-import 'package:App/pages/explore/result_item.dart';
+import 'package:App/data_classes/recipe.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
-import 'package:App/service/http_client.dart';
-import 'package:App/service/meal_service.dart';
 import 'package:App/service/menu_service.dart';
-import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +37,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
 
   bool _isPublic = false;
 
-  Map<String, MenuRecipe> _recipes = Map();
+  Map<String, MenuItem> _recipes = Map();
 
-  Map<String, MenuMeal> _meals = Map();
+  Map<String, MenuItem> _meals = Map();
 
   @override
   void initState() {
@@ -51,13 +49,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
       _isEditing = true;
       _name = widget.menu.name;
       _isPublic = widget.menu.public;
-
-      for (var recipe in widget.menu.recipes) {
-        _addMenuRecipeToDisplayMap(recipe);
-      }
-
-      for (var meal in widget.menu.meals) {
-        _addMenuMealToDisplayMap(meal);
+      for (var dayItem in widget.menu.getMenuItems()) {
+        if (dayItem.item.runtimeType == Meal) {
+          _addMenuMealToDisplayMap(dayItem);
+        } else if (dayItem.item.runtimeType == Recipe) {
+          _addMenuRecipeToDisplayMap(dayItem);
+        }
       }
     }
   }
@@ -73,8 +70,8 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     if (formState.validate()) {
       formState.save();
 
-      NewMenu newMenu = NewMenu(
-          _name, _isPublic, _recipes.values.toList(), _meals.values.toList());
+      NewMenu newMenu =
+          NewMenu(_name, _isPublic, [..._meals.values, ..._recipes.values]);
 
       var res = false;
 
@@ -97,12 +94,12 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     }
   }
 
-  void _addMenuRecipeToDisplayMap(MenuRecipe menuRecipe) {
-    _recipes["${menuRecipe.recipe.id}-${menuRecipe.day}"] = menuRecipe;
+  void _addMenuRecipeToDisplayMap(MenuItem menuRecipe) {
+    _recipes["${menuRecipe.item.id}-${menuRecipe.day}"] = menuRecipe;
   }
 
-  void _addMenuMealToDisplayMap(MenuMeal menuMeal) {
-    _meals["${menuMeal.meal.id}-${menuMeal.day}"] = menuMeal;
+  void _addMenuMealToDisplayMap(MenuItem menuMeal) {
+    _meals["${menuMeal.item.id}-${menuMeal.day}"] = menuMeal;
   }
 
   /// Creates the recipe card that is displayed on the screen with information about the meal/recipe.
@@ -118,41 +115,30 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   }
 
   /// Handles the navigation to search screen, and returns selected results from
-  /// search as a map of TypeSearchResult.
-  Future<Map<String, TypeSearchResult>> _searchForRecipesAndMeals() async {
+  /// search as a map of dynamic.
+  Future<Map<String, dynamic>> _searchForRecipesAndMeals() async {
     final returnResult = await Navigator.pushNamed(context, RouteSearch,
         arguments: SearchRouteOptions(
-            returnSelected: true, searchOwnedOnly: true, searchMenus: false));
+            returnSelected: true,
+            searchOwnedOnly: true,
+            searchMenus: false,
+            multiSelect: true));
 
     if (returnResult == null) return Map();
-    return returnResult as Map<String, TypeSearchResult>;
+    return returnResult as Map<String, dynamic>;
   }
 
   /// Filters the types from the search result into their belonging category
   /// MenuRecipe / MenuMeal and adds them to their beloning map with key as
   /// id-day so that a type can be added to two different days, but only
   /// one of same for any day.
-  Future _handleSearchResult(
-      Map<String, TypeSearchResult> result, int day) async {
-    List<int> recipeIds = List();
-    List<int> mealIds = List();
-
-    for (var item in result.values) {
-      if (item.runtimeType == RecipeSearchResult) {
-        recipeIds.add(item.id);
-      } else if (item.runtimeType == MealSearchResult) {
-        mealIds.add(item.id);
+  Future _handleSearchResult(Map<String, dynamic> result, int day) async {
+    for (var resu in result.entries) {
+      if (resu.value.runtimeType == Recipe) {
+        _recipes[resu.key] = new MenuItem(resu.value, day);
+      } else if (resu.value.runtimeType == Meal) {
+        _meals[resu.key] = new MenuItem(resu.value, day);
       }
-    }
-
-    var recipes = await RecipeService().getMultipleMinifiedRecipes(recipeIds);
-    for (var recipe in recipes) {
-      _addMenuRecipeToDisplayMap(MenuRecipe(recipe, day));
-    }
-
-    var meals = await MealService().getMultipleMinifiedMeals(mealIds);
-    for (var meal in meals) {
-      _addMenuMealToDisplayMap(MenuMeal(meal, day));
     }
   }
 
@@ -174,8 +160,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
         style: Theme.of(context).accentTextTheme.headline2,
       ),
       onPressed: () async {
-        Map<String, TypeSearchResult> result =
-            await _searchForRecipesAndMeals();
+        Map<String, dynamic> result = await _searchForRecipesAndMeals();
         await _handleSearchResult(result, day);
         // Force redraw of UI
         setState(() {});
@@ -189,7 +174,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     var dayRecipes =
         _recipes.entries.where((recipe) => recipe.value.day == day).map((e) {
       return _createDisplayCard(
-          e.value.recipe.name, e.value.recipe.getDisplayImage(), [], () {
+          e.value.item.name, e.value.item.displayImage, [], () {
         setState(() {
           _recipes.remove(e.key);
         });
@@ -199,7 +184,7 @@ class CreateMenuPageState extends State<CreateMenuPage> {
     var dayMeals =
         _meals.entries.where((meal) => meal.value.day == day).map((e) {
       return _createDisplayCard(
-          e.value.meal.name, e.value.meal.getDisplayImage(), [], () {
+          e.value.item.name, e.value.item.displayImage, [], () {
         setState(() {
           _meals.remove(e.key);
         });

@@ -1,15 +1,12 @@
-import 'package:App/components/loading_spinnder.dart';
 import 'package:App/data_classes/recipe.dart';
-import 'package:App/main.dart';
-import 'package:App/routes/routes.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DisplayRecipe extends StatelessWidget {
-  final _recipe;
+  final CompleteRecipe _recipe;
   final editClickCallback;
-  DisplayRecipe(this._recipe, {VoidCallback this.editClickCallback});
+  DisplayRecipe(this._recipe, {this.editClickCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,7 @@ class DisplayRecipe extends StatelessWidget {
                   ]).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
             },
             blendMode: BlendMode.dstIn,
-            child: _recipe.getDisplayImage()),
+            child: _recipe.displayImage),
         Container(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: Column(

@@ -9,14 +9,12 @@ import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-import '../main.dart';
-
 class MealService {
   static final HttpServiceClient _httpClient = HttpServiceClient();
 
-  static Future<Meal> getExample(int recipeId) async {
-    return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
-  }
+  // static Future<Meal> getExample(int recipeId) async {
+  //   return Future<Meal>.delayed(Duration(seconds: 3), () => TEST_DATA);
+  // }
 
   static Future<CompleteMeal> getFullMeal(int mealId) async {
     var response =
@@ -89,7 +87,6 @@ class MealService {
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body["data"] != null) {
-          print(body);
           List<SimpleMeal> simpleMeals = List();
           for (var simpleMeal in body["data"]) {
             simpleMeals.add(SimpleMeal.fromJson(simpleMeal));

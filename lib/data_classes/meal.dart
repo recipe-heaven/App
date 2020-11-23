@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:App/data_classes/displayable.dart';
+import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/data_classes/user.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -11,19 +13,11 @@ import 'food_image.dart';
 part 'meal.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Meal with UserOwned {
-  String name = "";
-
-  Image getDisplayImage() {
-    if (recipes == null || recipes?.length == 0) {
-      return FoodImage().defaultImage;
-    }
-    return recipes.first.getDisplayImage();
-  }
-
+class Meal extends Displayable {
   List<Recipe> recipes;
 
-  Meal({this.name, List<Recipe> recipes, int id, User owner, bool public}) {
+  Meal({name, List<Recipe> recipes, int id, User owner, bool public}) {
+    this.name = name;
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
@@ -35,6 +29,18 @@ class Meal with UserOwned {
 
   /// Convert this object to json Map
   Map<String, dynamic> toJson() => _$MealToJson(this);
+
+  @override
+  Image get displayImage {
+    if (recipes == null || recipes?.length == 0) {
+      return FoodImage().defaultImage;
+    }
+    return recipes.first.displayImage;
+  }
+
+  List<MealType> get reicpeTypes {
+    return recipes.map((e) => e.type).toList();
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -64,7 +70,11 @@ class CompleteMeal extends Meal {
 @JsonSerializable(explicitToJson: true)
 class SimpleMeal extends Meal {
   SimpleMeal(
-      {String name, List<Recipe> recipes, int id, User owner, bool public})
+      {String name,
+      List<SimpleRecipe> recipes,
+      int id,
+      User owner,
+      bool public})
       : super(
           name: name,
           id: id,

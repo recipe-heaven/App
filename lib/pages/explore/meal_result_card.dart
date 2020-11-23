@@ -45,10 +45,10 @@ List<Widget> getRecipeTypes(List<MealType> types, BuildContext context) {
         starters++;
         break;
       case MealType.main:
-        starters++;
+        main++;
         break;
       case MealType.dessert:
-        starters++;
+        dessert++;
         break;
       default:
     }

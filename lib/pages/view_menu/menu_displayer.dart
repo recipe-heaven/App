@@ -1,44 +1,39 @@
 import 'package:App/components/info_card.dart';
-import 'package:App/components/loading_spinnder.dart';
 import 'package:App/components/time_widget.dart';
+import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
-import 'package:App/main.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
-import 'package:App/theme/themes.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DisplayMenu extends StatelessWidget {
   final Menu _menu;
   final editClickCallback;
-  DisplayMenu(this._menu, {VoidCallback this.editClickCallback});
+  DisplayMenu(this._menu, {this.editClickCallback});
 
-  Widget _makeDisplayCard(MenuDay menuDay, BuildContext context) {
-    if (menuDay.runtimeType == MenuMeal) {
-      var menuMeal = menuDay as MenuMeal;
+  Widget _makeDisplayCard(MenuItem menuItem, BuildContext context) {
+    if (menuItem.item.runtimeType == Meal) {
+      var menuMeal = menuItem.item as Meal;
 
       return InfoCard(
-        title: menuMeal.meal.name,
-        background: menuMeal.meal.getDisplayImage(),
+        title: menuMeal.name,
+        background: menuMeal.displayImage,
         onPressed: () => Navigator.pushNamed(context,
-            pathWtihParameters(RouteMealView, {"id": "${menuMeal.meal.id}"})),
+            pathWtihParameters(RouteMealView, {"id": "${menuMeal.id}"})),
       );
-    } else if (menuDay.runtimeType == MenuRecipe) {
-      var menuRecipe = menuDay as MenuRecipe;
+    } else if (menuItem.item.runtimeType == Recipe) {
+      var menuRecipe = menuItem.item as Recipe;
       return InfoCard(
-        title: menuRecipe.recipe.name,
-        background: menuRecipe.recipe.getDisplayImage(),
+        title: menuRecipe.name,
+        background: menuRecipe.displayImage,
         children: [
           TimeWidget(
-            timeInSeconds: menuRecipe.recipe.cookTime,
+            timeInSeconds: menuRecipe.cookTime,
           )
         ],
-        onPressed: () => Navigator.pushNamed(
-            context,
-            pathWtihParameters(
-                RouteRecipeView, {"id": "${menuRecipe.recipe.id}"})),
+        onPressed: () => Navigator.pushNamed(context,
+            pathWtihParameters(RouteRecipeView, {"id": "${menuRecipe.id}"})),
       );
     } else {
       // todo: handle

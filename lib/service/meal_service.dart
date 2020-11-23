@@ -89,7 +89,6 @@ class MealService {
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body["data"] != null) {
-          print(body);
           List<SimpleMeal> simpleMeals = List();
           for (var simpleMeal in body["data"]) {
             simpleMeals.add(SimpleMeal.fromJson(simpleMeal));

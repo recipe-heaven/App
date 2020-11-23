@@ -30,6 +30,6 @@ class RecipeSearchResultCard extends StatelessWidget {
       ),
       Text(recipe.name, style: TextStyle(fontSize: 16)),
       TimeWidget(timeInSeconds: recipe.cookTime)
-    ], background: recipe.getDisplayImage(), selected: selected);
+    ], background: recipe.displayImage, selected: selected);
   }
 }

@@ -1,31 +1,62 @@
 import 'dart:convert';
 
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/data_classes/user.dart';
+import 'package:App/data_classes/user_owned.dart';
+import 'package:App/helpers/consts.dart';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'meal.dart';
 
 part 'menu.g.dart';
 
+List<MenuItem> _menuItemsFromJson(List<dynamic> k) {
+  List<MenuItem> items = List();
+  try {
+    for (var item in k) {
+      if (item[meal_type_name] != null) {
+        items.add(
+            new MenuItem(Meal.fromJson(item[meal_type_name]), item["day"]));
+      } else if (item[recipe_type_name] != null) {
+        items.add(
+            new MenuItem(Recipe.fromJson(item[recipe_type_name]), item["day"]));
+      }
+    }
+  } on Exception {}
+  return items;
+}
+
+mixin MenuDay {
+  int day;
+}
+
 @JsonSerializable(explicitToJson: true)
-class Menu with UserOwned {
-  String name;
+class Menu extends Displayable {
+  @JsonKey(fromJson: _menuItemsFromJson)
+  List<MenuItem> meals;
 
-  List<MenuMeal> meals;
+  @JsonKey(fromJson: _menuItemsFromJson)
+  List<MenuItem> recipes;
 
-  List<MenuRecipe> recipes;
-
-  Menu({this.name, this.meals, this.recipes, int id, User owner, bool public}) {
+  Menu(
+      {String name,
+      List<MenuItem> meals,
+      List<MenuItem> recipes,
+      int id,
+      User owner,
+      bool public}) {
+    this.meals = meals ?? [];
+    this.recipes = recipes ?? [];
     this.owner = owner;
     this.public = public ?? false;
     this.id = id;
     this.name = name ?? "";
-    this.meals = meals ?? new List<Meal>();
-    this.recipes = recipes ?? new List<Meal>();
   }
 
-  List<MenuDay> getMenuItems() {
+  @JsonKey(ignore: true)
+  List<MenuItem> getMenuItems() {
     return [...meals, ...recipes];
   }
 
@@ -42,78 +73,76 @@ class Menu with UserOwned {
     "Saturday",
     "Sunday"
   ];
+
+  @override
+  Image get displayImage {
+    return recipes.first.item.displayImage;
+  }
+
+  List<int> get daysInMenu {
+    return this.getMenuItems().map((element) {
+      return element.day;
+    }).toList();
+  }
 }
 
-/// Mixin that provides a day field.
+Displayable _menuItemFromJson(String displayable) {
+  return null;
+}
+
+Map<String, dynamic> _menuItemToJson(Displayable json) {
+  return null;
+}
+
 @JsonSerializable()
-class MenuDay {
-  int day;
-}
+class MenuItem with MenuDay {
+  @JsonKey(toJson: _menuItemToJson, fromJson: _menuItemFromJson)
+  Displayable item;
 
-/// Menu meal is a meal that belongs to a
-/// menu for a particular day in the menu.
-@JsonSerializable(explicitToJson: true)
-class MenuMeal with MenuDay {
-  SimpleMeal meal;
-
-  MenuMeal(this.meal, int day) {
+  MenuItem(this.item, day) {
     this.day = day;
   }
 
-  factory MenuMeal.fromJson(Map<String, dynamic> json) =>
-      _$MenuMealFromJson(json);
-  Map<String, dynamic> toJson() => _$MenuMealToJson(this);
+  factory MenuItem.fromJson(Map<String, dynamic> json) =>
+      _$MenuItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MenuItemToJson(this);
 }
 
-/// Menu recipe is a recipe that belongs to a
-/// menu for a particular day in the menu.
-@JsonSerializable(explicitToJson: true)
-class MenuRecipe with MenuDay {
-  Recipe recipe;
-
-  MenuRecipe(this.recipe, int day) {
-    this.day = day;
+/// Convert the menuItems to structure that matches the server enpoint
+/// for updating/creating menus.
+List<dynamic> _menuItemsToJson(List<MenuItem> menuItems) {
+  List<dynamic> items = List();
+  for (var menuItem in menuItems) {
+    items.add({
+      "type": menuItem.item.runtimeType == Recipe ? "reicpe" : "meal",
+      "menuDayItem": {"id": menuItem.item.id},
+      "day": menuItem.day
+    });
   }
-
-  factory MenuRecipe.fromJson(Map<String, dynamic> json) =>
-      _$MenuRecipeFromJson(json);
-  Map<String, dynamic> toJson() => _$MenuRecipeToJson(this);
+  return items;
 }
 
 /// A represents a new menu object, which can be serialized to json for
 /// creating a new or updating a menu
 @JsonSerializable(explicitToJson: true)
-class NewMenu {
-  int _id;
-
+class NewMenu extends UserOwned {
   String _name;
 
-  bool _public = false;
+  List<MenuItem> _menuItems = new List();
 
-  List<MenuRecipe> _recipes = new List();
-
-  List<MenuMeal> _meals = new List();
-
-  NewMenu(String name, bool public, List<MenuRecipe> recipes,
-      List<MenuMeal> meals) {
+  NewMenu(String name, bool public, List<MenuItem> items) {
     this._name = name;
-    this._public = public;
-    this._recipes = recipes;
-    this._meals = meals;
+    this.public = public;
+    this._menuItems = items;
   }
 
   String get name => _name;
 
-  bool get public => _public;
+  @JsonKey(name: "menuItems", toJson: _menuItemsToJson)
+  List<MenuItem> get items => _menuItems;
 
-  List<MenuRecipe> get recipes => _recipes;
+  String toJsonString() => jsonEncode(toJson());
 
-  List<MenuMeal> get meals => _meals;
-
-  int get id => _id;
-
-  set id(id) => _id = id;
-
-  String toJsonString() => jsonEncode(_$NewMenuToJson(this));
   Map<String, dynamic> toJson() => _$NewMenuToJson(this);
 }

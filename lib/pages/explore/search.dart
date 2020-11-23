@@ -3,6 +3,7 @@ import 'package:App/components/input_feald.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/helpers/consts.dart';
 import 'package:App/pages/explore/filter_buttons_widget.dart';
 import 'package:App/pages/explore/meal_result_card.dart';
 import 'package:App/pages/explore/menu_result_card.dart';
@@ -21,10 +22,6 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Disable navigation if search is from Create(menu, meal) page
-
-const meal_type_name = "meal";
-const recipe_type_name = "recipe";
-const menu_type_name = "menu";
 
 class Search extends StatefulWidget {
   final SearchRouteOptions options;
@@ -116,7 +113,6 @@ class _SearchState extends State<Search> {
                       semanticLabel: 'List icon',
                     ),
                     onPressed: () {
-                      // TODO: Convert to type of return
                       Navigator.pop(context, searchState.selected);
                     },
                   )
@@ -158,17 +154,17 @@ class _SearchState extends State<Search> {
       String type;
 
       if (item.runtimeType == Recipe) {
-        type = "recipe";
+        type = recipe_type_name;
         clickedRoute = RouteRecipeView;
         isSelected = state.selectedContains(type, item);
         card = RecipeSearchResultCard(item, context, selected: isSelected);
       } else if (item.runtimeType == Meal) {
-        type = "meal";
+        type = meal_type_name;
         clickedRoute = RouteMealView;
         isSelected = state.selectedContains(type, item);
         card = MealSearchResultCard(item, context, selected: isSelected);
       } else if (item.runtimeType == Menu) {
-        type = "menu";
+        type = menu_type_name;
         clickedRoute = RouteMenuNew;
         isSelected = state.selectedContains(type, item);
         card = MenuSearchResultCard(item, context, selected: isSelected);
@@ -181,7 +177,11 @@ class _SearchState extends State<Search> {
                 if (isSelected) {
                   state.removeSelected(type, item);
                 } else {
-                  state.addSelected(type, item);
+                  if (!state.selectMultiple) {
+                    state.clearAndAddSelected(type, item);
+                  } else {
+                    state.addSelected(type, item);
+                  }
                 }
               } else {
                 Navigator.pushNamed(

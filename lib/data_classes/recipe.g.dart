@@ -97,6 +97,44 @@ Map<String, dynamic> _$CompleteRecipeToJson(CompleteRecipe instance) {
   return val;
 }
 
+SimpleRecipe _$SimpleRecipeFromJson(Map<String, dynamic> json) {
+  return SimpleRecipe(
+    name: json['name'] as String,
+    description: json['description'] as String,
+    cookTime: json['cookTime'] as int,
+    type: _mealTypeFromJson(json['type'] as String),
+    image: json['image'] == null
+        ? null
+        : FoodImage.fromJson(json['image'] as Map<String, dynamic>),
+    id: json['id'] as int,
+    owner: json['owner'] == null
+        ? null
+        : User.fromJson(json['owner'] as Map<String, dynamic>),
+    public: json['public'] as bool,
+  )..updated = json['updated'] as int;
+}
+
+Map<String, dynamic> _$SimpleRecipeToJson(SimpleRecipe instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('owner', instance.owner?.toJson());
+  writeNotNull('public', instance.public);
+  writeNotNull('name', instance.name);
+  writeNotNull('description', instance.description);
+  writeNotNull('cookTime', instance.cookTime);
+  writeNotNull('type', _mealTypeToJson(instance.type));
+  writeNotNull('image', instance.image?.toJson());
+  writeNotNull('updated', instance.updated);
+  return val;
+}
+
 Tag _$TagFromJson(Map<String, dynamic> json) {
   return Tag(
     json['tagName'] as String,

@@ -1,7 +1,6 @@
-import 'dart:collection';
-import 'dart:convert';
 import 'dart:math';
 
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/user.dart';
 import 'package:App/helpers/enumHelper.dart';
@@ -17,7 +16,6 @@ List<RecipeStep> _stepsFromJson(String json) {
       .map((e) => RecipeStep(step: e))
       //   .where((element) => element.runtimeType == RecipeStep)
       .toList();
-  print(a.runtimeType);
   return a;
 }
 
@@ -43,17 +41,9 @@ String _mealTypeToJson(MealType mealType) {
 
 var _random = Random(928130938120983);
 
-mixin UserOwned {
-  int id;
-  User owner = null;
-  bool public = false;
-}
-
 // Måltid
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class Recipe with UserOwned {
-  String name = "";
-
+class Recipe extends Displayable {
   String description = "";
   int cookTime = 0;
 
@@ -64,16 +54,8 @@ class Recipe with UserOwned {
 
   int updated;
 
-  Image getDisplayImage() {
-    return (image == null)
-        ? FoodImage().defaultImage
-        : Image.network(
-            image.getImageUrl(),
-          );
-  }
-
   Recipe(
-      {this.name,
+      {String name,
       this.description,
       this.cookTime,
       this.image,
@@ -82,6 +64,7 @@ class Recipe with UserOwned {
       int id,
       User owner,
       bool public}) {
+    this.name = name;
     this.id = id;
     this.owner = owner;
     this.public = public ?? false;
@@ -90,6 +73,15 @@ class Recipe with UserOwned {
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
   Map<String, dynamic> toJson() => _$RecipeToJson(this);
+
+  @override
+  Image get displayImage {
+    return (image == null)
+        ? FoodImage().defaultImage
+        : Image.network(
+            image.getImageUrl(),
+          );
+  }
 }
 
 /// A complete recipe includes all details and fields for displaying a recipe
@@ -124,9 +116,9 @@ class CompleteRecipe extends Recipe {
             description: description,
             cookTime: cookTime,
             owner: owner,
-            image: image)
-  // : super(id: id, owner: owner, public: public ?? false)
-  {
+            image: image,
+            public: public,
+            type: type) {
     this.tags = tags ?? [];
     this.cookingSteps = cookingSteps ?? [];
     this.recommendedDrinks = recommendedDrinks ?? [];
@@ -139,9 +131,35 @@ class CompleteRecipe extends Recipe {
   Map<String, dynamic> toJson() => _$CompleteRecipeToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true, includeIfNull: false)
+class SimpleRecipe extends Recipe {
+  SimpleRecipe(
+      {String name,
+      String description,
+      int cookTime,
+      MealType type,
+      FoodImage image,
+      int id,
+      User owner,
+      bool public})
+      : super(
+            id: id,
+            name: name,
+            description: description,
+            type: type,
+            cookTime: cookTime,
+            owner: owner,
+            public: public,
+            image: image);
+
+  factory SimpleRecipe.fromJson(Map<String, dynamic> json) =>
+      _$SimpleRecipeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SimpleRecipeToJson(this);
+}
+
 class RecipeDrink {
   Key key;
-
   String drink = "";
   RecipeDrink({String drink})
       : this.key = Key(_random.nextDouble().toString()),

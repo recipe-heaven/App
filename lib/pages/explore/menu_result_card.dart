@@ -14,28 +14,22 @@ class MenuSearchResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchResultCard(
+    return SearchResultCard(children: [
+      Row(
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.menu_book,
-                color: primaryTextColor,
-                size: 14.0,
-                semanticLabel: 'Text to announce in accessibility modes',
-              ),
-              SizedBox(width: 2),
-              Text("Menu", style: Theme.of(context).accentTextTheme.headline4)
-            ],
+          Icon(
+            Icons.menu_book,
+            color: primaryTextColor,
+            size: 14.0,
+            semanticLabel: 'Menu icon',
           ),
-          Text(menu.name, style: TextStyle(fontSize: 16)),
-          // TODO: Add days from menu
-          Row(children: getDays([1], context))
-          // TODO ADD IMAGE FROM MENU
-          // menu.getDisplayImage()
+          SizedBox(width: 2),
+          Text("Menu", style: Theme.of(context).accentTextTheme.headline4)
         ],
-        background: Image.asset("assets/images/BANNER-NEW-MEAL.png"),
-        selected: selected);
+      ),
+      Text(menu.name, style: TextStyle(fontSize: 16)),
+      Row(children: getDays(menu.daysInMenu, context))
+    ], background: menu.displayImage, selected: selected);
   }
 }
 
@@ -43,13 +37,13 @@ List<Widget> getDays(List<int> days, BuildContext context) {
   List<Widget> dayTextWidgets = List();
   String dayString = "";
   days.forEach((day) {
-    if (day == 1) dayString = "Mon";
-    if (day == 2) dayString = "Tue";
-    if (day == 3) dayString = "Wed";
-    if (day == 4) dayString = "Tue";
-    if (day == 5) dayString = "Fri";
-    if (day == 6) dayString = "Sat";
-    if (day == 7) dayString = "Sun";
+    if (day == 0) dayString = "Mon";
+    if (day == 1) dayString = "Tue";
+    if (day == 2) dayString = "Wed";
+    if (day == 3) dayString = "Tue";
+    if (day == 4) dayString = "Fri";
+    if (day == 5) dayString = "Sat";
+    if (day == 6) dayString = "Sun";
     dayTextWidgets.add(
         Text(dayString, style: Theme.of(context).accentTextTheme.headline4));
     dayTextWidgets.add(SizedBox(width: 5));

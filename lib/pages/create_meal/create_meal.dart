@@ -7,9 +7,12 @@ import 'package:App/components/public_private_dialoug.dart';
 import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/components/time_widget.dart';
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/data_classes/meal.dart';
+import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/data_classes/user_owned.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:App/service/meal_service.dart';
@@ -35,8 +38,8 @@ class CreateMealPageState extends State<CreateMealPage> {
   Map<String, Recipe> _starters = Map();
   Map<String, Recipe> _mains = Map();
   Map<String, Recipe> _desserts = Map();
-  bool _isEditing = false;
 
+  bool _isEditing = false;
   String _name = "";
   bool _isPublic = false;
 
@@ -136,7 +139,7 @@ class CreateMealPageState extends State<CreateMealPage> {
     return InfoCard(
         title: recipe.value.name,
         removeCallback: removeCardCallback,
-        background: recipe.value.getDisplayImage(),
+        background: recipe.value.displayImage,
         children: [TimeWidget(timeInSeconds: recipe.value.cookTime)]);
   }
 
@@ -149,16 +152,15 @@ class CreateMealPageState extends State<CreateMealPage> {
             recipeType: describeEnum(mealtype),
             searchOwnedOnly: true,
             searchMenus: false,
+            multiSelect: true,
             searchMeals: false));
 
-    if (returnResult == null) return null;
-
-    Map<String, dynamic> results = returnResult;
-
-    List<int> ids = results.entries.map((e) => e.value.id).toList();
-    var recipes = await RecipeService().getMultipleMinifiedRecipes(ids);
-
-    return createRecipeMap(recipes);
+    var results;
+    try {
+      results =
+          (returnResult as Map<String, Displayable>).cast<String, Recipe>();
+    } catch (e) {}
+    return results;
   }
 
   Widget _createCategorySelector(

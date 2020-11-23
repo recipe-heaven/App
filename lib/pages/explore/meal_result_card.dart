@@ -16,43 +16,44 @@ class MealSearchResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchResultCard(
+    return SearchResultCard(children: [
+      Row(
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.restaurant,
-                color: primaryTextColor,
-                size: 14.0,
-                semanticLabel: 'Recipe icon',
-              ),
-              SizedBox(width: 2),
-              Text("Meal", style: Theme.of(context).accentTextTheme.headline4),
-            ],
+          Icon(
+            Icons.restaurant,
+            color: primaryTextColor,
+            size: 14.0,
+            semanticLabel: 'Recipe icon',
           ),
-          Text(meal.name, style: TextStyle(fontSize: 16)),
-          // TODO Add recipes for resolving of type
-          ...getRecipeTypes([], context)
+          SizedBox(width: 2),
+          Text("Meal", style: Theme.of(context).accentTextTheme.headline4),
         ],
-        background: Image.asset("assets/images/BANNER-NEW-MEAL.png"),
-        selected: selected);
+      ),
+      Text(meal.name, style: TextStyle(fontSize: 16)),
+      ...getRecipeTypes(meal.reicpeTypes, context)
+    ], background: meal.displayImage, selected: selected);
   }
 }
 
-List<Widget> getRecipeTypes(List<String> types, BuildContext context) {
+List<Widget> getRecipeTypes(List<MealType> types, BuildContext context) {
   int starters = 0;
   int main = 0;
   int dessert = 0;
-
   for (var type in types) {
-    if (type == getStringFromEnum(MealType.starter)) {
-      starters++;
-    } else if (type == getStringFromEnum(MealType.main)) {
-      main++;
-    } else if (type == getStringFromEnum(MealType.dessert)) {
-      dessert++;
+    switch (type) {
+      case MealType.starter:
+        starters++;
+        break;
+      case MealType.main:
+        starters++;
+        break;
+      case MealType.dessert:
+        starters++;
+        break;
+      default:
     }
   }
+
   getText(int count, String text) =>
       Text("$count $text", style: Theme.of(context).accentTextTheme.headline4);
 

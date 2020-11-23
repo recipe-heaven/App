@@ -9,8 +9,6 @@ import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-import '../main.dart';
-
 class MealService {
   static final HttpServiceClient _httpClient = HttpServiceClient();
 

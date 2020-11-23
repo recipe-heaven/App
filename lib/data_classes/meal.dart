@@ -37,6 +37,10 @@ class Meal extends Displayable {
     }
     return recipes.first.displayImage;
   }
+
+  List<MealType> get reicpeTypes {
+    return recipes.map((e) => e.type).toList();
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

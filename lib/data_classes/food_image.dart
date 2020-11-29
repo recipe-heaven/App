@@ -10,7 +10,8 @@ part 'food_image.g.dart';
 @JsonSerializable(explicitToJson: true)
 class FoodImage {
   final defaultImage = Image.network(
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1599px-RedDot_Burger.jpg");
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/RedDot_Burger.jpg/1599px-RedDot_Burger.jpg",
+      fit: BoxFit.cover);
   int id;
   String name;
   String mimeType;

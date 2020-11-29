@@ -20,8 +20,25 @@ class ViewMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _menuFuture.timeout(Duration(seconds: 2));
     return ScaffoldWithNavigation(
-      body: defaultBuilder<Menu>(_menuFuture,
-          (Menu menu) => SingleChildScrollView(child: DisplayMenu(menu))),
+      body: defaultBuilder<Menu>(
+          _menuFuture,
+          (Menu menu) => SingleChildScrollView(
+                  child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Menu Name:",
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                  Text(
+                    menu?.name,
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  DisplayMenu(menu)
+                ],
+              ))),
     );
   }
 }

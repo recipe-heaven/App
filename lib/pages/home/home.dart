@@ -89,6 +89,17 @@ class _HomeState extends State<Home> {
   Widget _displayMenu(Menu menu) {
     return Column(
       children: [
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          "Current Menu:",
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        Text(
+          menu.name,
+          style: Theme.of(context).textTheme.headline1,
+        ),
         DisplayMenu(menu),
         MaterialButton(
             onPressed: () => _updateCurrentMenu(menu),

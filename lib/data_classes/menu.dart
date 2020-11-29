@@ -55,12 +55,7 @@ class Menu extends Displayable {
     this.name = name ?? "";
   }
 
-  @JsonKey(ignore: true)
   List<MenuItem> getMenuItems() {
-    return [...meals, ...recipes];
-  }
-
-  List<MenuDay> getMenuItems() {
     return [...meals, ...recipes];
   }
 
@@ -93,7 +88,6 @@ class Menu extends Displayable {
 Displayable _menuItemFromJson(String displayable) {
   return null;
 }
-
 
 Map<String, dynamic> _menuItemToJson(Displayable json) {
   return null;

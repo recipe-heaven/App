@@ -165,7 +165,7 @@ class _SearchState extends State<Search> {
         card = MealSearchResultCard(item, context, selected: isSelected);
       } else if (item.runtimeType == Menu) {
         type = menu_type_name;
-        clickedRoute = RouteMenuNew;
+        clickedRoute = RouteMenuView;
         isSelected = state.selectedContains(type, item);
         card = MenuSearchResultCard(item, context, selected: isSelected);
       }

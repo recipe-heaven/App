@@ -3,62 +3,57 @@ import 'package:App/routes/routes.dart' as route_names;
 import 'package:App/app_state.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/user_service.dart';
-
-import 'package:App/app_state.dart';
-import 'package:App/routes/router.dart';
-import 'package:App/routes/routes.dart' as route_names;
-import 'package:App/service/http_client.dart';
-import 'package:App/service/user_service.dart';
 import 'package:App/theme/themes.dart' as app_themes;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:App/theme/themes.dart' as app_themes;
-import 'package:provider/provider.dart';
-import 'data_classes/meal.dart';
-import 'data_classes/menu.dart';
-import 'data_classes/recipe.dart';
+var _userService = UserService(HttpServiceClient());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  var loggedinUser = await _userService.getCurrentUser();
+
   runApp(ChangeNotifierProvider(
-    create: (context) => AppState(),
-    child: MyApp(),
+    create: (context) => AppState(loggedinUser),
+    child: App(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    _StateSetup(context);
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: app_themes.mainTheme.copyWith(), //ThemeData.dark(),
-        // for easy testing of pr
-        initialRoute: route_names.RouteHome,
-        onGenerateRoute: (settings) => router(context, settings));
-  }
+class App extends StatefulWidget {
+  _App createState() => _App();
 }
 
-/// Provides facilities for setting application state and setup required when
-/// the application starts.
-class _StateSetup {
-  BuildContext _context;
-
+class _App extends State<App> with WidgetsBindingObserver {
   AppState _appState;
-  _StateSetup(this._context) {
-    _appState = Provider.of<AppState>(_context, listen: false);
-    _initState();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  void _initState() {
-    _setInitialUserState();
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
-  /// Will try to get user from stored token, and set the user state, by fetching
-  /// the user from the server.
-  void _setInitialUserState() async {
-    var userService = UserService(HttpServiceClient());
-    _appState.user = await userService.getCurrentUser();
+  /// Event hook for when application state changes; close, active, resume...
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      _appState.user = await _userService.getCurrentUser();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _appState = Provider.of<AppState>(context);
+    return MaterialApp(
+        title: 'Recipe Heaven',
+        theme: app_themes.mainTheme.copyWith(),
+        initialRoute: route_names.RouteHome,
+        onGenerateRoute: (settings) => router(context, settings));
   }
 }
 

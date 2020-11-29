@@ -20,7 +20,8 @@ class ViewMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _menuFuture.timeout(Duration(seconds: 2));
     return ScaffoldWithNavigation(
-      body: defaultBuilder<Menu>(_menuFuture, (Menu menu) => DisplayMenu(menu)),
+      body: defaultBuilder<Menu>(_menuFuture,
+          (Menu menu) => SingleChildScrollView(child: DisplayMenu(menu))),
     );
   }
 }

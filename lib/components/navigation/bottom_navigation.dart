@@ -17,8 +17,7 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteMenuNew);
       }
       if (i == 2) {
-        Navigator.pushNamed(
-            context, pathWtihParameters(RouteMealView, {"id": "1"}));
+        Navigator.pushNamed(context, RouteMealNew);
       }
       if (i == 3) {
         navigateCallback(false);

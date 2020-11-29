@@ -37,34 +37,38 @@ Drawer getDrawer(BuildContext context) {
         createDrawerItem("Search", RouteSearch, Icons.search, context),
         // TODO MAKE CONDITIONAL
         createDrawerItem("Profile", RouteUserChangePass, Icons.person, context),
-        // TODO REMOVE LATER :D
-        createDrawerItem("-----DEV BELOW HERE------", RouteUserChangePass,
-            Icons.dangerous, context),
-        createDrawerItem("New meal", RouteMealNew, Icons.adb, context),
-        createDrawerItem("New recipe", RouteRecipeNew, Icons.adb, context),
-        createDrawerItem("New menu", RouteMenuNew, Icons.adb, context),
-        createDrawerItem("Login", RouteUserLogin, Icons.adb, context),
-        createDrawerItem("Create user", RouteUserNew, Icons.adb, context),
-        ListTile(
-            leading: Icon(
-              Icons.send,
-              color: primaryTextColor,
-            ),
-            title: Text("DEBUG LOGIN"),
-            onTap: () {
-              _authServ.loginEmailPassword(
-                  email: 'mail@mail.com', password: '123456789');
-            }),
-        ListTile(
-            leading: Icon(
-              Icons.send,
-              color: primaryTextColor,
-            ),
-            title: Text("view menu 4"),
-            onTap: () {
-              Navigator.pushNamed(
-                  context, pathWtihParameters(RouteMenuView, {"id": "4"}));
-            }),
+
+        if (true)
+          // TODO REMOVE LATER :D
+          ...[
+          createDrawerItem("-----DEV BELOW HERE------", RouteUserChangePass,
+              Icons.dangerous, context),
+          createDrawerItem("New meal", RouteMealNew, Icons.adb, context),
+          createDrawerItem("New recipe", RouteRecipeNew, Icons.adb, context),
+          createDrawerItem("New menu", RouteMenuNew, Icons.adb, context),
+          createDrawerItem("Login", RouteUserLogin, Icons.adb, context),
+          createDrawerItem("Create user", RouteUserNew, Icons.adb, context),
+          ListTile(
+              leading: Icon(
+                Icons.send,
+                color: primaryTextColor,
+              ),
+              title: Text("DEBUG LOGIN"),
+              onTap: () {
+                _authServ.loginEmailPassword(
+                    email: 'mail@mail.com', password: '123456789');
+              }),
+          ListTile(
+              leading: Icon(
+                Icons.send,
+                color: primaryTextColor,
+              ),
+              title: Text("view menu 4"),
+              onTap: () {
+                Navigator.pushNamed(
+                    context, pathWtihParameters(RouteMenuView, {"id": "4"}));
+              }),
+        ]
       ],
     ),
   ));

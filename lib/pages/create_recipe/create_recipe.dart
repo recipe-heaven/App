@@ -104,9 +104,9 @@ class NewRecipePageState extends State<NewRecipePage> {
   Material _selectRecipeTypeDropdowm() {
     return inputFealdShadowWrapper(
       child: Container(
-        color: elementBackgroundColor,
+        color: Colors.transparent,
 
-        child: DropdownButton<MealType>(
+        child: DropdownButtonFormField<MealType>(
           style: Theme.of(context).textTheme.bodyText1,
           dropdownColor: elementBackgroundColor,
           isExpanded: true,
@@ -127,10 +127,48 @@ class NewRecipePageState extends State<NewRecipePage> {
                 ),
               ),
           ],
+          decoration: const InputDecoration().applyDefaults(Theme.of(context)
+              .inputDecorationTheme
+              .copyWith(fillColor: Theme.of(context).dialogBackgroundColor)),
         ),
+
         //width: MediaQuery.of(context).size.width * ,
       ),
     );
+  }
+
+  Widget _wrapWithBlur(Widget child) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+      child: new Container(
+        decoration: new BoxDecoration(color: Colors.white.withOpacity(0.0)),
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: double.infinity,
+        child: child,
+      ),
+    );
+  }
+
+  Widget _imagePickingSquere() {
+    bool newPick = _image == null;
+
+    Widget buttonItems = Container(
+      decoration: new BoxDecoration(color: Colors.white.withOpacity(0.0)),
+      height: MediaQuery.of(context).size.height * 0.3,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.camera),
+          Text(
+            (newPick) ? "ADD PHOTO" : "CHANGE PHOTO",
+            style: Theme.of(context).textTheme.bodyText1,
+          )
+        ],
+      ),
+    );
+
+    return (newPick) ? _wrapWithBlur(buttonItems) : buttonItems;
   }
 
   @override
@@ -159,25 +197,7 @@ class NewRecipePageState extends State<NewRecipePage> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: _getDisplayImage(), fit: BoxFit.cover)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                      child: new Container(
-                        decoration: new BoxDecoration(
-                            color: Colors.white.withOpacity(0.0)),
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.camera),
-                            Text(
-                              "ADD PHOTO",
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    child: _imagePickingSquere(),
                   )),
               padding: const EdgeInsets.all(0),
             ),
@@ -371,6 +391,7 @@ class NewRecipePageState extends State<NewRecipePage> {
                           DrinksSelector(widget._recipe.recommendedDrinks),
                           SizedBox(
                             height: 20,
+                            width: double.infinity,
                           ),
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,

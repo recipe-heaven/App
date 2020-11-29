@@ -78,9 +78,7 @@ class Recipe extends Displayable {
   Image get displayImage {
     return (image == null)
         ? FoodImage().defaultImage
-        : Image.network(
-            image.getImageUrl(),
-          );
+        : Image.network(image.getImageUrl(), fit: BoxFit.cover);
   }
 }
 

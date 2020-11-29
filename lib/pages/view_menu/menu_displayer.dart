@@ -42,20 +42,36 @@ class DisplayMenu extends StatelessWidget {
   }
 
   Widget _makeDayDisplay(int day, BuildContext context) {
+    List<MenuItem> menuItems =
+        _menu.getMenuItems().where((element) => element.day == day).toList();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(Menu.days[day]),
-        for (MenuDay dayItem
-            in _menu.getMenuItems().where((element) => element.day == day))
+        if (menuItems.isNotEmpty) ...[
+          SizedBox(
+            height: 20,
+            width: double.infinity,
+          ),
+          Text(Menu.days[day], style: Theme.of(context).textTheme.headline2),
+        ],
+        for (MenuDay dayItem in menuItems) ...[
           _makeDisplayCard(dayItem, context),
+        ],
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    _menu.getMenuItems().forEach((element) {
+      print("${element.item.name} ${element.day}");
+    });
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 20,
+        ),
         for (int day = 0; day < 7; day++) _makeDayDisplay(day, context)
       ],
     );

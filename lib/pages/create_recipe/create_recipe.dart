@@ -430,8 +430,8 @@ class NewRecipePageState extends State<NewRecipePage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
-        body: defaultBuilder<Recipe>(
-            widget._future, (Recipe meal) => _showCreateRecipe(meal, context)));
+        body: defaultBuilder<Recipe>(widget._future,
+            (Recipe meal, ctx) => _showCreateRecipe(meal, ctx)));
   }
 
   String _getTagString() {

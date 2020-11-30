@@ -1,5 +1,5 @@
-//const apiUrl = "http://192.168.1.100:9876/api/";
-const apiUrl = "http://10.50.50.60:8080/api/";
+const apiUrl = "http://192.168.0.10:9876/api/";
+//const apiUrl = "http://10.50.50.60:8080/api/";
 
 /// -- User -- ///
 
@@ -15,6 +15,7 @@ const getImageEndpoint = "${apiUrl}resource/image/";
 /// -- RECIPE -- ///
 
 const newRecipeEndpoint = "${apiUrl}recipe/new";
+const editRecipeEndpoint = "${apiUrl}recipe/edit";
 const getFullRecipeEndpoint = "${apiUrl}recipe/full/";
 const getSimpleRecipeEndpoint = "${apiUrl}recipe/simple/";
 const getMultipleSimpleRecipeEndpoint = "${apiUrl}recipe/multiple/simple/";

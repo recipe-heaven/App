@@ -19,12 +19,18 @@ class Storage {
 
   /// Save JWT token to store
   Future<bool> saveToken(String token) async {
-    var e = await this._storage;
-    return await e.setString(_jwtKey, token);
+    var storage = await this._storage;
+    return await storage.setString(_jwtKey, token);
+  }
+
+  /// Clear JWT token
+  Future<bool> clearToken() async {
+    var storage = await this._storage;
+    return await storage.remove(_jwtKey);
   }
 
   Future<String> getToken() async {
-    var e = await this._storage;
-    return e.getString(_jwtKey);
+    var storage = await this._storage;
+    return storage.getString(_jwtKey);
   }
 }

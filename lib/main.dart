@@ -48,7 +48,6 @@ class _App extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    _appState = Provider.of<AppState>(context);
     return MaterialApp(
         title: 'Recipe Heaven',
         theme: app_themes.mainTheme.copyWith(),

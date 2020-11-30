@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:App/data_classes/menu.dart';
-import 'package:App/main.dart';
 import 'package:App/service/endpoints.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/store/store.dart';
@@ -16,9 +15,8 @@ class MenuService {
   /// Returns true if added, else false
   static Future<bool> addNewMenu({@required NewMenu newMenu}) async {
     try {
-      final token = await Storage().getToken();
-      var response = await _httpClient.post(newMenuEndpoint,
-          headers: {'Content-type': "application/json", "Authorization": token},
+      var response = await _httpClient.auth().post(newMenuEndpoint,
+          headers: {'Content-type': "application/json"},
           body: newMenu.toJsonString());
 
       if (response.statusCode == 200) {
@@ -36,8 +34,8 @@ class MenuService {
   static Future<bool> updateMenu({@required NewMenu updatedMenu}) async {
     try {
       final token = await Storage().getToken();
-      var response = await _httpClient.pathch(updateMenuEndpoint,
-          headers: {'Content-type': "application/json", "Authorization": token},
+      var response = await _httpClient.auth().pathch(updateMenuEndpoint,
+          headers: {'Content-type': "application/json"},
           body: updatedMenu.toJsonString());
 
       if (response.statusCode == 200) {
@@ -54,9 +52,8 @@ class MenuService {
   /// Returns null if there is no menu found or there is an error.
   static Future<Menu> getMenu({@required int menuId}) async {
     var response =
-        _httpClient.get(getSimpleMenuEndpoint + "$menuId", addAuth: true);
-
-    return response.then((value) => _handleGetMenu(value));
+        await _httpClient.auth().get(getSimpleMenuEndpoint + "$menuId");
+    return _handleGetMenu(response);
   }
 
   static Menu _handleGetMenu(Response response) {

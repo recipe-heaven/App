@@ -64,3 +64,18 @@ String validateEquality(String a, String b, String targetEquality) {
   }
   return null;
 }
+
+/// Runs all validators unless a validation fails. If one fails, return the error
+/// message for that validation. Else null is returned if all passes.
+String multivalidate(List<String Function()> validators) {
+  String message;
+  validators.every((element) {
+    var validatorResult = element();
+    if (validatorResult == null) {
+      return true;
+    }
+    message = validatorResult;
+    return false;
+  });
+  return message;
+}

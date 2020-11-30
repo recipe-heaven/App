@@ -1,6 +1,7 @@
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart' as route_names;
 import 'package:App/app_state.dart';
+import 'package:App/routes/routes.dart';
 import 'package:App/service/http_client.dart';
 import 'package:App/service/user_service.dart';
 import 'package:App/theme/themes.dart' as app_themes;
@@ -43,6 +44,9 @@ class _App extends State<App> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       _appState.user = await _userService.getCurrentUser();
+      if (_appState.user == null) {
+        _userService.logout();
+      }
     }
   }
 

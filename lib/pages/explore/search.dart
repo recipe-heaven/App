@@ -21,8 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-// TODO: Disable navigation if search is from Create(menu, meal) page
-
 class Search extends StatefulWidget {
   final SearchRouteOptions options;
 
@@ -34,7 +32,6 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   var _result;
-  String _searchString = "";
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -128,16 +125,14 @@ class _SearchState extends State<Search> {
   }
 
   Future<List<Widget>> fetchSearchResult(SearchState state, context) async {
-    if (_searchString != state.searchString) {
-      _searchString = state.searchString;
-      _result = await SearchService(HttpServiceClient()).search(SearchOptions(
-          state.searchString,
-          widget.options.recipeType,
-          state.ownedOnly,
-          state.includeMeal,
-          state.includeMenu,
-          state.includeRecipe));
-    }
+    _result = await SearchService(HttpServiceClient()).search(SearchOptions(
+        state.searchString,
+        widget.options.recipeType,
+        state.ownedOnly,
+        state.includeMeal,
+        state.includeMenu,
+        state.includeRecipe));
+
     return createCards(_result, context);
   }
 

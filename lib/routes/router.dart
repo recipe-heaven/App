@@ -1,3 +1,4 @@
+import 'package:App/app_state.dart';
 import 'package:App/pages/create_meal/create_meal.dart';
 import 'package:App/pages/create_menu/create_menu.dart';
 import 'package:App/pages/create_recipe/create_recipe.dart';
@@ -11,6 +12,7 @@ import 'package:App/pages/view_menu/view_menu.dart';
 import 'package:App/pages/view_recipe/view_recipe.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import "routes.dart";
 
 int _tryGetId(Map<String, String> settings) {
@@ -27,6 +29,10 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
   var uri = Uri.parse(settings.name);
   var queryParams = uri.queryParameters;
   var path = uri.path;
+
+  // Route protection
+  var appState = Provider.of<AppState>(context);
+  if (appState.user == null) path = RouteUserLogin;
 
   Widget page;
   switch (path) {

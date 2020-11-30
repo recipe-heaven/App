@@ -51,4 +51,13 @@ class UserService {
       return null;
     }
   }
+
+  /// Logouts the current user by clearing the JWT
+  Future<bool> logout() async {
+    try {
+      return await Storage().clearToken();
+    } on Exception {
+      return false;
+    }
+  }
 }

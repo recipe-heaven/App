@@ -38,7 +38,7 @@ class LoginPageState extends State<LoginPage> {
         var user = await widget.authService
             .loginEmailPassword(email: _email, password: _password);
         Provider.of<AppState>(context).user = user;
-        Navigator.pushReplacementNamed(context, RouteHome);
+        Navigator.pushNamedAndRemoveUntil(context, RouteHome, (_) => false);
       } on HttpException catch (e) {
         setState(() {
           _errorMessage = e.message;

@@ -62,6 +62,7 @@ class _HomeState extends State<Home> {
             searchMeals: false,
             searchRecipes: false));
 
+    if (returnResult == null) return null;
     return (returnResult as Map<String, Displayable>).values.first as Menu;
   }
 
@@ -71,15 +72,11 @@ class _HomeState extends State<Home> {
     if (candidate != null && candidate?.id != current?.id) {
       bool wantChange =
           await _displayAreYouShureDialog(context, candidate, current);
-
       if (wantChange) {
         bool suc = await HomeService.setUserActiveMenu(candidate.id);
         if (suc) {
           setState(() {
             _menuFuture = HomeService.getUserActiveMenu();
-
-            // possible not gettig from server poteto potato the one over is better practice given future proofing
-            //_menuFuture = Future<Menu>.value(candidate);
           });
         }
       }

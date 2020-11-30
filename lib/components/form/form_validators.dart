@@ -23,7 +23,7 @@ String validateFloatInput(String value) {
 }
 
 String validateNotEmptyInput(String value) {
-  if (value.trim().isEmpty) {
+  if (value.trim().isNotEmpty) {
     return null;
   } else {
     return "Can not be empty";

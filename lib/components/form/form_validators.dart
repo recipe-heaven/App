@@ -23,7 +23,7 @@ String validateFloatInput(String value) {
 }
 
 String validateNotEmptyInput(String value) {
-  if (value.trim().length > 1) {
+  if (value.trim().isEmpty) {
     return null;
   } else {
     return "Can not be empty";
@@ -59,7 +59,6 @@ String validateLength(String value, {int min = -1, int max = -1}) {
 }
 
 String validateEquality(String a, String b, String targetEquality) {
-  print(a == b);
   if (a != b) {
     return "Is not equal to $targetEquality";
   }

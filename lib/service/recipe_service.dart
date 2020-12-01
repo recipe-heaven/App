@@ -10,7 +10,6 @@ import 'package:App/store/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 
-import '../main.dart';
 import 'http_client.dart';
 
 class RecipeService {
@@ -22,11 +21,9 @@ class RecipeService {
   // }
 
   static Future<CompleteRecipe> getFullRecipe(int recipeId) async {
-    var response =
-        _httpClient.get(getFullRecipeEndpoint + "$recipeId", addAuth: true);
+    var response = _httpClient.auth().get(getFullRecipeEndpoint + "$recipeId");
     return response.then((value) => _handleGetFullRecipe(value));
   }
-
 
   static CompleteRecipe _handleGetFullRecipe(Response response) {
     if (response.statusCode == 200) {
@@ -43,18 +40,15 @@ class RecipeService {
   Future<List<Recipe>> getMultipleMinifiedRecipes(List<int> recipeIds) async {
     try {
       if (recipeIds.length == 0) return List();
-
-      final token = await Storage().getToken();
       String ids = "";
       recipeIds.forEach((id) {
         ids += "$id,";
       });
       ids = ids.replaceRange(ids.length - 1, null, "");
-      var response = await _httpClient.get(
+      var response = await _httpClient.auth().get(
           pathWtihParameters(getMultipleSimpleRecipeEndpoint, {"ids": ids}),
           headers: {
             'Content-type': "application/json",
-            "Authorization": token
           });
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
@@ -82,6 +76,27 @@ class RecipeService {
       ..fields["recipe"] = json.encode(recipe.toJson())
       ..files.add(await http.MultipartFile.fromPath("image", imageFile.path,
           contentType: MediaType.parse(lookupMimeType(imageFile.path))));
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> editRecipe(Recipe recipe, File imageFile) async {
+    var uri = Uri.parse(editRecipeEndpoint);
+
+    final token = await Storage().getToken();
+
+    var request = http.MultipartRequest("POST", uri)
+      ..headers.addAll({"Authorization": token})
+      ..fields["recipe"] = json.encode(recipe.toJson());
+    if (imageFile != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          "image", imageFile.path,
+          contentType: MediaType.parse(lookupMimeType(imageFile.path))));
+    }
+
     var response = await request.send();
     if (response.statusCode == 200) {
       return true;

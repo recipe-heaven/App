@@ -1,12 +1,33 @@
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../app_state.dart';
 
 class DisplayRecipe extends StatelessWidget {
   final CompleteRecipe _recipe;
   final editClickCallback;
-  DisplayRecipe(this._recipe, {this.editClickCallback});
+  final _allowEdit;
+  DisplayRecipe(this._recipe, {this.editClickCallback, bool allowEdit = false})
+      : _allowEdit = allowEdit ?? false;
+
+  Widget _mabyEditButton(BuildContext context) {
+    User user = Provider.of<AppState>(context).user;
+    if (user != null && _allowEdit) {
+      if (user.id == _recipe.owner.id) {
+        return IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: editClickCallback);
+      }
+    }
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +57,7 @@ class DisplayRecipe extends StatelessWidget {
                       _recipe.name,
                       style: Theme.of(context).primaryTextTheme.headline1,
                     ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                        onPressed: editClickCallback)
+                    _mabyEditButton(context)
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),

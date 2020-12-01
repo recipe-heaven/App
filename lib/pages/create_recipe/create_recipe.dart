@@ -277,10 +277,11 @@ class NewRecipePageState extends State<NewRecipePage> {
                       hint: "desc"),
                   newTimeInputBox(context,
                       hedValue: "Estimated time",
+                      initTime: _recipe.cookTime,
                       onSaveHour: (newValue) =>
-                          {_recipe.cookTime = num.parse(newValue)},
+                          {_recipe.cookTime = 60 * num.parse(newValue)},
                       onSaveMin: (newValue) =>
-                          {_recipe.cookTime = num.parse(newValue)},
+                          {_recipe.cookTime += num.parse(newValue)},
                       validator: validateFloatInput),
                   Row(
                     children: [
@@ -438,9 +439,7 @@ class NewRecipePageState extends State<NewRecipePage> {
     if (_recipe.tags.length == 0) {
       return "";
     } else {
-      return _recipe.tags
-          .map((e) => e.tagName)
-          .reduce((value, element) => value + " " + element);
+      return _recipe.tags.map((e) => e.tagName).map((e) => "#" + e).join(" ");
     }
   }
 }

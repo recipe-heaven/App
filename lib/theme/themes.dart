@@ -4,6 +4,7 @@ final primaryTextColor = Color(0xFFFFFFFF);
 final formTextColor = Color(0xFF555555);
 final formSecondaryHintColor = Color(0xFFCCCCCC);
 final formPrimaryHintColor = Color(0xFF2B3B40);
+final okColor = Color(0xFF5FD982);
 final errorColor = Color(0xFFD96060);
 final acceptColor = Color(0xFF4F6E81);
 final disabledAcceptColor = Color(0xFF637283);

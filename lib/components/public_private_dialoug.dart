@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 /// When in edit mode, it is not possible to revert to falsy state.
 class SetPublicDialog extends StatefulWidget {
   final Function(bool) _stateChange;
-  final _typeText;
-  final _isEditing;
-  var _isPublic = false;
+  final String _typeText;
+  final bool _isEditing;
+  bool _isPublic = false;
 
   SetPublicDialog(
       this._stateChange, this._isPublic, this._isEditing, this._typeText,
@@ -54,49 +54,54 @@ class _SetPublicDialogState extends State<SetPublicDialog> {
       children: [
         Text(
           '${widget._typeText} is: ',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: primaryTextColor),
         ),
         if (!widget._isPublic) ...[
           Text(
-            "PRIVATE",
-            style: Theme.of(context)
-                .textTheme
-                .headline2
-                .copyWith(color: YeahhhhhColor),
+            "private",
+            style:
+                Theme.of(context).textTheme.headline5.copyWith(color: okColor),
           ),
           Spacer(),
           MaterialButton(
-            child: Text("Make public"),
+            child: Text("Make public",
+                style: Theme.of(context).textTheme.bodyText1),
             color: Theme.of(context).errorColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onPressed: () {
               this._displayMakePublicDialog(context);
             },
             height: 35,
           ),
-          Spacer(),
         ],
         if (widget._isPublic) ...[
           Text(
-            "PUBLIC",
+            "public",
             style: Theme.of(context)
                 .textTheme
-                .headline2
+                .headline5
                 .copyWith(color: errorColor),
           ),
           if (!widget._isEditing) ...[
             Spacer(),
             MaterialButton(
-              child: Text("Make private"),
-              color: YeahhhhhColor,
+              child: Text("Make private",
+                  style: Theme.of(context).textTheme.bodyText1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              color: okColor,
               onPressed: () {
                 setState(() {
                   widget._isPublic = false;
                   widget._stateChange(widget._isPublic);
                 });
               },
-              height: 20,
+              height: 35,
             ),
-            Spacer(),
           ],
         ],
       ],

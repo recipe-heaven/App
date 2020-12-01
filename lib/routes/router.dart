@@ -50,10 +50,15 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
     case RouteUserChangePass:
       page = ChangePassPage();
       break;
+
+    // edit falls over
+    case RouteRecipeEdit:
     case RouteRecipeNew:
-      page = NewRecipePage();
+      var mabyId = _tryGetId(queryParams);
+      page = NewRecipePage(recipeId: mabyId);
+
       break;
-    //case RouteRecipeEdit:
+
     case RouteRecipeView:
       var mabyid = _tryGetId(queryParams);
       if (mabyid != null) {

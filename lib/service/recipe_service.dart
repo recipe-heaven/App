@@ -27,7 +27,6 @@ class RecipeService {
     return response.then((value) => _handleGetFullRecipe(value));
   }
 
-
   static CompleteRecipe _handleGetFullRecipe(Response response) {
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
@@ -82,6 +81,27 @@ class RecipeService {
       ..fields["recipe"] = json.encode(recipe.toJson())
       ..files.add(await http.MultipartFile.fromPath("image", imageFile.path,
           contentType: MediaType.parse(lookupMimeType(imageFile.path))));
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> editRecipe(Recipe recipe, File imageFile) async {
+    var uri = Uri.parse(editRecipeEndpoint);
+
+    final token = await Storage().getToken();
+
+    var request = http.MultipartRequest("POST", uri)
+      ..headers.addAll({"Authorization": token})
+      ..fields["recipe"] = json.encode(recipe.toJson());
+    if (imageFile != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          "image", imageFile.path,
+          contentType: MediaType.parse(lookupMimeType(imageFile.path))));
+    }
+
     var response = await request.send();
     if (response.statusCode == 200) {
       return true;

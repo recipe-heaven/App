@@ -115,6 +115,7 @@ Container newTimeInputBox(BuildContext context,
     FormFieldSetter<String> onSaveHour,
     FormFieldSetter<String> onSaveMin,
     FormFieldValidator<String> validator,
+    int initTime,
     bool obscureInput = false,
     String hint = ""}) {
   return Container(
@@ -136,6 +137,9 @@ Container newTimeInputBox(BuildContext context,
                       keyboardType: TextInputType.number,
                       validator: validator,
                       onSaved: onSaveHour,
+                      initialValue: (initTime != null)
+                          ? (initTime / 60).floor().toString()
+                          : "",
                       obscureText: obscureInput)),
               width: MediaQuery.of(context).size.width * 0.1,
             ),
@@ -151,6 +155,8 @@ Container newTimeInputBox(BuildContext context,
                 child: TextFormField(
                   style: TextStyle(color: primaryTextColor),
                   keyboardType: TextInputType.number,
+                  initialValue:
+                      (initTime != null) ? (initTime % 60).toString() : "",
                   validator: validator,
                   onSaved: onSaveMin,
                   obscureText: obscureInput,
@@ -196,6 +202,9 @@ Container newMealIngredientInputBlock(
                 child: TextFormField(
                     style: TextStyle(color: primaryTextColor),
                     keyboardType: TextInputType.number,
+                    initialValue: (ingredient.amount != 0)
+                        ? ingredient.amount.toString()
+                        : "",
                     validator: validateFloatInput,
                     onSaved: onSavedAmmount,
                     obscureText: obscureInput,
@@ -243,6 +252,7 @@ Container newMealIngredientInputBlock(
           child: inputFealdShadowWrapper(
             child: TextFormField(
                 style: TextStyle(color: primaryTextColor),
+                initialValue: ingredient.comment,
                 validator: validateNotEmptyInput,
                 onSaved: onSavedComment,
                 obscureText: false,
@@ -366,13 +376,16 @@ class _DrinksSelectorState extends State<DrinksSelector> {
               in widget._drinks.asMap().entries)
             _drinkRow(entry.value.drink, entry.key, context)
         ],
-        RawMaterialButton(
-          onPressed: () => setState(() => widget._drinks.add(RecipeDrink())),
-          elevation: 2.0,
-          fillColor: elementBackgroundColor,
-          child: Icon(Icons.add),
-          padding: EdgeInsets.all(5.0),
-          shape: CircleBorder(),
+        Container(
+          width: double.infinity,
+          child: RawMaterialButton(
+            onPressed: () => setState(() => widget._drinks.add(RecipeDrink())),
+            elevation: 2.0,
+            fillColor: elementBackgroundColor,
+            child: Icon(Icons.add),
+            padding: EdgeInsets.all(5.0),
+            shape: CircleBorder(),
+          ),
         ),
         Text("Add another", style: Theme.of(context).textTheme.headline4)
       ],

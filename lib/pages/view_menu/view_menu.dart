@@ -22,7 +22,7 @@ class ViewMenuPage extends StatelessWidget {
     return ScaffoldWithNavigation(
       body: defaultBuilder<Menu>(
           _menuFuture,
-          (Menu menu) => SingleChildScrollView(
+          (Menu menu, ctx) => SingleChildScrollView(
                   child: Column(
                 children: [
                   SizedBox(

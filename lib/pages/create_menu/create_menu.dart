@@ -241,13 +241,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
                             child: Text(
-                              "Put together the",
+                              "Put together the\nperfect menu",
                               style: Theme.of(context).textTheme.headline1,
                             ),
-                          ),
-                          Text(
-                            "Pefect menu",
-                            style: Theme.of(context).textTheme.headline1,
                           ),
                           Spacer(),
                           SizedBox(

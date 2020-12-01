@@ -55,10 +55,6 @@ class ChangePassPageState extends State<ChangePassPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hi",
-                  style: Theme.of(context).primaryTextTheme.headline5,
-                ),
-                Text(
                   user.name,
                   style: Theme.of(context).textTheme.headline1,
                 ),

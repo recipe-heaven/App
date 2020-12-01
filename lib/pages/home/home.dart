@@ -164,7 +164,7 @@ class _HomeState extends State<Home> {
     return ScaffoldWithNavigation(
         body: defaultBuilder<Menu>(
             _menuFuture,
-            (Menu menu) => SafeArea(
+            (Menu menu, context) => SafeArea(
                     child: Container(
                         child: SingleChildScrollView(
                             child: Padding(

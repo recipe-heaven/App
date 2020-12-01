@@ -142,7 +142,7 @@ class CourseMealState extends State<CourseMealPage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
-        body:
-            defaultBuilder<Meal>(_mealFuture, (Meal meal) => _showMeal(meal)));
+        body: defaultBuilder<Meal>(
+            _mealFuture, (Meal meal, ctx) => _showMeal(meal)));
   }
 }

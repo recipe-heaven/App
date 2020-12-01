@@ -150,7 +150,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
         body: defaultBuilder<Menu>(
-            _menuFuture, (Menu menu) => _displayHome(menu),
+            _menuFuture, (Menu menu, ctx) => _displayHome(menu),
             allowNull: true));
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'loading_spinnder.dart';
 
-typedef OnSucBuild<T> = Widget Function(T);
+typedef OnSucBuild<T> = Widget Function(T, BuildContext);
 FutureBuilder<T> defaultBuilder<T>(Future<T> future, OnSucBuild<T> onSucses,
     {bool allowNull = false}) {
   return FutureBuilder(
@@ -21,7 +21,7 @@ FutureBuilder<T> defaultBuilder<T>(Future<T> future, OnSucBuild<T> onSucses,
             if (!allowNull && snapshot.data == null) {
               return _showOnConError();
             }
-            return onSucses(snapshot.data);
+            return onSucses(snapshot.data, context);
           } else {
             // todo:remove
             print(snapshot.error);

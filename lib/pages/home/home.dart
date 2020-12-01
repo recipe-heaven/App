@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
       BuildContext context, Menu newMenu, Menu oldMenu) async {
     String changeText = "";
     if (oldMenu != null) {
-      changeText = "\ncurrent menu is ${oldMenu.name} this wil be changed ";
+      changeText = "\ncurrent menu is ${oldMenu.name}.";
     }
     return showDialog<bool>(
         context: context,
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
         barrierColor: dialogBackgroundColor,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Set ${newMenu.name}? as the new menu $changeText"),
+            title: Text("Set ${newMenu.name} as the new menu? $changeText"),
             actions: [
               FlatButton(
                   onPressed: () {

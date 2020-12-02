@@ -78,7 +78,7 @@ class DisplayRecipe extends StatelessWidget {
                     children: [
                       for (var tag in _recipe.tags) ...[
                         Text(
-                          tag.tagName,
+                          "#" + tag.tagName,
                           style: Theme.of(context).primaryTextTheme.headline4,
                         ),
                         SizedBox(

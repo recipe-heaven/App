@@ -33,7 +33,6 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
   // Route protection
   var appState = Provider.of<AppState>(context);
   var requireLogin = appState.user == null;
-  print(appState.user);
 
   Widget page;
 

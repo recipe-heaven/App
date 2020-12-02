@@ -235,29 +235,40 @@ class NewRecipePageState extends State<NewRecipePage> {
           width: double.maxFinite,
           color: Theme.of(context).backgroundColor,
         ),
-        Text(
-          "NEW RECIPE",
-          style: Theme.of(context).accentTextTheme.headline1,
-        ),
         Container(
           child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  SetPublicDialog((state) {
-                    _recipe.public = state;
-                  }, _recipe.public, _recipe != null, "Meal"),
-                  Text(
-                    "meal type",
-                    style: Theme.of(context).textTheme.headline2,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "NEW RECIPE",
+                        style: Theme.of(context).accentTextTheme.headline1,
+                      ),
+                      SetPublicDialog((state) {
+                        _recipe.public = state;
+                      }, _recipe.public, _recipe != null, "Recipe"),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          "Type",
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ),
+                      _selectRecipeTypeDropdowm(),
+                    ],
                   ),
-                  _selectRecipeTypeDropdowm(),
-                  newMealInputBox(context,
-                      label: "Meal Name",
-                      onSave: (newValue) => {_recipe.name = newValue},
-                      validator: validateNotEmptyInput,
-                      initVal: _recipe.name,
-                      hint: "name"),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: newMealInputBox(context,
+                        label: "Meal Name",
+                        onSave: (newValue) => {_recipe.name = newValue},
+                        validator: validateNotEmptyInput,
+                        initVal: _recipe.name,
+                        hint: "name"),
+                  ),
                   newMealInputBox(context, label: "Tags", onSave: (tags) {
                     if (tags.length >= 2) {
                       _recipe.tags = tags

@@ -24,25 +24,41 @@ Drawer getDrawer(BuildContext context) {
       children: <Widget>[
         DrawerHeader(
           decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: ExactAssetImage("assets/images/DRAWER-IMAGE.jpg")),
             color: elementBackgroundColor,
           ),
           child: Column(
             children: [
               Text('Recipe heaven', style: logoTextStyle),
-              SizedBox(
-                height: 10,
-              ),
+              Text('All your favourite recipes.'),
             ],
           ),
         ),
+        createDrawerItem("Search", () => _onDrawerItemTap(context, RouteSearch),
+            Icons.search, context),
         createDrawerItem(
             "My items",
             () => _onDrawerItemTap(context, RouteSearch,
                 arguments: SearchRouteOptions(searchOwnedOnly: true)),
             Icons.food_bank,
             context),
-        createDrawerItem("Search", () => _onDrawerItemTap(context, RouteSearch),
-            Icons.search, context),
+        createDrawerItem(
+            "New menu",
+            () => _onDrawerItemTap(context, RouteMenuNew),
+            Icons.menu_book,
+            context),
+        createDrawerItem(
+            "New meal",
+            () => _onDrawerItemTap(context, RouteMealNew),
+            Icons.restaurant,
+            context),
+        createDrawerItem(
+            "New recipe",
+            () => _onDrawerItemTap(context, RouteRecipeNew),
+            Icons.list,
+            context),
         createDrawerItem(
             "Profile",
             () => _onDrawerItemTap(context, RouteUserChangePass),
@@ -55,7 +71,7 @@ Drawer getDrawer(BuildContext context) {
           Navigator.pushNamedAndRemoveUntil(
               context, RouteUserLogin, (_) => false);
         }, Icons.logout, context),
-        if (true)
+        if (false)
 
           // TODO REMOVE LATER :D
           ...[

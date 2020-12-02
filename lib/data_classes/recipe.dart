@@ -175,21 +175,13 @@ class Tag {
   Map<String, dynamic> toJson() => _$TagToJson(this);
 }
 
-// us
-
-///
-/// 3 different classes
-///   - volume
-///   - mass
-///   - units
-///
-
-// TODO: fill these somehow
 List<String> volumeUnits;
 List<String> massUnits;
 List<String> unitUnits;
+
 enum MealType { starter, main, dessert }
-enum IngredientUnit { kg, cm, lumen, liter }
+
+enum IngredientUnit { kg, gram, l, ml, tbsp, tsp, unit }
 
 Map<MealType, String> mealTypeDisplayNames = {
   MealType.starter: "starter",

@@ -134,10 +134,11 @@ class CreateMenuPageState extends State<CreateMenuPage> {
   /// one of same for any day.
   Future _handleSearchResult(Map<String, dynamic> result, int day) async {
     for (var resu in result.entries) {
+      var key = "${resu.key}+$day";
       if (resu.value.runtimeType == Recipe) {
-        _recipes[resu.key] = new MenuItem(resu.value, day);
+        _recipes[key] = new MenuItem(resu.value, day);
       } else if (resu.value.runtimeType == Meal) {
-        _meals[resu.key] = new MenuItem(resu.value, day);
+        _meals[key] = new MenuItem(resu.value, day);
       }
     }
   }
@@ -241,13 +242,9 @@ class CreateMenuPageState extends State<CreateMenuPage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 10),
                             child: Text(
-                              "Put together the",
+                              "Put together the\nperfect menu",
                               style: Theme.of(context).textTheme.headline1,
                             ),
-                          ),
-                          Text(
-                            "Pefect menu",
-                            style: Theme.of(context).textTheme.headline1,
                           ),
                           Spacer(),
                           SizedBox(

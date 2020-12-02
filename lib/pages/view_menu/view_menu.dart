@@ -4,6 +4,8 @@ import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/main.dart';
 import 'package:App/pages/view_menu/menu_displayer.dart';
+import 'package:App/routes/router.dart';
+import 'package:App/routes/routes.dart';
 import 'package:App/service/menu_service.dart';
 import 'package:flutter/material.dart';
 
@@ -23,20 +25,25 @@ class ViewMenuPage extends StatelessWidget {
       body: defaultBuilder<Menu>(
           _menuFuture,
           (Menu menu, ctx) => SingleChildScrollView(
-                  child: Column(
+              padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
+              child: Column(
                 children: [
-                  SizedBox(
-                    height: 20,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Text(
+                      menu.name,
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ),
-                  Text(
-                    "Menu Name:",
-                    style: Theme.of(context).textTheme.headline2,
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                    thickness: .5,
                   ),
-                  Text(
-                    menu?.name,
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  DisplayMenu(menu)
+                  DisplayMenu(menu,
+                      allowEdit: true,
+                      editClickCallback: () => Navigator.pushNamed(
+                          context, RouteMenuEdit,
+                          arguments: menu))
                 ],
               ))),
     );

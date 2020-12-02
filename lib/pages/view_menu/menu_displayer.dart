@@ -1,16 +1,35 @@
+import 'package:App/app_state.dart';
 import 'package:App/components/info_card.dart';
 import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DisplayMenu extends StatelessWidget {
   final Menu _menu;
   final editClickCallback;
-  DisplayMenu(this._menu, {this.editClickCallback});
+  bool allowEdit = false;
+  DisplayMenu(this._menu, {this.editClickCallback, this.allowEdit = false});
+
+  Widget _mabyEditButton(BuildContext context) {
+    User user = Provider.of<AppState>(context).user;
+    if (user != null && allowEdit) {
+      if (user.id == _menu.owner.id) {
+        return IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: editClickCallback);
+      }
+    }
+    return Container();
+  }
 
   Widget _makeDisplayCard(MenuItem menuItem, BuildContext context) {
     if (menuItem.item.runtimeType == Meal) {
@@ -69,12 +88,16 @@ class DisplayMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _menu.getMenuItems().forEach((element) {
-      print("${element.item.name} ${element.day}");
-    });
+    // _menu.getMenuItems().forEach((element) {
+    //   print("${element.item.name} ${element.day}");
+    // });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          alignment: Alignment(1, 1),
+          child: _mabyEditButton(context),
+        ),
         for (int day = 0; day < 7; day++) _makeDayDisplay(day, context)
       ],
     );

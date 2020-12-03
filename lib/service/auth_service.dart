@@ -30,8 +30,8 @@ class AuthService {
   Future<User> loginEmailPassword(
       {@required String email, @required String password}) async {
     try {
-      var response = await httpClient
-          .post(loginEndpoint, headers: {"email": email, "password": password});
+      var response = await httpClient.post(loginEndpoint,
+          headers: {"email": email.toLowerCase(), "password": password});
       if (response.statusCode == 200) {
         var decodedJson = jsonDecode(response.body);
         if (decodedJson["data"] != null) {

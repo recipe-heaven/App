@@ -202,6 +202,14 @@ class RecipeStep {
         this.step = step ?? "";
 }
 
+IngredientUnit _ingredientUnitFromJson(String json) {
+  return IngredientUnit.values.firstWhere((e) => getStringFromEnum(e) == json);
+}
+
+String _ingredientUnitToJson(IngredientUnit ingredientUnit) {
+  return describeEnum(ingredientUnit);
+}
+
 // this comes from the db
 @JsonSerializable()
 class Ingredient {
@@ -209,7 +217,7 @@ class Ingredient {
   Key key;
   String name = "";
   num amount = 0; // metric
-  @JsonKey(ignore: true)
+  @JsonKey(toJson: _ingredientUnitToJson, fromJson: _ingredientUnitFromJson)
   IngredientUnit unitType; // g ml cup
   String comment = ""; // if we are going to have the whole finely chopped
 

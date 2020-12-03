@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'loading_spinnder.dart';
 
-typedef OnSucBuild<T> = Widget Function(T);
-FutureBuilder<T> defaultBuilder<T>(
-  Future<T> future,
-  OnSucBuild<T> onSucses,
-) {
+typedef OnSucBuild<T> = Widget Function(T, BuildContext);
+FutureBuilder<T> defaultBuilder<T>(Future<T> future, OnSucBuild<T> onSucses,
+    {bool allowNull = false}) {
   return FutureBuilder(
     future: future,
     builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
@@ -20,23 +18,29 @@ FutureBuilder<T> defaultBuilder<T>(
         //case ConnectionState.done:
         default:
           if (!snapshot.hasError) {
-            //print(onSucses(snapshot.data));
-            return onSucses(snapshot.data);
+            if (!allowNull && snapshot.data == null) {
+              return _showOnConError();
+            }
+            return onSucses(snapshot.data, context);
           } else {
             // todo:remove
             print(snapshot.error);
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('ERROR:'),
-                )
-              ],
-            );
+            return _showOnConError();
           }
       }
     },
+  );
+}
+
+Widget _showOnConError() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: Text('ERROR:'),
+      )
+    ],
   );
 }

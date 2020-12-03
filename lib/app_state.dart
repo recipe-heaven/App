@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 class AppState extends ChangeNotifier {
   User _user;
 
+  AppState(this._user);
+
   /// Returns the user signed in or null if no user is signed in
   get user => _user;
 

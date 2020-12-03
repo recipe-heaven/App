@@ -1,4 +1,3 @@
-import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -14,41 +13,24 @@ _bottomNavigationBar(
         Navigator.pushNamed(context, RouteHome);
       }
       if (i == 1) {
-        Navigator.pushNamed(context, RouteMenuNew);
+        Navigator.pushNamed(context, RouteSearch);
       }
       if (i == 2) {
-        Navigator.pushNamed(
-            context, pathWtihParameters(RouteMealView, {"id": "1"}));
-      }
-      if (i == 3) {
         navigateCallback(false);
       }
-      if (i != 3) {
+      if (i != 2) {
         navigateCallback(true);
         _currentIndex = i;
       }
     },
     items: [
-      BottomNavigationBarItem(
-          icon: Padding(
-              padding: EdgeInsets.only(top: 10), child: Icon(Icons.home)),
-          label: "Week menu"),
-      BottomNavigationBarItem(
-          icon: Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Icon(Icons.local_dining)),
-          label: "New menu"),
-      BottomNavigationBarItem(
-          icon: Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Icon(Icons.shopping_bag)),
-          label: "New meal"),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Week menu"),
+      BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
       BottomNavigationBarItem(
           icon: Padding(
               padding: EdgeInsets.only(top: 10), child: Icon(Icons.menu)),
           label: "")
     ],
-    //backgroundColor: Colors.yellow,
   );
 }
 

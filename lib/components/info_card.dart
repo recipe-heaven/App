@@ -13,13 +13,15 @@ class InfoCard extends StatelessWidget {
       this.title,
       this.removeCallback,
       this.children = const [],
-      this.background})
+      this.background,
+      this.onPressed})
       : super(key: key);
 
   final String title;
   final Image background;
   final VoidCallback removeCallback;
   final List<Widget> children;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +48,6 @@ class InfoCard extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: background),
-              Row(
-                children: _createRemoveButton(),
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-              ),
               Padding(
                   padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
                   child: Column(
@@ -61,7 +58,14 @@ class InfoCard extends StatelessWidget {
                       Text(title, style: TextStyle(fontSize: 26)),
                       ...children
                     ],
-                  ))
+                  )),
+              Row(
+                children: _createRemoveButton(),
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              if (onPressed != null)
+                TextButton(onPressed: onPressed, child: null)
             ])));
   }
 

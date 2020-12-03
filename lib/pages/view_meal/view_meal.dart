@@ -121,6 +121,7 @@ class CourseMealState extends State<CourseMealPage> {
           for (CompleteRecipe recipe in meal.recipes)
             DisplayRecipe(
               recipe,
+              allowEdit: true,
               editClickCallback: () async {
                 final returnResult = await Navigator.pushNamed(
                     context, RouteMealNew,
@@ -142,7 +143,7 @@ class CourseMealState extends State<CourseMealPage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
-        body:
-            defaultBuilder<Meal>(_mealFuture, (Meal meal) => _showMeal(meal)));
+        body: defaultBuilder<Meal>(
+            _mealFuture, (Meal meal, ctx) => _showMeal(meal)));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:App/pages/explore/result_item.dart';
+import 'package:App/data_classes/displayable.dart';
 import 'package:App/routes/routes_options.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,8 @@ class SearchState extends ChangeNotifier {
   bool _includeMenu = true;
   bool _ownedOnly = false;
   bool _returnSelected = false;
-  Map<String, TypeSearchResult> _selected = Map<String, TypeSearchResult>();
+  bool _multiSelect = false;
+  Map<String, Displayable> _selected = Map<String, Displayable>();
 
   String _searchString;
 
@@ -21,6 +22,7 @@ class SearchState extends ChangeNotifier {
     this._includeMeal = options.searchMeals;
     this._includeRecipe = options.searchRecipes;
     this._returnSelected = options.returnSelected;
+    this._multiSelect = options.multiSelect;
     this._ownedOnly = options.searchOwnedOnly;
   }
 
@@ -44,19 +46,24 @@ class SearchState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addSelected(String type, TypeSearchResult selected) {
+  void addSelected(String type, Displayable selected) {
     var id = type + selected.id.toString();
     _selected[id] = selected;
     notifyListeners();
   }
 
-  void removeSelected(String type, TypeSearchResult selected) {
+  void removeSelected(String type, Displayable selected) {
     var id = type + selected.id.toString();
     _selected.remove(id);
     notifyListeners();
   }
 
-  bool selectedContains(String type, TypeSearchResult selected) {
+  void clearAndAddSelected(String type, Displayable selected) {
+    _selected.clear();
+    this.addSelected(type, selected);
+  }
+
+  bool selectedContains(String type, Displayable selected) {
     var id = type + selected.id.toString();
     return this._selected.containsKey(id);
   }
@@ -71,7 +78,9 @@ class SearchState extends ChangeNotifier {
 
   bool get returnSelected => _returnSelected;
 
+  bool get selectMultiple => _multiSelect;
+
   String get searchString => _searchString;
 
-  Map<String, TypeSearchResult> get selected => _selected;
+  Map<String, Displayable> get selected => _selected;
 }

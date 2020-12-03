@@ -20,7 +20,7 @@ class TimeWidget extends StatelessWidget {
           semanticLabel: 'Clock icon',
         ),
         SizedBox(width: 2),
-        Text(getHourSecndsStringFromSeconds(timeInSeconds),
+        Text(getHourMinutesStringFromMinutes(timeInSeconds),
             style: Theme.of(context).accentTextTheme.headline4),
       ],
     );

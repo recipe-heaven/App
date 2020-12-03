@@ -158,6 +158,7 @@ Ingredient _$IngredientFromJson(Map<String, dynamic> json) {
   return Ingredient(
     name: json['name'] as String,
     amount: json['amount'] as num,
+    unitType: _ingredientUnitFromJson(json['unitType'] as String),
     comment: json['comment'] as String,
   );
 }
@@ -173,6 +174,7 @@ Map<String, dynamic> _$IngredientToJson(Ingredient instance) {
 
   writeNotNull('name', instance.name);
   writeNotNull('amount', instance.amount);
+  writeNotNull('unitType', _ingredientUnitToJson(instance.unitType));
   writeNotNull('comment', instance.comment);
   return val;
 }

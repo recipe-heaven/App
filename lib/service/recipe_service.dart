@@ -71,6 +71,7 @@ class RecipeService {
   static Future<bool> newRecipe(Recipe recipe, File imageFile) async {
     var uri = Uri.parse(newRecipeEndpoint);
     final token = await Storage().getToken();
+    print(json.encode(recipe.toJson()));
     var request = http.MultipartRequest("POST", uri)
       ..headers.addAll({"Authorization": token})
       ..fields["recipe"] = json.encode(recipe.toJson())

@@ -232,9 +232,9 @@ class Ingredient {
   Ingredient(
       {this.name = "",
       this.amount = 0,
-      unitType = IngredientUnit,
+      IngredientUnit unitType,
       this.comment = ""})
-      : this.unitType = IngredientUnit.kg,
+      : this.unitType = unitType ?? IngredientUnit.kg,
         this.key = Key(_random.nextDouble().toString());
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>

@@ -22,8 +22,11 @@ abstract class Http {
 class HttpServiceClient implements Http {
   final _client = http.Client();
 
+  bool _doAddAuthHeaders = false;
+
   Future<Map<String, String>> _addAuthHeaders(
       Map<String, String> headers) async {
+    _doAddAuthHeaders = false;
     final token = await Storage().getToken();
     var autHeaders = headers;
     if (headers == null) {
@@ -33,40 +36,46 @@ class HttpServiceClient implements Http {
     return autHeaders;
   }
 
-  Future<http.Response> get(dynamic url,
-      {Map<String, String> headers, bool addAuth = false}) async {
+  Future<Map<String, String>> _createHeaders(
+      Map<String, String> headers) async {
+    if (headers == null) headers = Map();
     var finalHeaders = headers;
-    if (addAuth) {
+    if (_doAddAuthHeaders) {
       finalHeaders = await _addAuthHeaders(headers);
     }
+    return finalHeaders;
+  }
 
-    return _client.get(url, headers: finalHeaders);
+  /// Flags request for authorization
+  HttpServiceClient auth() {
+    this._doAddAuthHeaders = true;
+    return this;
+  }
+
+  Future<http.Response> get(dynamic url, {Map<String, String> headers}) async {
+    return _client.get(url, headers: await _createHeaders(headers));
   }
 
   Future<http.Response> post(dynamic url,
-      {Map<String, String> headers,
-      dynamic body,
-      Encoding encoding,
-      bool addAuth = false}) async {
-    var finalHeaders = headers;
-    if (addAuth) {
-      finalHeaders = await _addAuthHeaders(headers);
-    }
+      {Map<String, String> headers, dynamic body, Encoding encoding}) async {
     return _client.post(url,
-        headers: finalHeaders, body: body, encoding: encoding);
+        headers: await _createHeaders(headers), body: body, encoding: encoding);
   }
 
   Future<http.Response> put(dynamic url,
-      {Map<String, String> headers, dynamic body, Encoding encoding}) {
-    return _client.put(url, headers: headers, body: body, encoding: encoding);
+      {Map<String, String> headers, dynamic body, Encoding encoding}) async {
+    return _client.put(url,
+        headers: await _createHeaders(headers), body: body, encoding: encoding);
   }
 
-  Future<http.Response> delete(dynamic url, {Map<String, String> headers}) {
-    return _client.delete(url, headers: headers);
+  Future<http.Response> delete(dynamic url,
+      {Map<String, String> headers}) async {
+    return _client.delete(url, headers: await _createHeaders(headers));
   }
 
   Future<http.Response> pathch(dynamic url,
-      {Map<String, String> headers, dynamic body, Encoding encoding}) {
-    return _client.patch(url, headers: headers, body: body, encoding: encoding);
+      {Map<String, String> headers, dynamic body, Encoding encoding}) async {
+    return _client.patch(url,
+        headers: await _createHeaders(headers), body: body, encoding: encoding);
   }
 }

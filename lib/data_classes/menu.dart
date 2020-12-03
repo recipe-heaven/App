@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:App/data_classes/displayable.dart';
+import 'package:App/data_classes/food_image.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/data_classes/user.dart';
 import 'package:App/data_classes/user_owned.dart';
@@ -75,7 +76,11 @@ class Menu extends Displayable {
 
   @override
   Image get displayImage {
-    return recipes.first.item.displayImage;
+    if (recipes.isNotEmpty) {
+      return recipes.first.item.displayImage;
+    } else {
+      return FoodImage().defaultImage;
+    }
   }
 
   List<int> get daysInMenu {

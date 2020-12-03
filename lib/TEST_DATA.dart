@@ -31,22 +31,22 @@ final TEST_DATA = CompleteMeal(name: "aslkdjal", recipes: [
             comment: "finely ground"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "penguin",
             comment: "nawww"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "planks",
             comment: "without nails"),
         Ingredient(
             amount: 20,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "screens",
             comment: "waaaaa"),
         Ingredient(
             amount: 88,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "keys",
             comment: "waaaa"),
       ]),
@@ -78,22 +78,22 @@ final TEST_DATA = CompleteMeal(name: "aslkdjal", recipes: [
             comment: "finely ground"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "penguin",
             comment: "nawww"),
         Ingredient(
             amount: 2,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "planks",
             comment: "without nails"),
         Ingredient(
             amount: 20,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "screens",
             comment: "waaaaa"),
         Ingredient(
             amount: 88,
-            unitType: IngredientUnit.cm,
+            unitType: IngredientUnit.kg,
             name: "keys",
             comment: "waaaa"),
       ]),

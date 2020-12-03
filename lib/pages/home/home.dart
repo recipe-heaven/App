@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
       BuildContext context, Menu newMenu, Menu oldMenu) async {
     String changeText = "";
     if (oldMenu != null) {
-      changeText = "\ncurrent menu is ${oldMenu.name} this wil be changed ";
+      changeText = "\ncurrent menu is ${oldMenu.name}.";
     }
     return showDialog<bool>(
         context: context,
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
         barrierColor: dialogBackgroundColor,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Set ${newMenu.name}? as the new menu $changeText"),
+            title: Text("Set ${newMenu.name} as the new menu? $changeText"),
             actions: [
               FlatButton(
                   onPressed: () {
@@ -62,6 +62,7 @@ class _HomeState extends State<Home> {
             searchMeals: false,
             searchRecipes: false));
 
+    if (returnResult == null) return null;
     return (returnResult as Map<String, Displayable>).values.first as Menu;
   }
 
@@ -71,15 +72,11 @@ class _HomeState extends State<Home> {
     if (candidate != null && candidate?.id != current?.id) {
       bool wantChange =
           await _displayAreYouShureDialog(context, candidate, current);
-
       if (wantChange) {
         bool suc = await HomeService.setUserActiveMenu(candidate.id);
         if (suc) {
           setState(() {
             _menuFuture = HomeService.getUserActiveMenu();
-
-            // possible not gettig from server poteto potato the one over is better practice given future proofing
-            //_menuFuture = Future<Menu>.value(candidate);
           });
         }
       }
@@ -89,16 +86,23 @@ class _HomeState extends State<Home> {
   Widget _displayMenu(Menu menu) {
     return Column(
       children: [
-        SizedBox(
-          height: 20,
+        Padding(
+          padding: const EdgeInsets.only(top: 15, bottom: 15),
+          child: Text(
+            "This weeks menu",
+            style: Theme.of(context).textTheme.headline2,
+          ),
         ),
-        Text(
-          "Current Menu:",
-          style: Theme.of(context).textTheme.headline2,
+        Divider(
+          color: Theme.of(context).dividerColor,
+          thickness: .5,
         ),
-        Text(
-          menu.name,
-          style: Theme.of(context).textTheme.headline1,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: Text(
+            menu.name,
+            style: Theme.of(context).textTheme.headline1,
+          ),
         ),
         DisplayMenu(menu),
         MaterialButton(
@@ -119,17 +123,26 @@ class _HomeState extends State<Home> {
 
   Widget _displayHome(Menu menu) {
     if (menu == null) {
-      // no menu is set show the selector
       return _displayPicker(menu);
     } else {
-      return SingleChildScrollView(child: _displayMenu(menu));
+      return _displayMenu(menu);
     }
   }
 
   Widget _displayPicker(Menu menu) {
     return Column(
       children: [
-        Text("No menu selected"),
+        Padding(
+          padding: const EdgeInsets.only(top: 15, bottom: 15),
+          child: Text(
+            "No menu for this week",
+            style: Theme.of(context).textTheme.headline2,
+          ),
+        ),
+        Divider(
+          color: Theme.of(context).dividerColor,
+          thickness: .5,
+        ),
         MaterialButton(
             onPressed: () => _updateCurrentMenu(menu),
             disabledColor: disabledAcceptColor,
@@ -150,7 +163,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return ScaffoldWithNavigation(
         body: defaultBuilder<Menu>(
-            _menuFuture, (Menu menu, ctx) => _displayHome(menu),
+            _menuFuture,
+            (Menu menu, context) => SafeArea(
+                    child: Container(
+                        child: SingleChildScrollView(
+                            child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10.0, right: 10.0, bottom: 25.0),
+                  child: _displayHome(menu),
+                )))),
             allowNull: true));
   }
 }

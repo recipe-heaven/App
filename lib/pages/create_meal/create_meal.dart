@@ -75,6 +75,8 @@ class CreateMealPageState extends State<CreateMealPage> {
           displaySavedSnackbar("meal", context, updated: true);
         } else {
           displaySavedSnackbar("meal", context);
+          Navigator.popAndPushNamed(context, RouteSearch,
+              arguments: SearchRouteOptions(searchOwnedOnly: true));
         }
       } else {
         displaySavedSnackbar("meal", context, error: true);
@@ -285,7 +287,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                               height: 10,
                             ),
                             _createCategorySelector(
-                                buttonText: "ADD STARTERS",
+                                buttonText: "Add starter",
                                 onClick: () async {
                                   var newRecipe = await this
                                       ._searchForType(MealType.starter);
@@ -297,7 +299,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                                 },
                                 categotyItems: _starters),
                             _createCategorySelector(
-                                buttonText: "ADD COURSE",
+                                buttonText: "Add main",
                                 onClick: () async {
                                   var newRecipe =
                                       await this._searchForType(MealType.main);
@@ -309,7 +311,7 @@ class CreateMealPageState extends State<CreateMealPage> {
                                 },
                                 categotyItems: _mains),
                             _createCategorySelector(
-                                buttonText: "ADD DESSERT",
+                                buttonText: "Add dessert",
                                 onClick: () async {
                                   var newRecipe = await this
                                       ._searchForType(MealType.dessert);

@@ -32,84 +32,92 @@ Route<dynamic> router(BuildContext context, RouteSettings settings) {
 
   // Route protection
   var appState = Provider.of<AppState>(context);
-  if (appState.user == null) path = RouteUserLogin;
+  var requireLogin = appState.user == null;
 
   Widget page;
-  switch (path) {
-    case RouteHome:
-      page = Home();
-      break;
-    case RouteUserNew:
-      page = NewUserPage();
-      break;
-    case RouteUserLogin:
-      page = LoginPage();
-      break;
-    case RouteUserProfile:
-    case RouteUserEditProfile:
-    case RouteUserChangePass:
-      page = ChangePassPage();
-      break;
 
-    // edit falls over
-    case RouteRecipeEdit:
-    case RouteRecipeNew:
-      var mabyId = _tryGetId(queryParams);
-      page = NewRecipePage(recipeId: mabyId);
+  if (requireLogin) {
+    switch (path) {
+      case RouteUserNew:
+        page = NewUserPage();
+        break;
+      case RouteUserLogin:
+        page = LoginPage();
+        break;
+      default:
+        page = LoginPage();
+        break;
+    }
+  } else {
+    switch (path) {
+      case RouteHome:
+        page = Home();
+        break;
+      case RouteUserProfile:
+      case RouteUserEditProfile:
+      case RouteUserChangePass:
+        page = ChangePassPage();
+        break;
 
-      break;
+      // edit falls over
+      case RouteRecipeEdit:
+      case RouteRecipeNew:
+        var mabyId = _tryGetId(queryParams);
+        page = NewRecipePage(recipeId: mabyId);
 
-    case RouteRecipeView:
-      var mabyid = _tryGetId(queryParams);
-      if (mabyid != null) {
-        page = ViewRecipePage(mabyid);
-      } else {
-        // TODO: what shold we do when an invalid id is requested to view
-        page = ViewRecipePage(0);
-      }
+        break;
 
-      break;
-    case RouteMealEdit:
-    case RouteMealNew:
-      page = CreateMealPage(meal: settings.arguments);
-      break;
-    case RouteMealView:
-      var mabyid = _tryGetId(queryParams);
-      if (mabyid != null) {
-        page = CourseMealPage(mabyid);
-      } else {
-        // TODO: what shold we do when an invalid id is requested to view
-        page = CourseMealPage(0);
-      }
-      break;
-    case RouteMenuNew:
-    case RouteMenuEdit:
-      page = CreateMenuPage(menu: settings.arguments);
-      break;
-    case RouteMenuView:
-      var mabyid = _tryGetId(queryParams);
-      if (mabyid != null) {
-        page = ViewMenuPage(mabyid);
-      } else {
-        // TODO: what shold we do when an invalid id is requested to view
-        page = ViewMenuPage(4);
-      }
-      break;
-    case RouteMenuShoppingList:
-      break;
-    case RouteSearch:
-      SearchRouteOptions options = SearchRouteOptions();
-      if (settings.arguments.runtimeType == SearchRouteOptions) {
-        options = settings.arguments;
-      }
-      page = Search(options);
-      break;
-    default:
-      return null;
+      case RouteRecipeView:
+        var mabyid = _tryGetId(queryParams);
+        if (mabyid != null) {
+          page = ViewRecipePage(mabyid);
+        } else {
+          // TODO: what shold we do when an invalid id is requested to view
+          page = ViewRecipePage(0);
+        }
+
+        break;
+      case RouteMealEdit:
+      case RouteMealNew:
+        page = CreateMealPage(meal: settings.arguments);
+        break;
+      case RouteMealView:
+        var mabyid = _tryGetId(queryParams);
+        if (mabyid != null) {
+          page = CourseMealPage(mabyid);
+        } else {
+          // TODO: what shold we do when an invalid id is requested to view
+          page = CourseMealPage(0);
+        }
+        break;
+      case RouteMenuNew:
+      case RouteMenuEdit:
+        page = CreateMenuPage(menu: settings.arguments);
+        break;
+      case RouteMenuView:
+        var mabyid = _tryGetId(queryParams);
+        if (mabyid != null) {
+          page = ViewMenuPage(mabyid);
+        } else {
+          // TODO: what shold we do when an invalid id is requested to view
+          page = ViewMenuPage(4);
+        }
+        break;
+      case RouteMenuShoppingList:
+        break;
+      case RouteSearch:
+        SearchRouteOptions options = SearchRouteOptions();
+        if (settings.arguments.runtimeType == SearchRouteOptions) {
+          options = settings.arguments;
+        }
+        page = Search(options);
+        break;
+      default:
+        return null;
+    }
   }
 
   return FadeRoute(page: page); //FadeRoute(page: page);
-  //MaterialPageRoute(builder: (context) => page);
 }
 
 /// Generatesa route ling with query parameters ?key=value

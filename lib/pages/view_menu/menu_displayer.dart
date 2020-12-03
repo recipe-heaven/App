@@ -1,16 +1,35 @@
+import 'package:App/app_state.dart';
 import 'package:App/components/info_card.dart';
 import 'package:App/components/time_widget.dart';
 import 'package:App/data_classes/meal.dart';
 import 'package:App/data_classes/menu.dart';
 import 'package:App/data_classes/recipe.dart';
+import 'package:App/data_classes/user.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DisplayMenu extends StatelessWidget {
   final Menu _menu;
   final editClickCallback;
-  DisplayMenu(this._menu, {this.editClickCallback});
+  bool allowEdit = false;
+  DisplayMenu(this._menu, {this.editClickCallback, this.allowEdit = false});
+
+  Widget _mabyEditButton(BuildContext context) {
+    User user = Provider.of<AppState>(context).user;
+    if (user != null && allowEdit) {
+      if (user.id == _menu.owner.id) {
+        return IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: editClickCallback);
+      }
+    }
+    return Container();
+  }
 
   Widget _makeDisplayCard(MenuItem menuItem, BuildContext context) {
     if (menuItem.item.runtimeType == Meal) {
@@ -44,33 +63,40 @@ class DisplayMenu extends StatelessWidget {
   Widget _makeDayDisplay(int day, BuildContext context) {
     List<MenuItem> menuItems =
         _menu.getMenuItems().where((element) => element.day == day).toList();
+    List<Widget> dayItemWidgets = List();
+    if (menuItems.isNotEmpty) {
+      dayItemWidgets.add(Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child:
+            Text(Menu.days[day], style: Theme.of(context).textTheme.headline2),
+      ));
+
+      for (MenuDay dayItem in menuItems) {
+        dayItemWidgets.add(_makeDisplayCard(dayItem, context));
+      }
+
+      dayItemWidgets.add(Divider(
+        color: Theme.of(context).dividerColor,
+        thickness: .5,
+      ));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (menuItems.isNotEmpty) ...[
-          SizedBox(
-            height: 20,
-            width: double.infinity,
-          ),
-          Text(Menu.days[day], style: Theme.of(context).textTheme.headline2),
-        ],
-        for (MenuDay dayItem in menuItems) ...[
-          _makeDisplayCard(dayItem, context),
-        ],
-      ],
+      children: [...dayItemWidgets],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    _menu.getMenuItems().forEach((element) {
-      print("${element.item.name} ${element.day}");
-    });
+    // _menu.getMenuItems().forEach((element) {
+    //   print("${element.item.name} ${element.day}");
+    // });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 20,
+        Container(
+          alignment: Alignment(1, 1),
+          child: _mabyEditButton(context),
         ),
         for (int day = 0; day < 7; day++) _makeDayDisplay(day, context)
       ],

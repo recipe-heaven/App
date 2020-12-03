@@ -9,6 +9,8 @@ import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/routes/routes.dart';
+import 'package:App/routes/routes_options.dart';
 import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +64,8 @@ class NewRecipePageState extends State<NewRecipePage> {
 
       if (suc) {
         displaySavedSnackbar("recipe", context);
+        Navigator.popAndPushNamed(context, RouteSearch,
+            arguments: SearchRouteOptions(searchOwnedOnly: true));
       } else {
         displaySavedSnackbar("recipe", context, error: true);
       }
@@ -235,29 +239,40 @@ class NewRecipePageState extends State<NewRecipePage> {
           width: double.maxFinite,
           color: Theme.of(context).backgroundColor,
         ),
-        Text(
-          "NEW RECIPE",
-          style: Theme.of(context).accentTextTheme.headline1,
-        ),
         Container(
           child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  SetPublicDialog((state) {
-                    _recipe.public = state;
-                  }, _recipe.public, _recipe != null, "Meal"),
-                  Text(
-                    "meal type",
-                    style: Theme.of(context).textTheme.headline2,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "NEW RECIPE",
+                        style: Theme.of(context).accentTextTheme.headline1,
+                      ),
+                      SetPublicDialog((state) {
+                        _recipe.public = state;
+                      }, _recipe.public, _recipe != null, "Recipe"),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          "Type",
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ),
+                      _selectRecipeTypeDropdowm(),
+                    ],
                   ),
-                  _selectRecipeTypeDropdowm(),
-                  newMealInputBox(context,
-                      label: "Meal Name",
-                      onSave: (newValue) => {_recipe.name = newValue},
-                      validator: validateNotEmptyInput,
-                      initVal: _recipe.name,
-                      hint: "name"),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: newMealInputBox(context,
+                        label: "Meal Name",
+                        onSave: (newValue) => {_recipe.name = newValue},
+                        validator: validateNotEmptyInput,
+                        initVal: _recipe.name,
+                        hint: "name"),
+                  ),
                   newMealInputBox(context, label: "Tags", onSave: (tags) {
                     if (tags.length >= 2) {
                       _recipe.tags = tags

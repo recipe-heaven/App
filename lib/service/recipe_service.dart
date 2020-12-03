@@ -10,7 +10,6 @@ import 'package:App/store/store.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
 
-import '../main.dart';
 import 'http_client.dart';
 
 class RecipeService {
@@ -22,8 +21,7 @@ class RecipeService {
   // }
 
   static Future<CompleteRecipe> getFullRecipe(int recipeId) async {
-    var response =
-        _httpClient.get(getFullRecipeEndpoint + "$recipeId", addAuth: true);
+    var response = _httpClient.auth().get(getFullRecipeEndpoint + "$recipeId");
     return response.then((value) => _handleGetFullRecipe(value));
   }
 
@@ -42,18 +40,15 @@ class RecipeService {
   Future<List<Recipe>> getMultipleMinifiedRecipes(List<int> recipeIds) async {
     try {
       if (recipeIds.length == 0) return List();
-
-      final token = await Storage().getToken();
       String ids = "";
       recipeIds.forEach((id) {
         ids += "$id,";
       });
       ids = ids.replaceRange(ids.length - 1, null, "");
-      var response = await _httpClient.get(
+      var response = await _httpClient.auth().get(
           pathWtihParameters(getMultipleSimpleRecipeEndpoint, {"ids": ids}),
           headers: {
             'Content-type': "application/json",
-            "Authorization": token
           });
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);

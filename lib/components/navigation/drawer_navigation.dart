@@ -1,3 +1,4 @@
+import 'package:App/app_state.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
@@ -6,6 +7,7 @@ import 'package:App/service/http_client.dart';
 import 'package:App/service/user_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Makes sure we pop the drawer of the stack before we route to a page
 void _onDrawerItemTap(BuildContext context, String route, {Object arguments}) {
@@ -24,25 +26,41 @@ Drawer getDrawer(BuildContext context) {
       children: <Widget>[
         DrawerHeader(
           decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: ExactAssetImage("assets/images/DRAWER-IMAGE.jpg")),
             color: elementBackgroundColor,
           ),
           child: Column(
             children: [
               Text('Recipe heaven', style: logoTextStyle),
-              SizedBox(
-                height: 10,
-              ),
+              Text('All your favourite recipes.'),
             ],
           ),
         ),
+        createDrawerItem("Search", () => _onDrawerItemTap(context, RouteSearch),
+            Icons.search, context),
         createDrawerItem(
             "My items",
             () => _onDrawerItemTap(context, RouteSearch,
                 arguments: SearchRouteOptions(searchOwnedOnly: true)),
             Icons.food_bank,
             context),
-        createDrawerItem("Search", () => _onDrawerItemTap(context, RouteSearch),
-            Icons.search, context),
+        createDrawerItem(
+            "New menu",
+            () => _onDrawerItemTap(context, RouteMenuNew),
+            Icons.menu_book,
+            context),
+        createDrawerItem(
+            "New meal",
+            () => _onDrawerItemTap(context, RouteMealNew),
+            Icons.restaurant,
+            context),
+        createDrawerItem(
+            "New recipe",
+            () => _onDrawerItemTap(context, RouteRecipeNew),
+            Icons.list,
+            context),
         createDrawerItem(
             "Profile",
             () => _onDrawerItemTap(context, RouteUserChangePass),
@@ -50,12 +68,13 @@ Drawer getDrawer(BuildContext context) {
             context),
         createDrawerItem("Logout", () async {
           await UserService(HttpServiceClient()).logout();
+          Provider.of<AppState>(context).user = null;
           Navigator.pop(context);
           // Remove all routes
           Navigator.pushNamedAndRemoveUntil(
               context, RouteUserLogin, (_) => false);
         }, Icons.logout, context),
-        if (true)
+        if (false)
 
           // TODO REMOVE LATER :D
           ...[

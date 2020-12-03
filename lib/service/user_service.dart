@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:App/data_classes/user.dart';
 import 'package:App/service/endpoints.dart';
@@ -8,7 +7,7 @@ import 'package:App/store/store.dart';
 import 'package:flutter/foundation.dart';
 
 class UserService {
-  final Http httpClient;
+  final HttpServiceClient httpClient;
 
   UserService(this.httpClient);
 
@@ -16,14 +15,12 @@ class UserService {
   ///
   Future<bool> changePass(
       {@required String oldPass, @required String newPass}) async {
-    // TODO Chaange signature
     try {
       var response = await httpClient
-          .post(changePassEndpoint, headers: {"password": newPass});
+          .auth()
+          .put(changePassEndpoint, headers: {"password": newPass});
       if (response.statusCode == 200) {
         return true;
-      } else {
-        return false;
       }
     } on IOException catch (e) {
       print(e);
@@ -44,12 +41,9 @@ class UserService {
         if (body["data"] != null) {
           return User.fromJson(body["data"]);
         }
-      } else {
-        return null;
       }
-    } on IOException {
-      return null;
-    }
+    } on IOException {}
+    return null;
   }
 
   /// Logouts the current user by clearing the JWT

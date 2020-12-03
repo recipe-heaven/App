@@ -1,3 +1,4 @@
+import 'package:App/app_state.dart';
 import 'package:App/routes/router.dart';
 import 'package:App/routes/routes.dart';
 import 'package:App/routes/routes_options.dart';
@@ -6,6 +7,7 @@ import 'package:App/service/http_client.dart';
 import 'package:App/service/user_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Makes sure we pop the drawer of the stack before we route to a page
 void _onDrawerItemTap(BuildContext context, String route, {Object arguments}) {
@@ -66,6 +68,7 @@ Drawer getDrawer(BuildContext context) {
             context),
         createDrawerItem("Logout", () async {
           await UserService(HttpServiceClient()).logout();
+          Provider.of<AppState>(context).user = null;
           Navigator.pop(context);
           // Remove all routes
           Navigator.pushNamedAndRemoveUntil(

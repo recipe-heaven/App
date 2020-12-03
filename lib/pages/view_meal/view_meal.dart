@@ -121,6 +121,7 @@ class CourseMealState extends State<CourseMealPage> {
           for (CompleteRecipe recipe in meal.recipes)
             DisplayRecipe(
               recipe,
+              allowEdit: true,
               editClickCallback: () async {
                 final returnResult = await Navigator.pushNamed(
                     context, RouteMealNew,

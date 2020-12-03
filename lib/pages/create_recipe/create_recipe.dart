@@ -9,6 +9,8 @@ import 'package:App/components/round_button.dart';
 import 'package:App/components/saved_snackbar.dart';
 import 'package:App/data_classes/recipe.dart';
 import 'package:App/components/input_feald.dart';
+import 'package:App/routes/routes.dart';
+import 'package:App/routes/routes_options.dart';
 import 'package:App/service/recipe_service.dart';
 import 'package:App/theme/themes.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +64,8 @@ class NewRecipePageState extends State<NewRecipePage> {
 
       if (suc) {
         displaySavedSnackbar("recipe", context);
+        Navigator.popAndPushNamed(context, RouteSearch,
+            arguments: SearchRouteOptions(searchOwnedOnly: true));
       } else {
         displaySavedSnackbar("recipe", context, error: true);
       }

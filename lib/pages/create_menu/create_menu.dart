@@ -87,6 +87,8 @@ class CreateMenuPageState extends State<CreateMenuPage> {
           displaySavedSnackbar("menu", context, updated: true);
         } else {
           displaySavedSnackbar("menu", context);
+          Navigator.popAndPushNamed(context, RouteSearch,
+              arguments: SearchRouteOptions(searchOwnedOnly: true));
         }
       } else {
         displaySavedSnackbar("menu", context, error: true);
